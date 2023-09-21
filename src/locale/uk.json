@@ -1,0 +1,21 @@
+{
+  "uk": {
+    "translation": {
+      "logRegPage": {
+        "logGetStart": "Увійдіть щоб розпочати!",
+        "regGetStart": "Створення нового акаунту!",
+        "loginInput": "Ім'я користувача / Пошта",
+        "userInput": "Ім'я користувача",
+        "emailInput": "Пошта",
+        "pswdInput": "Пароль",
+        "pswdRepInput": "Повторіть пароль",
+        "remMe": "Запам'ятати мене?",
+        "forgotPswd": "Забули пароль?",
+        "loginBtn": "УВІЙТИ",
+        "regBtn": "ЗАРЕЄСТРУВАТИСЬ",
+        "orLine": "АБО",
+        "noAcc": "Ще не створили акаунт?"
+      }
+    }
+  }
+}
