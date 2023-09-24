@@ -152,6 +152,13 @@
     overflow: scroll;
     overflow-x: hidden;
     overflow-y: visible;
+
+    display: flex;
+    flex-direction: column-reverse;
+
+    /*display: flex;*/
+    /*justify-content: flex-end;*/
+    /*flex-direction: column;*/
 }
 
 /*.chat::-webkit-scrollbar {*/
