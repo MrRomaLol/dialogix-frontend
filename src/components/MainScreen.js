@@ -2,10 +2,14 @@ import React from 'react';
 import UserBox from "./UserBox";
 import '../styles/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import * as PropTypes from "prop-types";
+import InputChatBox from "./InputChatBox";
+import ChatBox from "./ChatBox";
 
-const ServerScreen = () => {
+InputChatBox.propTypes = {name: PropTypes.string};
+const MainScreen = () => {
     return (
-        <div style={{display:"flex", flex:1}}>
+        <div style={{display: "flex", flex: 1}}>
 
             <div className={"app-users-box"}>
                 <UserBox username={"GetTheNya"} activity={"away"}/>
@@ -14,13 +18,10 @@ const ServerScreen = () => {
                 <UserBox username={"9lrluk"} activity={"online"}/>
             </div>
 
-            <div className={"app-text-box"}>
-
-            </div>
-
+            <ChatBox/>
 
         </div>
     );
 };
 
-export default ServerScreen;
+export default MainScreen;

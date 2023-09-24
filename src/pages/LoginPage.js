@@ -8,7 +8,6 @@ import Checkbox from "../components/Checkbox";
 import LineOr from "../components/LineOr";
 import {redirect, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {cT} from "../usefull/functions";
 import {Fade} from "react-awesome-reveal";
 import {backend} from "../config/consts";
 import axios from "axios";
