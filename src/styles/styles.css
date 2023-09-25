@@ -106,13 +106,12 @@
 
 .input-chat-box {
     width: 100%;
-    border: 2px #3f3636 solid;
-    border-radius: 15px;
+    border: 0;
     background-color: transparent;
 }
 
-.input-chat-box:hover {
-    border: 2px white solid;
+.input-chat-box:focus {
+    outline: 0;
 }
 
 .input-chat-text {
