@@ -14,7 +14,8 @@ const Online = () => {
 const Away = () => {
     return (
         <div className={"status-circle"} style={{height: "18px", width: "18px"}}>
-            <FontAwesomeIcon icon={faMoon} style={{height:"100%", width:"100%",color: "#f5dc24", transform:"rotate(-20deg)"}} />
+            <FontAwesomeIcon icon={faMoon}
+                             style={{height: "100%", width: "100%", color: "#f5dc24", transform: "rotate(-20deg)"}}/>
         </div>
     )
 }
@@ -78,7 +79,7 @@ const UserBox = ({
                 {status}
             </div>
 
-            <div className={"d-flex"} style={{width:"100%", whiteSpace:"nowrap",}}>
+            <div className={"d-flex"} style={{width: "100%", whiteSpace: "nowrap",}}>
                 <p className={"username m-0 p-0 "}>{username.length > 12 ? username.substring(0, 11) + "..." : username}</p>
             </div>
         </div>
