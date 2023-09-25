@@ -13,7 +13,7 @@ const Chat = () => {
     }
 
     return (
-        <div className={"chat p-2"} style={{flex: 1}}>
+        <div className={"scroll-bar chat p-2"} style={{flex: 1}}>
             <div>
                 {msgArr.map((obj, index) => (<Message key={index} content={obj.message}/>))}
             </div>
