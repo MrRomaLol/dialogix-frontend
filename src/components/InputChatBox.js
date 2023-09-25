@@ -1,8 +1,9 @@
-import React, {useMemo, useState} from 'react';
+import React, {useLayoutEffect, useMemo, useRef, useState} from 'react';
 import "../styles/styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const InputChatBox = ({name, id, onTextChange}) => {
+    const inputRef = useRef(null);
     const [input, setInput] = useState('');
 
     const handleKeyDown = (event) => {
@@ -13,17 +14,18 @@ const InputChatBox = ({name, id, onTextChange}) => {
             event.preventDefault();
         }
     };
+
     const handleInput = (event) => {
         const text = event.target.value;
-        console.log(text);
         setInput(text);
         onTextChange?.(text);
     }
 
-    const rowsLength = useMemo(() => {
-        const rows = input.split('\n').length;
-        return(Math.min(rows, 8));
+    useLayoutEffect(() => {
+        inputRef.current.style.height = "55px";
+        inputRef.current.style.height = `${(Math.min(inputRef.current.scrollHeight + 4, 270))}px`;
     }, [input])
+
 
     return (
         <div className={"mb-4 mt-0 mx-3"} >
@@ -34,8 +36,8 @@ const InputChatBox = ({name, id, onTextChange}) => {
                     placeholder={name}
                     onChange={handleInput}
                     onKeyDown={handleKeyDown}
-                    rows={rowsLength}
                     id={id}
+                    ref={inputRef}
                 />
         </div>
     );
