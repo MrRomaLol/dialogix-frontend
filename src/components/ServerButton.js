@@ -2,7 +2,7 @@ import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
 import "../styles/styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function ServerButton({image, name, onHover, serverIndex, isNotificated, isSelected}, ref) {
+function ServerButton({image, name, onHover, serverIndex, isNotificated, isSelected, onClick}, ref) {
     const [isHovered, setIsHovered] = useState(false);
     const objectRef = useRef(null);
 
@@ -41,6 +41,10 @@ function ServerButton({image, name, onHover, serverIndex, isNotificated, isSelec
         }
     }
 
+    const handleOnClick = () => {
+        onClick?.();
+    }
+
     useImperativeHandle(ref, () => ({disableHover, getPosition}))
 
     return (
@@ -48,10 +52,12 @@ function ServerButton({image, name, onHover, serverIndex, isNotificated, isSelec
             <div className={"server-button-line position-relative"} style={{...style.line}}/>
             {image ? <img src={image} alt={name} width={48} height={48} className={"server-button-image position-absolute"} style={{...style.image}}
                           onMouseEnter={() => handleOnHover(true)}
-                          onMouseLeave={() => handleOnHover(false)}/> :
+                          onMouseLeave={() => handleOnHover(false)}
+                          onClick={handleOnClick}/> :
                 <div className={"server-button-image position-absolute"} style={{...style.image, width: "48px", height: "48px", backgroundColor: "rgba(0,0,0,0.4)"}}
                      onMouseEnter={() => handleOnHover(true)}
-                     onMouseLeave={() => handleOnHover(false)}>
+                     onMouseLeave={() => handleOnHover(false)}
+                     onClick={handleOnClick}>
                     <div className={"namePlaceholder text-white d-flex justify-content-center align-items-center"}>{name.substring(0, 1)}</div>
                 </div>}
         </div>

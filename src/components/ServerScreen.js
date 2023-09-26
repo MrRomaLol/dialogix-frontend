@@ -2,13 +2,18 @@ import React from 'react';
 import UserBox from "./UserBox";
 import '../styles/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ServerName from "./ServerName";
+import UserNameBox from "./UserNameBox";
+import ChannelList from "./ChannelList";
 
 const ServerScreen = () => {
     return (
         <div style={{display:"flex", flex:1}}>
 
             <div className={"app-channels-box"}>
-
+                <ServerName />
+                <ChannelList />
+                <UserNameBox />
             </div>
 
             <div className={"app-text-box"}>
@@ -16,6 +21,7 @@ const ServerScreen = () => {
             </div>
 
             <div className={"app-users-box"}>
+                {/*<UserList />*/}
                 <UserBox username={"GetTheNya"} activity={"away"}/>
                 <UserBox username={"Ishodus"} activity={"dnd"}/>
                 <UserBox username={"HybridTNTU"}/>

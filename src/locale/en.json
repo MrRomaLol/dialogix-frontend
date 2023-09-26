@@ -15,6 +15,9 @@
         "regBtn": "REGISTER",
         "orLine": "OR",
         "noAcc": "Dont have account yet?"
+      },
+      "mainScreen": {
+        "chooseChat": "Choose chat to continue"
       }
     }
   }
