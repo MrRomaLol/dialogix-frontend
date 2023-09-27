@@ -6,9 +6,9 @@ import ChannelBox from "./ChannelBox";
 const ChannelList = () => {
 
     const channels = [
-        {name: "kedgnierbfenfeornferirigbegqwerkjgb"},
-        {name: "channel"},
-        {name: "channel"},
+        {name: "kedgnierbfenfeornferirigbegqwerkjgfsdfjsdfbsnmdfmsd fmnwbenfnwemnwefwemfnwnme fwefnwef b"},
+        {name: "channel fnjwef  ewfhjwefhwe we"},
+        {name: "channelfwefwef ewf wefwef"},
         {name: "channel"},
         {name: "channel"},
         {name: "channel"},

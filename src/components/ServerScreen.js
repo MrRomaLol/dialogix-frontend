@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ServerName from "./ServerName";
 import UserNameBox from "./UserNameBox";
 import ChannelList from "./ChannelList";
+import ChannelHeader from "./ChannelHeader";
 
 const ServerScreen = () => {
     return (
@@ -12,6 +13,7 @@ const ServerScreen = () => {
 
             <div className={"app-channels-box"}>
                 <ServerName />
+                <ChannelHeader />
                 <ChannelList />
                 <UserNameBox />
             </div>
