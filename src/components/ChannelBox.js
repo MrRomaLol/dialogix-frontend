@@ -7,17 +7,25 @@ import {faGear} from "@fortawesome/free-solid-svg-icons";
 const ChannelBox = ({name}) => {
 
     return (
-        <div className={"p-0 m-3 d-inline-block"}
-             style={{justifyContent: "space-between", flexDirection:"column", height: "20px", maxWidth: "168px"}}>
-            <div style={{maxWidth: "140px"}}>
+        <div className={"p-0 m-3 d-flex"}
+             style={{height: "20px", justifyContent:"space-between"}}>
+            <div className={"d-inline-block"}>
                 <p className={"group-name"}
-                   style={{textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"}}>
+                   style={{
+                       textOverflow: "ellipsis",
+                       overflow: "hidden",
+                       whiteSpace: "nowrap",
+                       width: "140px",
+                       margin: 0,
+                       padding: 0
+                   }}>
                     {name}
                 </p>
             </div>
 
-            <div className={"m-0 p-0"} style={{maxWidth:"20px"}}>
-                <IconButton icon={faGear} style={{color: "#cecece", height:"20px", width:"20px"}} onClick={null}/>
+            <div className={"m-0 p-0"} style={{width: "20px"}}>
+                <IconButton icon={faGear} style={{color: "#cecece", height: "20px", width: "20px", float: "right"}}
+                            onClick={null}/>
                 {/*<IconButton icon={} style={} className={} onClick={null} hoverStyle={} />*/}
             </div>
         </div>
