@@ -1,11 +1,11 @@
 import React, {useMemo, useRef} from 'react';
 import '../styles/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import InputTextBox from "../components/InputTextBox";
-import ButtonClass from "../components/ButtonClass";
+import InputTextBox from "../components/Modules/InputTextBox";
+import ButtonClass from "../components/Modules/ButtonClass";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Checkbox from "../components/Checkbox";
-import LineOr from "../components/LineOr";
+import Checkbox from "../components/Modules/Checkbox";
+import LineOr from "../components/Modules/LineOr";
 import {redirect, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {Fade} from "react-awesome-reveal";

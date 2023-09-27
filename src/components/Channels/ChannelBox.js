@@ -1,7 +1,7 @@
 import React from 'react';
-import '../styles/styles.css'
+import '../../styles/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import IconButton from "./IconButton";
+import IconButton from "../Icon/IconButton";
 import {faGear} from "@fortawesome/free-solid-svg-icons";
 
 const ChannelBox = ({name}) => {

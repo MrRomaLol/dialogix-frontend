@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import "../styles/styles.css";
+import "../../styles/styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const InputTextBox = ({name, type, id, onTextChange}) => {

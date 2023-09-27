@@ -1,10 +1,10 @@
 import React from 'react';
-import UserBox from "./UserBox";
+import UserBox from "./UserBox/UserBox";
 import '../styles/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as PropTypes from "prop-types";
-import InputChatBox from "./InputChatBox";
-import ChatBox from "./ChatBox";
+import InputChatBox from "./Modules/InputChatBox";
+import ChatBox from "./ChatBox/ChatBox";
 import {useTranslation} from "react-i18next";
 
 

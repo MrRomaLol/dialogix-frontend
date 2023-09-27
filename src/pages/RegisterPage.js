@@ -1,10 +1,10 @@
 import React, {useMemo, useRef} from 'react';
 import '../styles/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import InputTextBox from "../components/InputTextBox";
-import ButtonClass from "../components/ButtonClass";
+import InputTextBox from "../components/Modules/InputTextBox";
+import ButtonClass from "../components/Modules/ButtonClass";
 import "bootstrap/dist/css/bootstrap.min.css";
-import LineOr from "../components/LineOr";
+import LineOr from "../components/Modules/LineOr";
 import {useTranslation} from "react-i18next";
 import {redirect, useNavigate} from "react-router-dom";
 import {Fade} from "react-awesome-reveal";

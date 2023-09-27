@@ -2,11 +2,11 @@ import React, {useMemo, useState} from 'react';
 import '../styles/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useNavigate} from "react-router-dom";
-import ServerList from "../components/ServerList";
+import ServerList from "../components/ServerScreen/ServerList";
 import {onUnLoggined} from "../usefull/loginStatus";
-import ServerScreen from "../components/ServerScreen";
+import ServerScreen from "../components/ServerScreen/ServerScreen";
 import MainScreen from "../components/MainScreen";
-import ServerButton from "../components/ServerButton";
+import ServerButton from "../components/ServerScreen/ServerButton";
 
 const AppPage = () => {
     const navigate = useNavigate();

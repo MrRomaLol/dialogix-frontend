@@ -2,7 +2,7 @@ import React from 'react';
 import {useNavigate} from "react-router-dom";
 import '../styles/styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ButtonClass from "../components/ButtonClass";
+import ButtonClass from "../components/Modules/ButtonClass";
 import {useTranslation} from "react-i18next";
 
 

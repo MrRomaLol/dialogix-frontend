@@ -1,11 +1,11 @@
 import React from 'react';
-import UserBox from "./UserBox";
-import '../styles/styles.css'
+import UserBox from "../UserBox/UserBox";
+import '../../styles/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ServerName from "./ServerName";
-import UserNameBox from "./UserNameBox";
-import ChannelList from "./ChannelList";
-import ChannelHeader from "./ChannelHeader";
+import UserNameBox from "../UserBox/UserNameBox";
+import ChannelList from "../Channels/ChannelList";
+import ChannelHeader from "../Channels/ChannelHeader";
 
 const ServerScreen = () => {
     return (
