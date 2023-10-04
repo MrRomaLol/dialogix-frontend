@@ -7,8 +7,14 @@ import {onUnLoggined} from "../usefull/loginStatus";
 import ServerScreen from "../components/ServerScreen/ServerScreen";
 import MainScreen from "../components/MainScreen";
 import ServerButton from "../components/ServerScreen/ServerButton";
+import FriendsSideBar from "../components/NewComponents/FriendsSideBar";
+import ServerSideBar from "../components/NewComponents/ServersSideBar";
+import Header from "../components/NewComponents/Header";
+import ChatBox from "../components/NewComponents/ChatBox";
+import {useTheme} from "../theme";
 
 const AppPage = () => {
+    const theme = useTheme();
     const navigate = useNavigate();
 
     const [isMainPage, setIsMainPage] = useState(true);
@@ -30,22 +36,33 @@ const AppPage = () => {
         onUnLoggined(logout, logout);
     }, []);
 
-
     return (
 
-        <div className={"app-page"}>
+        <div className={"app-page"} style={{backgroundColor: theme.background}}>
 
-            <div className={"app-name"}>
-                <p className={"p-2 m-0"} style={{fontFamily: "Buroek"}}>DIALOGIX</p>
-            </div>
+            <FriendsSideBar/>
 
-            <div className={"app-main-page m-0 p-0"}>
+            <div style={{display: "flex", flex: "1", flexDirection: "column"}}>
 
-                <ServerList onClick={handleChange}/>
+                <Header/>
 
-                {content}
+                <ChatBox/>
 
             </div>
+
+            <ServerSideBar/>
+
+            {/*<div className={"app-name"}>*/}
+            {/*    <p className={"p-2 m-0"} style={{fontFamily: "Buroek"}}>DIALOGIX</p>*/}
+            {/*</div>*/}
+
+            {/*<div className={"app-main-page m-0 p-0"}>*/}
+
+            {/*    <ServerList onClick={handleChange}/>*/}
+
+            {/*    {content}*/}
+
+            {/*</div>*/}
 
 
         </div>

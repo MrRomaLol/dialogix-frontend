@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import i18n from "i18next";
+import {Provider} from "react-redux";
 import {initReactI18next} from "react-i18next";
 
-import App from './App';
+import store from "./store";
 
+import App from './App';
 import {uk, en} from "./locale/locale";
 
 i18n.use(initReactI18next).init({
@@ -13,13 +15,15 @@ i18n.use(initReactI18next).init({
         ...uk, ...en,
     },
     lng: "en",
-    fallbackLng:"en",
+    fallbackLng: "en",
     interpolation: {
         escapeValue: false,
     }
 })
 
 ReactDOM.render(
-    <App/>,
+    <Provider store={store}>
+        <App/>
+    </Provider>,
     document.getElementById('root')
 )
