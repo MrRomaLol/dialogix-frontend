@@ -42,7 +42,7 @@ const AppPage = () => {
 
             <FriendsSideBar/>
 
-            <div style={{display: "flex", flex: "1", flexDirection: "column"}}>
+            <div style={{display: "flex", flexDirection: "column", flex: 1}}>
 
                 <Header/>
 

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import ServerButton from "../ServerScreen/ServerButton";
 import {useTheme} from "../../theme";
+import ThemeSelector from "./ThemeSelector";
 
 const FriendsSideBar = () => {
     const theme = useTheme();
@@ -28,6 +29,7 @@ const FriendsSideBar = () => {
              onMouseEnter={() => handleIsHovered(true)}
              onMouseLeave={() => handleIsHovered(false)}>
             <ServerButton name={"qwe"}/>
+            <ThemeSelector />
         </div>
     );
 };
