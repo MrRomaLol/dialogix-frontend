@@ -6,17 +6,20 @@ const Left = styled.div`
   flex: 1;
 `
 
-const LText = styled.p`
+const LRText = styled.p`
   color: #9788b0;
   font-family: "Goldman-Regular", Helvetica, serif;
   font-size: 28px;
   font-weight: 400;
   height: 64px;
-  left: 93px;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
   top: 0;
+`
+
+const LText = styled(LRText)`
+  left: 93px; 
 `
 
 const LeftSide = (props) => {
@@ -25,4 +28,5 @@ const LeftSide = (props) => {
     </Left>
 };
 
+module.exports = {LRText}
 export default LeftSide;
