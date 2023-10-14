@@ -6,7 +6,7 @@ const Left = styled.div`
   flex: 1;
 `
 
-const LRText = styled.p`
+export const LRText = styled.p`
   color: #9788b0;
   font-family: "Goldman-Regular", Helvetica, serif;
   font-size: 28px;
@@ -28,5 +28,5 @@ const LeftSide = (props) => {
     </Left>
 };
 
-module.exports = {LRText}
+
 export default LeftSide;
