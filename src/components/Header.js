@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import Flex from "./Flex";
+import Flex from "./StyledComponents/Flex";
 import LeftSide from "./Header/LeftSide";
 import CenterSide from "./Header/CenterSide";
 import RightSide from "./Header/RightSide";

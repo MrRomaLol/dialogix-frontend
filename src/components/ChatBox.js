@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
-import Flex from "./Flex";
+import Flex from "./StyledComponents/Flex";
+import MessageBox from "./Chat/MessageBox";
 
 const Chat = styled.div`
 `
@@ -8,7 +9,7 @@ const Chat = styled.div`
 const ChatBox = () => {
     return <Flex>
         <Chat></Chat>
-        <MessageBox></MessageBox>
+        <MessageBox/>
     </Flex>
 };
 

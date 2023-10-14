@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Microphone = () => {
+const MessageBox = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const Microphone = () => {
     );
 };
 
-export default Microphone;
+export default MessageBox;

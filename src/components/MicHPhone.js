@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
-import Microphone from "./Microphone";
-import Headphones from "./Headphones";
+import Microphone from "./MicHPhones/Microphone";
+import Headphones from "./MicHPhones/Headphones";
 
 const MPHButtons = styled.div`
   

@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {onUnLoggined} from "../usefull/loginStatus";
 import {useTheme} from "../theme";
 import Header from "../components/Header";
-import FullWindow from "../components/FullWindow";
+import FullWindow from "../components/StyledComponents/FullWindow";
 
 const AppPage = () => {
     // const theme = useTheme();
@@ -36,7 +36,7 @@ export default AppPage;
 //
 //     <Header/>
 //
-//     <ChatBox/>
+//     <Chat/>
 //
 // </div>
 //
