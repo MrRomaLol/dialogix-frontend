@@ -1,6 +1,7 @@
 {
   "background": "#57287b",
-  "headerBackground": "#45205e",
-  "sidebarBackground": "#562974",
-  "chatBoxBackground": "#341749"
+  "backgroundGradient": "#9b2d8a",
+  "chatBoxBackground": "rgba(0, 0, 0, 0.4)",
+  "headerBackground": "rgba(0, 0, 0, 0.2)",
+  "sidebarBackground": "rgba(0, 0, 0, 0.2)"
 }

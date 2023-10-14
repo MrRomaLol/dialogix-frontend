@@ -1,30 +1,32 @@
 import React from "react";
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {createGlobalStyle} from 'styled-components';
+import {useSelector} from "react-redux";
 
+import MainPage from "./pages/MainPage";
 
 import {ThemeProvider, themes} from "./theme";
-
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import MainPage from "./pages/MainPage";
 import AppPage from "./pages/AppPage";
-import {useSelector} from "react-redux";
+
+const GlobalStyle = createGlobalStyle`
+  * {
+    margin: 0;
+    padding: 0;
+  }
+`
 
 function App() {
     const theme = useSelector(state => state.theme.theme);
 
-    console.log(theme);
-
     return (
         <ThemeProvider theme={themes[theme]}>
-            <Router>
+            <GlobalStyle/>
+            <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<MainPage/>}/>
-                    <Route path="/login" element={<LoginPage/>}/>
-                    <Route path="/register" element={<RegisterPage/>}/>
                     <Route path="/app" element={<AppPage/>}/>
                 </Routes>
-            </Router>
+            </BrowserRouter>
         </ThemeProvider>
     )
 }
