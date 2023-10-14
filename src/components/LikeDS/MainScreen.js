@@ -1,6 +1,6 @@
 import React from 'react';
 import UserBox from "./UserBox/UserBox";
-import '../styles/styles.css'
+import '../../styles/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as PropTypes from "prop-types";
 import InputChatBox from "./Modules/InputChatBox";

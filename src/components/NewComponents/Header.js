@@ -17,7 +17,7 @@ const Header = () => {
         },
 
         left: {
-            height: "30px",
+            height: "40px",
             borderRadius: "0 0 0 30px",
             width: "30%"
         },
@@ -32,7 +32,7 @@ const Header = () => {
         },
 
         right: {
-            height: "30px",
+            height: "40px",
             borderRadius: "0 0 30px 0",
             width: "30%"
         }

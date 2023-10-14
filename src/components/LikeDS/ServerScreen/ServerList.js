@@ -1,9 +1,8 @@
 import React, {useRef, useState} from 'react';
 import ServerButton from "./ServerButton";
-import "../../styles/styles.css"
+import "../../../styles/styles.css"
 import "bootstrap/dist/css/bootstrap.min.css"
-import {useNavigate} from "react-router-dom";
-import mainScreen from "../MainScreen";
+
 
 const ServerName = ({top, name, isHovered}) => {
     return (

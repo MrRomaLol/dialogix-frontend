@@ -1,5 +1,5 @@
 import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
-import "../../styles/styles.css";
+import "../../../styles/styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function ServerButton({image, name, onHover, serverIndex, isNotificated, isSelected, onClick}, ref) {

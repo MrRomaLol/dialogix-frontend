@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import ServerButton from "../ServerScreen/ServerButton";
+import ServerButton from "../LikeDS/ServerScreen/ServerButton";
 import {useTheme} from "../../theme";
 
 const ServerSideBar = () => {

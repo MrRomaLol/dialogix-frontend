@@ -1,6 +1,6 @@
 import React from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import '../../styles/styles.css'
+import '../../../styles/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {faMoon} from "@fortawesome/free-solid-svg-icons";
 

@@ -1,9 +1,6 @@
 import React from "react";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
-
-
 import {ThemeProvider, themes} from "./theme";
-
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MainPage from "./pages/MainPage";

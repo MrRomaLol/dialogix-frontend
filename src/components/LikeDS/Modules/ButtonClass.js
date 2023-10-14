@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 const ButtonClass = ({
-                         name = 'Modules name',
+                         name = 'Button name',
                          textColor = 'black',
                          hoverTextColor = 'white',
                          buttonColor = 'transparent',

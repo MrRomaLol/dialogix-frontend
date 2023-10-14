@@ -1,6 +1,6 @@
 import React from 'react';
 import InputChatBox from "../Modules/InputChatBox";
-import '../../styles/styles.css'
+import '../../../styles/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Chat from "./Chat";
 

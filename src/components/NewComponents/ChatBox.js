@@ -11,6 +11,7 @@ const ChatBox = () => {
         back: {
             display: "flex",
             flex: 1,
+            overflow: "hidden",
             flexDirection: "column",
             backgroundColor: theme.chatBoxBackground,
             margin: "20px 40px 20px 40px",

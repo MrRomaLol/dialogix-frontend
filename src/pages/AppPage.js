@@ -2,32 +2,14 @@ import React, {useMemo, useState} from 'react';
 import '../styles/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useNavigate} from "react-router-dom";
-import ServerList from "../components/ServerScreen/ServerList";
 import {onUnLoggined} from "../usefull/loginStatus";
-import ServerScreen from "../components/ServerScreen/ServerScreen";
-import MainScreen from "../components/MainScreen";
-import ServerButton from "../components/ServerScreen/ServerButton";
-import FriendsSideBar from "../components/NewComponents/FriendsSideBar";
-import ServerSideBar from "../components/NewComponents/ServersSideBar";
-import Header from "../components/NewComponents/Header";
-import ChatBox from "../components/NewComponents/ChatBox";
 import {useTheme} from "../theme";
+import Header from "../components/Header";
+import FullWindow from "../components/FullWindow";
 
 const AppPage = () => {
-    const theme = useTheme();
+    // const theme = useTheme();
     const navigate = useNavigate();
-
-    const [isMainPage, setIsMainPage] = useState(true);
-
-    let content = isMainPage ? <MainScreen/> : <ServerScreen/>
-
-    const handleChange = (idk) => {
-        if (idk.type === "main") {
-            setIsMainPage(true);
-        } else if (idk.type === "server") {
-            setIsMainPage(false);
-        }
-    }
 
     useMemo(() => {
         const logout = () => {
@@ -35,38 +17,55 @@ const AppPage = () => {
         }
         onUnLoggined(logout, logout);
     }, []);
-
-    return (
-
-        <div className={"app-page"} style={{backgroundColor: theme.background}}>
-
-            <FriendsSideBar/>
-
-            <div style={{display: "flex", flexDirection: "column", flex: 1}}>
-
-                <Header/>
-
-                <ChatBox/>
-
-            </div>
-
-            <ServerSideBar/>
-
-            {/*<div className={"app-name"}>*/}
-            {/*    <p className={"p-2 m-0"} style={{fontFamily: "Buroek"}}>DIALOGIX</p>*/}
-            {/*</div>*/}
-
-            {/*<div className={"app-main-page m-0 p-0"}>*/}
-
-            {/*    <ServerList onClick={handleChange}/>*/}
-
-            {/*    {content}*/}
-
-            {/*</div>*/}
-
-
-        </div>
-    );
+    
+    return <FullWindow>
+        <Header></Header>
+    </FullWindow>
 };
 
+
 export default AppPage;
+
+// New Design
+
+// style={{backgroundColor: theme.background}}
+
+// <FriendsSideBar/>
+//
+// <div style={{display: "flex", flexDirection: "column", flex: 1}}>
+//
+//     <Header/>
+//
+//     <ChatBox/>
+//
+// </div>
+//
+// <ServerSideBar/>
+
+
+// {/*LikeDS*/}
+
+// const [isMainPage, setIsMainPage] = useState(true);
+//
+// let content = isMainPage ? <MainScreen/> : <ServerScreen/>
+//
+// const handleChange = (idk) => {
+//     if (idk.type === "main") {
+//         setIsMainPage(true);
+//     } else if (idk.type === "server") {
+//         setIsMainPage(false);
+//     }
+// }
+
+
+// (   <div className={"app-name"} style={{height: "100vh"}}>
+//         <p className={"p-2 m-0"} style={{fontFamily: "Buroek"}}>DIALOGIX</p>
+//
+//         <div className={"app-main-page m-0 p-0"}>
+//             <ServerList onClick={handleChange}/>
+//
+//             {content}
+//
+//         </div>
+//     </div>
+// );

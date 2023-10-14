@@ -2,7 +2,7 @@ import React from 'react';
 import {useNavigate} from "react-router-dom";
 import '../styles/styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ButtonClass from "../components/Modules/ButtonClass";
+import ButtonClass from "../components/LikeDS/Modules/ButtonClass";
 import {useTranslation} from "react-i18next";
 
 
@@ -18,6 +18,9 @@ const MainPage = () => {
     const handleRegister = () => {
         navigate('/register');
     }
+    const handleApp = () => {
+        navigate('/app');
+    }
 
     return (
         <div className={"main-page"}>
@@ -26,7 +29,7 @@ const MainPage = () => {
                     <h2 className={"main-page-logo mt-2"} style={{fontFamily: "Buroek"}}>DIALOGIX</h2>
 
                     <div>
-                        <h1>gvdfgdfgdfg</h1>
+                        <h1>Best project</h1>
                     </div>
 
                     <div className={"buttons-log-reg"}>
