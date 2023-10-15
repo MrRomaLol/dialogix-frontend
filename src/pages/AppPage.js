@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import FriendsSideBar from "../components/FriendsSideBar";
 import styled from "styled-components";
 
@@ -21,18 +21,41 @@ const Content = styled.div`
   position: fixed;
   left: 0;
   right: 0;
-  z-index: 9999;
+  z-index: 10;
   width: 100%;
   height: 100%;
 `
 
 const AppPage = () => {
+    const [isScreenTooSmall, setIsScreenTooSmall] = useState(false);
+
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsScreenTooSmall(window.innerWidth < 768);
+        };
+
+        checkScreenSize();
+
+        window.addEventListener('resize', checkScreenSize);
+
+        return () => {
+            window.removeEventListener('resize', checkScreenSize);
+        };
+    }, []);
+
     return (
         <React.Fragment>
-            <AppBackground/>
-            <Content>
-                <FriendsSideBar/>
-            </Content>
+            {isScreenTooSmall ?
+                (<div>
+                    <h1>Screen is too small!</h1>
+                    <p>Please use a larger screen to view this content.</p>
+                </div>) :
+                (<React.Fragment>
+                    <AppBackground/>
+                    <Content>
+                        <FriendsSideBar/>
+                    </Content>
+                </React.Fragment>)}
         </React.Fragment>
     );
 };
