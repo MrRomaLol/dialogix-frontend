@@ -13,8 +13,9 @@ export const LRBars = styled.div`
   }
 `
 
-export const BarWrapper = styled(LRBars)`
+export const BarsBorder = styled.div`
+  height: 100%;
   width: 22px;
-  margin-left: -22px;
   background-color: rgba(188, 44, 201, 1);
+  z-index: 15;
 `

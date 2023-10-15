@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import FriendsSideBar from "../components/FriendsSideBar";
 import styled from "styled-components";
+import MainContent from "../components/MainContent";
+import ServersSideBar from "../components/ServersSideBar";
 
 const AppBackground = styled.div`
   position: fixed;
@@ -24,6 +26,9 @@ const Content = styled.div`
   z-index: 10;
   width: 100%;
   height: 100%;
+  
+  display: flex;
+  flex-direction: row;
 `
 
 const AppPage = () => {
@@ -54,6 +59,8 @@ const AppPage = () => {
                     <AppBackground/>
                     <Content>
                         <FriendsSideBar/>
+                        <MainContent/>
+                        <ServersSideBar/>
                     </Content>
                 </React.Fragment>)}
         </React.Fragment>
