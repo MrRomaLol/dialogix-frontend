@@ -13,7 +13,7 @@ const MainPage = () => {
     }
 
     const goToApp = () => {
-        navigate('/register')
+        navigate('/app')
     }
 
     return (
