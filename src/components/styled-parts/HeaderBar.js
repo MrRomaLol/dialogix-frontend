@@ -5,11 +5,13 @@ export const HeaderBack = styled.div`
 `
 
 export const LeftRightBars = styled(HeaderBack)`
-  width: 450px;
+  width: 100%;
   height: 50px;
 `
 
-export const HeaderBorders = styled(LeftRightBars)`
+export const HeaderBorders = styled.div`
+  height: 50px;
+  
   position: absolute;
   top: 0;
   left: 0;

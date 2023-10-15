@@ -3,7 +3,8 @@ import styled from "styled-components";
 import Header from "./Header";
 
 const Content = styled.div`
-  flex: 1;
+  width: 100%;
+  height: 100%;
 `
 
 const MainContent = () => {
