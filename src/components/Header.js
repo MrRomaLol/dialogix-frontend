@@ -3,6 +3,11 @@ import {HeaderBack, HeaderBorders, LeftRightBars} from "./styled-parts/HeaderBar
 import styled from "styled-components";
 
 const EobaniyBlyr = styled.span`
+  position: fixed;
+  left: 0;
+  right: 0;
+  margin-left: 100px;
+  margin-right: 100px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -14,7 +19,8 @@ const Container = styled.div`
 `
 
 const ContainerLR = styled(Container)`
-  width: 20%;
+  flex: 0 0 20%;
+  max-width: 300px;
 `
 
 const LeftBorder = styled(HeaderBorders)`

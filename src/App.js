@@ -8,6 +8,8 @@ import MainPage from "./pages/MainPage";
 import {ThemeProvider, themes} from "./theme";
 import AppPage from "./pages/AppPage";
 
+import "./styles/styles.css"
+
 const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;

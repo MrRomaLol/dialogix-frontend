@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from "styled-components";
 import {BarsBorder, LRBars} from "./styled-parts/LRBars";
+import BarButton from "./BarButton";
+import {faUsers} from "@fortawesome/free-solid-svg-icons";
 
 const EobaniyBlyr = styled.span`
   height: 100%;
@@ -23,7 +25,7 @@ const ServersSideBar = () => {
         <EobaniyBlyr>
             <BarBorder/>
             <Bar>
-
+                <BarButton icon={faUsers} float={'right'}/>
             </Bar>
         </EobaniyBlyr>
     );

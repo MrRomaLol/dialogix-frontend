@@ -1,17 +1,24 @@
 import React from 'react';
 import styled from "styled-components";
-import Header from "./Header";
+import Chat from "./Chat";
 
 const Content = styled.div`
   width: 100%;
   height: 100%;
+  
+  box-sizing: border-box;
+  
+  padding-top: 120px;
+  padding-bottom: 20px;
+  padding-left: 70px;
+  padding-right: 70px;
 `
 
 const MainContent = () => {
     return (
         <Content>
 
-            <Header/>
+            <Chat/>
 
         </Content>
     );
