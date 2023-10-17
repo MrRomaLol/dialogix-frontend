@@ -1,5 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {
+    faCompress,
+    faWindowMinimize,
+    faXmark
+} from "@fortawesome/free-solid-svg-icons";
 
 const WindowFrame = styled.div`
   width: 100%;
@@ -9,8 +15,6 @@ const WindowFrame = styled.div`
 
   padding-left: 10px;
   padding-right: 10px;
-  
-  color: white;
 
   display: flex;
   flex-direction: row;
@@ -21,6 +25,27 @@ const WindowFrame = styled.div`
 
   -webkit-user-select: none;
   -webkit-app-region: drag;
+`
+
+const StyledButtons = styled(FontAwesomeIcon)`
+  color: white;
+
+  padding: 4px;
+
+  width: 16px;
+  height: 16px;
+
+  margin-left: 12px;
+
+  cursor: pointer;
+
+  border-radius: 50%;
+
+  transition-duration: 100ms;
+
+  &:hover {
+    color: ${({color}) => color || "white"};
+  }
 `
 
 const Buttons = styled.div`
@@ -35,6 +60,12 @@ const Button = styled.p`
   margin-left: 10px;
 
   cursor: pointer;
+`
+
+const DialogixName = styled.p`
+  color: white;
+
+  font-size: 20px;
 `
 
 const ElectronHeader = () => {
@@ -52,11 +83,13 @@ const ElectronHeader = () => {
 
     return (
         <WindowFrame>
-            <p>DialogiX</p>
+            <DialogixName>DialogiX</DialogixName>
             <Buttons>
-                <Button onClick={handleMinimize}>minimize</Button>
-                <Button onClick={handleWindowed}>windowed</Button>
-                <Button onClick={handleClose}>close</Button>
+
+                <StyledButtons icon={faWindowMinimize} color={"grey"} onClick={handleMinimize}/>
+                <StyledButtons icon={faCompress} color={"grey"} onClick={handleWindowed}/>
+                <StyledButtons icon={faXmark} color={"red"} onClick={handleClose}/>
+
             </Buttons>
         </WindowFrame>
     );
