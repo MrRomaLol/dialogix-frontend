@@ -3,10 +3,28 @@ import IconButton from "./IconButton";
 import {faCirclePlus, faPaperPlane} from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
+const Container = styled.div`
+  margin: 15px;
+  position: relative;
+`
 const InputBack = styled.div`
   display: flex;
   align-items: center;
+  padding-top: 14px;
+  padding-bottom: 14px;
   background-color: rgba(121, 65, 142, 0.62);
+  clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 43px), calc(100% - 43px) 100%, 0% 100%);
+```
+
+const InputBorder = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(188, 44, 201, 0.62);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 43px), calc(100% - 43px) 100%, 0 100%, 0 0,
+  2px 2px, 2px calc(100% - 2px), calc(100% - 43px) calc(100% - 2px), calc(100% - 2px) calc(100% - 43px), calc(100% - 2px) 2px, 2px 2px);
 `
 
 const InputChatBox = ({name, id, onTextChange}) => {
@@ -22,7 +40,8 @@ const InputChatBox = ({name, id, onTextChange}) => {
             transitionDuration: "100ms"
         },
         sendButton: {
-            color: input.trim() ? "#949cf7" : "#5e5e5e"
+            color: input.trim() ? "#949cf7" : "#5e5e5e",
+            marginRight: "45px"
         }
     }
 
@@ -42,7 +61,7 @@ const InputChatBox = ({name, id, onTextChange}) => {
     }
 
     useLayoutEffect(() => {
-        inputRef.current.style.height = "45px";
+        inputRef.current.style.height = "25px";
         inputRef.current.style.height = `${(Math.min(inputRef.current.scrollHeight + 4, 270))}px`;
     }, [input])
 
@@ -57,28 +76,32 @@ const InputChatBox = ({name, id, onTextChange}) => {
         //     backgroundColor: "#452654", ...styles.box
         // }}>
 
-        <InputBack>
-            <IconButton icon={faCirclePlus}
-                        style={{...styles.button, color: "#cecece", marginLeft: "2px", marginRight: "5px"}}
-                        hoverStyle={{color: "#ffffff", cursor: "pointer"}}/>
-            <textarea
-                className={"scroll-bar"}
-                style={{
-                    fontSize: "20px", color: "white", resize: "none", verticalAlign: "middle", width: "100%",
-                    border: "0",
-                    backgroundColor: "transparent", padding: "4px",
-                }}
-                value={input}
-                placeholder={name}
-                onChange={handleInput}
-                onKeyDown={handleKeyDown}
-                id={id}
-                ref={inputRef}
-            />
-            <IconButton icon={faPaperPlane}
-                        style={{...styles.button, ...styles.sendButton}}
-                        hoverStyle={(input.trim() ? {color: "#ffffff", cursor: "pointer"} : {})}/>
-        </InputBack>
+
+        <Container>
+            <InputBack>
+                <IconButton icon={faCirclePlus}
+                            style={{...styles.button, color: "#cecece", marginLeft: "7px", marginRight: "5px"}}
+                            hoverStyle={{color: "#ffffff", cursor: "pointer"}}/>
+                <textarea
+                    className={"scroll-bar"}
+                    style={{
+                        fontSize: "28px", color: "white", resize: "none", verticalAlign: "middle", width: "100%",
+                        border: "0",
+                        backgroundColor: "transparent", padding: "4px",
+                    }}
+                    value={input}
+                    placeholder={name}
+                    onChange={handleInput}
+                    onKeyDown={handleKeyDown}
+                    id={id}
+                    ref={inputRef}
+                />
+                <IconButton icon={faPaperPlane}
+                            style={{...styles.button, ...styles.sendButton}}
+                            hoverStyle={(input.trim() ? {color: "#ffffff", cursor: "pointer"} : {})}/>
+            </InputBack>
+            <InputBorder/>
+        </Container>
         // </div>
     );
 };
