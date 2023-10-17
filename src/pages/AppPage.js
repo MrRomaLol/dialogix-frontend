@@ -5,6 +5,7 @@ import ServersSideBar from "../components/ServersSideBar";
 import Header from "../components/Header";
 import {AppBackground, AppContent} from "../components/styled-parts/AppBackground";
 import SmallScreen from "../components/SmallScreen";
+import ElectronHeader from "../components/ElectronHeader";
 
 const AppPage = () => {
     const [isScreenTooSmall, setIsScreenTooSmall] = useState(false);
@@ -30,10 +31,13 @@ const AppPage = () => {
                 (<React.Fragment>
                     <AppBackground/>
                     <AppContent>
-                        <FriendsSideBar/>
-                        <Header/>
-                        <MainContent/>
-                        <ServersSideBar/>
+                        {window.IS_USING_DIALOGIX_APP && <ElectronHeader/>}
+                        <div style={{display: "flex", flexDirection: "row", flex: 1}}>
+                            <FriendsSideBar/>
+                            <Header/>
+                            <MainContent/>
+                            <ServersSideBar/>
+                        </div>
                     </AppContent>
                 </React.Fragment>)}
         </React.Fragment>
