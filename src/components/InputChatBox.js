@@ -1,7 +1,7 @@
 import React, {useLayoutEffect, useRef, useState} from 'react';
 import IconButton from "./IconButton";
-import {faCirclePlus, faPaperPlane} from "@fortawesome/free-solid-svg-icons";
-import styled from "styled-components";
+import {faPaperclip, faPaperPlane} from "@fortawesome/free-solid-svg-icons";
+import styled, {css} from "styled-components";
 
 const Container = styled.div`
   margin: 15px;
@@ -10,11 +10,11 @@ const Container = styled.div`
 const InputBack = styled.div`
   display: flex;
   align-items: center;
-  padding-top: 14px;
-  padding-bottom: 14px;
+  padding-top: 16px;
+  padding-bottom: 16px;
   background-color: rgba(121, 65, 142, 0.62);
   clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 43px), calc(100% - 43px) 100%, 0% 100%);
-```
+`
 
 const InputBorder = styled.div`
   width: 100%;
@@ -27,23 +27,63 @@ const InputBorder = styled.div`
   2px 2px, 2px calc(100% - 2px), calc(100% - 43px) calc(100% - 2px), calc(100% - 2px) calc(100% - 43px), calc(100% - 2px) 2px, 2px 2px);
 `
 
+const MessageTextArea = styled.textarea`
+  color: white;
+  font-size: 20px;
+  resize: none;
+  width: 100%;
+  border: 0;
+  background-color: transparent;
+
+  margin-left: 10px;
+  margin-right: 10px;
+
+  &:focus {
+    outline: none;
+  }
+`
+
+const Separator = styled.div`
+  width: 2px;
+  height: 25px;
+
+  background-color: rgba(188, 44, 201, 0.62);
+`
+
+const StyledIconButton = styled(IconButton)`
+  height: 26px;
+  width: 50px;
+  transition-duration: 100ms;
+`
+
+const StyledAddButton = styled(StyledIconButton)`
+  color: #cecece;
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+  }
+`
+
+const StyledSendButton = styled(StyledIconButton)`
+  margin-right: 35px;
+
+  color: gray;
+  
+  ${({hasInput}) => hasInput && css`
+    color: #949cf7;
+
+    &:hover {
+      color: white;
+    }
+
+    cursor: pointer;
+  `}
+`
+
 const InputChatBox = ({name, id, onTextChange}) => {
     const inputRef = useRef(null);
     const [input, setInput] = useState('');
-
-    const styles = {
-        box: {
-            border: "none",
-        },
-        button: {
-            height: "26px",
-            transitionDuration: "100ms"
-        },
-        sendButton: {
-            color: input.trim() ? "#949cf7" : "#5e5e5e",
-            marginRight: "45px"
-        }
-    }
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' && event.shiftKey) {
@@ -60,35 +100,20 @@ const InputChatBox = ({name, id, onTextChange}) => {
         onTextChange?.(text);
     }
 
+    const getInput = () => input.trim();
+
     useLayoutEffect(() => {
-        inputRef.current.style.height = "25px";
+        inputRef.current.style.height = "10px";
         inputRef.current.style.height = `${(Math.min(inputRef.current.scrollHeight + 4, 270))}px`;
     }, [input])
 
     return (
-        // <div style={{
-        //     paddingRight: "10px",
-        //     paddingLeft: "10px",
-        //     border: "2px #3f3636 solid",
-        //     borderRadius: "15px",
-        //     display: "flex",
-        //     alignItems: "center",
-        //     backgroundColor: "#452654", ...styles.box
-        // }}>
-
-
         <Container>
             <InputBack>
-                <IconButton icon={faCirclePlus}
-                            style={{...styles.button, color: "#cecece", marginLeft: "7px", marginRight: "5px"}}
-                            hoverStyle={{color: "#ffffff", cursor: "pointer"}}/>
-                <textarea
+                <StyledAddButton icon={faPaperclip} hoverStyle={{color: "#ffffff", cursor: "pointer"}}/>
+                <Separator/>
+                <MessageTextArea
                     className={"scroll-bar"}
-                    style={{
-                        fontSize: "28px", color: "white", resize: "none", verticalAlign: "middle", width: "100%",
-                        border: "0",
-                        backgroundColor: "transparent", padding: "4px",
-                    }}
                     value={input}
                     placeholder={name}
                     onChange={handleInput}
@@ -96,9 +121,7 @@ const InputChatBox = ({name, id, onTextChange}) => {
                     id={id}
                     ref={inputRef}
                 />
-                <IconButton icon={faPaperPlane}
-                            style={{...styles.button, ...styles.sendButton}}
-                            hoverStyle={(input.trim() ? {color: "#ffffff", cursor: "pointer"} : {})}/>
+                <StyledSendButton icon={faPaperPlane} hasInput={getInput()}/>
             </InputBack>
             <InputBorder/>
         </Container>

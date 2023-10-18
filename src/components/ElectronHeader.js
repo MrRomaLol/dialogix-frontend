@@ -23,6 +23,9 @@ const WindowFrame = styled.div`
 
   justify-content: space-between;
 
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+
   -webkit-user-select: none;
   -webkit-app-region: drag;
 `
@@ -55,17 +58,10 @@ const Buttons = styled.div`
   -webkit-app-region: no-drag;
 `
 
-const Button = styled.p`
-  color: white;
-  margin-left: 10px;
-
-  cursor: pointer;
-`
-
 const DialogixName = styled.p`
   color: white;
 
-  font-size: 20px;
+  font-size: 20px;  
 `
 
 const ElectronHeader = () => {

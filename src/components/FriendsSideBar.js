@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import {BarsBorder, LRBars} from "./styled-parts/LRBars";
 import BarButton from "./BarButton";
-import {faUser} from "@fortawesome/free-solid-svg-icons";
+import {faPlus, faUser} from "@fortawesome/free-solid-svg-icons";
 
 const EobaniyBlyr = styled.span`
   height: 100%;
@@ -21,10 +21,13 @@ const Bar = styled(LRBars)`
 `
 
 const FriendsSideBar = () => {
+    
+
     return (
         <EobaniyBlyr>
             <Bar>
                 <BarButton icon={faUser} float={'left'}/>
+                <BarButton icon={faPlus} float={'left'}/>
             </Bar>
             <BarBorder/>
         </EobaniyBlyr>

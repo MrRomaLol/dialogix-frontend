@@ -1,6 +1,8 @@
 const path = require('path');
 
-const {app, BrowserWindow, ipcMain, Tray, Menu} = require('electron');
+const electronLocalShortcut = require('electron-localshortcut');
+
+const {app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut} = require('electron');
 const isDev = require('electron-is-dev');
 
 const iconPath = path.join(__dirname, 'icons', 'DialogiX256.ico');
@@ -10,9 +12,9 @@ let trayIcon;
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        minWidth: 800,
+        width: 1000,
+        height: 800,
+        minWidth: 920,
         minHeight: 600,
         show: false,
         frame: false,
@@ -36,6 +38,7 @@ function createWindow() {
         mainWindow.webContents.openDevTools({mode: 'detach'});
     }
 
+    //tray
     trayIcon = new Tray(iconPath);
     trayIcon.setToolTip('DialogiX app (beta)');
 
@@ -51,7 +54,12 @@ function createWindow() {
             }
         }, {
             type: 'separator'
-        }, {
+        }, (isDev && {
+            label: "Reload page",
+            click: function () {
+                mainWindow.reload();
+            }
+        }), {
             label: 'Quit',
             click: function () {
                 app.quit();
@@ -61,6 +69,12 @@ function createWindow() {
 
     trayIcon.setContextMenu(contextMenu);
 
+    //shortcuts
+    electronLocalShortcut.register(mainWindow, 'Ctrl+R', () => {
+        mainWindow?.reload();
+    });
+
+    //ipc
     ipcMain.on("minimizeApp", () => {
         mainWindow?.minimize();
     });

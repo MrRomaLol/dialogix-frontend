@@ -8,7 +8,7 @@ const Content = styled.div`
   
   box-sizing: border-box;
   
-  padding-top: 120px;
+  padding-top: 130px;
   padding-bottom: 20px;
   padding-left: 70px;
   padding-right: 70px;

@@ -1,6 +1,7 @@
 import React from 'react';
 import {HeaderBack, HeaderBorders, LeftRightBars} from "./styled-parts/HeaderBar";
 import styled from "styled-components";
+import Logotype from "./Logotype";
 
 const EobaniyBlyr = styled.span`
   position: fixed;
@@ -30,9 +31,9 @@ const LeftBorder = styled(HeaderBorders)`
 `
 
 const CenterBorder = styled(HeaderBorders)`
-  width: 300px;
+  width: 400px;
   height: 100px;
-  
+
   clip-path: polygon(0 calc(50% - 2px), 0 calc(100% - 18px), 20px 100%, calc(100% - 20px) 100%, 100% calc(100% - 18px), 100% calc(50% - 2px),
   calc(100% - 2px) calc(50% - 2px), calc(100% - 2px) calc(100% - 18px), calc(100% - 20px) calc(100% - 2px), 20px calc(100% - 2px), 2px calc(100% - 18px), 2px calc(50% - 2px));
 `
@@ -49,9 +50,15 @@ const Left = styled(LeftRightBars)`
 `
 
 const Center = styled(HeaderBack)`
-  width: 300px;
+  width: 400px;
   height: 100px;
   clip-path: polygon(0 0, 0 calc(100% - 18px), 20px 100%, calc(100% - 20px) 100%, 100% calc(100% - 18px), 100% 0);
+
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const Right = styled(LeftRightBars)`
@@ -59,24 +66,37 @@ const Right = styled(LeftRightBars)`
   clip-path: polygon(0 0, 0 100%, calc(100% - 20px) 100%, 100% calc(100% - 18px), 100% 0);
 `
 
+const LogoContainer = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+`
+
 const Header = () => {
     return (
-        <EobaniyBlyr>
-            <ContainerLR>
-                <Left/>
-                <LeftBorder/>
-            </ContainerLR>
+        <React.Fragment>
+            <EobaniyBlyr>
+                <ContainerLR>
+                    <Left/>
+                    <LeftBorder/>
+                </ContainerLR>
 
-            <Container>
-                <Center/>
-                <CenterBorder/>
-            </Container>
+                <Container>
+                    <Center>
 
-            <ContainerLR>
-                <Right/>
-                <RightBorder/>
-            </ContainerLR>
-        </EobaniyBlyr>
+                    </Center>
+                    <CenterBorder/>
+                </Container>
+
+                <ContainerLR>
+                    <Right/>
+                    <RightBorder/>
+                </ContainerLR>
+            </EobaniyBlyr>
+            <LogoContainer>
+                <Logotype/>
+            </LogoContainer>
+        </React.Fragment>
     );
 };
 

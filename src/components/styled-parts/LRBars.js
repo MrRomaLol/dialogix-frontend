@@ -7,10 +7,6 @@ export const LRBars = styled.div`
 
   transition-duration: 200ms;
   transition-timing-function: ease-in;
-
-  &:hover {
-    width: 300px;
-  }
 `
 
 export const BarsBorder = styled.div`
