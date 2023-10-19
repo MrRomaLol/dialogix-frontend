@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import {BarsBorder, LRBars} from "./styled-parts/LRBars";
+import {BarsBorder, LRBars, ScrollerBar, ScrollerBarBox} from "./styled-parts/LRBars";
 import BarButton from "./BarButton";
 import {faPlus, faUsers} from "@fortawesome/free-solid-svg-icons";
 import {IconSeparator} from "./styled-parts/SideIconParts";
@@ -29,6 +29,35 @@ const ServersSideBar = () => {
                 <BarButton icon={faUsers}/>
                 <BarButton icon={faPlus}/>
                 <IconSeparator/>
+                <ScrollerBarBox>
+                    <ScrollerBar>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+                        <BarButton icon={faPlus}/>
+
+                    </ScrollerBar>
+                </ScrollerBarBox>
             </Bar>
         </EobaniyBlyr>
     );

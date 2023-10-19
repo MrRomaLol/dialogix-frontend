@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import {BarsBorder, LRBars} from "./styled-parts/LRBars";
+import {BarsBorder, LRBars, ScrollerBar, ScrollerBarBox} from "./styled-parts/LRBars";
 import BarButton from "./BarButton";
 import {faPlus, faUser} from "@fortawesome/free-solid-svg-icons";
 import {IconSeparator} from "./styled-parts/SideIconParts";
@@ -18,24 +18,7 @@ const BarBorder = styled(BarsBorder)`
 `
 
 const Bar = styled(LRBars)`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-
   clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 30px, 100% calc(100% - 30px), calc(100% - 20px) 100%, 0 100%);
-`
-
-const Scroller = styled.div`
-  overflow-y: scroll;
-
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `
 
 const FriendsSideBar = () => {
@@ -48,31 +31,12 @@ const FriendsSideBar = () => {
                 <BarButton icon={faPlus}/>
                 <IconSeparator/>
 
-                <div style={{flex: 1, position: 'relative'}}>
-                    <Scroller>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
+                <ScrollerBarBox>
+                    <ScrollerBar>
 
-                    </Scroller>
-                </div>
+
+                    </ScrollerBar>
+                </ScrollerBarBox>
 
             </Bar>
             <BarBorder/>
