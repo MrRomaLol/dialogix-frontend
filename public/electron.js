@@ -2,7 +2,7 @@ const path = require('path');
 
 const electronLocalShortcut = require('electron-localshortcut');
 
-const {app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut} = require('electron');
+const {app, BrowserWindow, ipcMain, Tray, Menu} = require('electron');
 const isDev = require('electron-is-dev');
 
 const iconPath = path.join(__dirname, 'icons', 'DialogiX256.ico');
@@ -26,7 +26,6 @@ function createWindow() {
     });
 
     mainWindow.maximize();
-    mainWindow.removeMenu();
     mainWindow.loadURL(
         isDev
             ? 'http://localhost:3000'
@@ -59,7 +58,13 @@ function createWindow() {
             click: function () {
                 mainWindow.reload();
             }
-        }), {
+        }), (isDev && {
+            label: "Open Dev",
+            click: function () {
+                mainWindow.webContents.openDevTools({mode: 'detach'});
+            }
+        })
+        , {
             label: 'Quit',
             click: function () {
                 app.quit();
@@ -92,7 +97,27 @@ function createWindow() {
     });
 }
 
-app.on('ready', createWindow);
+function update() {
+    const updaterWindow = new BrowserWindow({
+        width: 340,
+        height: 400,
+        resizable: false,
+        frame: false,
+        icon: iconPath,
+        webPreferences: {
+            nodeIntegration: true,
+        },
+    });
+
+    updaterWindow.loadFile(path.join(__dirname, 'update_page.html'));
+
+    setTimeout(() => {
+        createWindow();
+        updaterWindow.close();
+    }, 5000)
+}
+
+app.on('ready', isDev ? createWindow : update);
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {

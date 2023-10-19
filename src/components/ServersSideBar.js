@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {BarsBorder, LRBars} from "./styled-parts/LRBars";
 import BarButton from "./BarButton";
 import {faPlus, faUsers} from "@fortawesome/free-solid-svg-icons";
+import {IconSeparator} from "./styled-parts/SideIconParts";
 
 const EobaniyBlyr = styled.span`
   height: 100%;
@@ -11,7 +12,7 @@ const EobaniyBlyr = styled.span`
   filter: drop-shadow(rgba(255, 0, 245, 0.8) -20px 0px 40px);
 `
 const BarBorder = styled(BarsBorder)`
-  clip-path: polygon(100% 0, calc(100% - 20px) 30px, calc(100% - 20px) calc(100% - 30px), 100% 100%, 
+  clip-path: polygon(100% 0, calc(100% - 20px) 30px, calc(100% - 20px) calc(100% - 30px), 100% 100%,
   20px 100%, 0 calc(100% - 30px), 0 30px, 20px 0);
   margin-right: -22px;
 `
@@ -25,8 +26,9 @@ const ServersSideBar = () => {
         <EobaniyBlyr>
             <BarBorder/>
             <Bar>
-                <BarButton icon={faUsers} float={'right'}/>
-                <BarButton icon={faPlus} float={'right'}/>
+                <BarButton icon={faUsers}/>
+                <BarButton icon={faPlus}/>
+                <IconSeparator/>
             </Bar>
         </EobaniyBlyr>
     );

@@ -1,24 +1,22 @@
 import React from 'react';
 import styled from "styled-components";
-import Chat from "./Chat";
+import FriendsCapsule from "./FriendsCapsule";
+import ChatCapsule from "./ChatCapsule";
 
 const Content = styled.div`
   width: 100%;
   height: 100%;
-  
+
   box-sizing: border-box;
-  
-  padding-top: 130px;
-  padding-bottom: 20px;
-  padding-left: 70px;
-  padding-right: 70px;
+
+  padding: 130px 70px 20px;
 `
 
 const MainContent = () => {
     return (
         <Content>
 
-            <Chat/>
+                <FriendsCapsule/>
 
         </Content>
     );

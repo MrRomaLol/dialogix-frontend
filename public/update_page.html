@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Updater...</title>
+
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+
+            justify-content: center;
+            align-items: center;
+
+            background-color: #a263c2;
+        }
+
+        .dx-image {
+            width: 200px;
+            height: 200px;
+            background: url(img/DialogiX_Logo_NOBG.png) no-repeat center center;
+            background-size: 100% 100%;
+
+            animation: rotate-logo 2s infinite ease-in-out;
+        }
+
+        @keyframes rotate-logo {
+            from {
+                rotate: 0deg;
+            }
+
+            5% {
+                rotate: 0deg;
+            }
+
+            45% {
+                rotate: 180deg;
+            }
+
+            55% {
+                rotate: 180deg;
+            }
+
+            95% {
+                rotate: 360deg;
+            }
+
+            to {
+                rotate: 360deg;
+            }
+        }
+
+        .update-text {
+            margin: 5px 0 0;
+            font-size: 20px;
+        }
+    </style>
+
+</head>
+<body onload="startCount()">
+<div class="dx-image"></div>
+<p class="update-text">There's supposed to be like an update</p>
+<p class="update-text">but it's not here yet</p>
+<p id="starting">Starting app in... <span id="timer">5</span></p>
+
+<script>
+    function startCount() {
+        const timer = document.getElementById('timer');
+        const starting = document.getElementById('starting');
+        let counter = 4;
+        const interval = setInterval(() => {
+            timer.innerText = counter--;
+            if (counter < 0) {
+                clearInterval(interval);
+                starting.innerHTML = 'Starting now!'
+            }
+        }, 1000);
+    }
+</script>
+</body>
+</html>

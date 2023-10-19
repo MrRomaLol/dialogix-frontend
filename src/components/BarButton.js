@@ -8,18 +8,16 @@ const Container = styled.div`
   align-items: center;
   
   width: 100px;
-  height: 100px;
-  
-  float: ${({float}) => float || 'none'}
+  height: 90px;
 `
 
 const FriendsIconBackground = styled(IconBackground)`
   background-color: #4E1867;
 `
 
-const BarButton = ({icon, float}) => {
+const BarButton = ({icon}) => {
     return (
-        <Container float={float}>
+        <Container>
             <FriendsIconBackground>
                 <StyledIcon icon={icon}/>
             </FriendsIconBackground>

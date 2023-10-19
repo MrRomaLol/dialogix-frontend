@@ -6,27 +6,14 @@ import Header from "../components/Header";
 import {AppBackground, AppContent} from "../components/styled-parts/AppBackground";
 import SmallScreen from "../components/SmallScreen";
 import ElectronHeader from "../components/ElectronHeader";
+import useWindowSize from "../components/hooks/useWindowSize";
 
 const AppPage = () => {
-    const [isScreenTooSmall, setIsScreenTooSmall] = useState(false);
-
-    useEffect(() => {
-        const checkScreenSize = () => {
-            setIsScreenTooSmall(window.innerWidth < 768);
-        };
-
-        checkScreenSize();
-
-        window.addEventListener('resize', checkScreenSize);
-
-        return () => {
-            window.removeEventListener('resize', checkScreenSize);
-        };
-    }, []);
+    const size = useWindowSize();
 
     return (
         <React.Fragment>
-            {isScreenTooSmall ?
+            {size.width < 675 ?
                 (<SmallScreen/>) :
                 (<React.Fragment>
                     <AppBackground/>

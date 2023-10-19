@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from "styled-components";
-import InputChatBox from "./InputChatBox";
 
 const Container = styled.div`
   width: 100%;
@@ -8,8 +7,13 @@ const Container = styled.div`
   position: relative;
 `
 
-const ChatBack = styled.div`
+const ContentBack = styled.div`
   background-color: rgba(61, 38, 84, 0.2);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   
   width: 100%;
   height: 100%;
@@ -20,7 +24,7 @@ const ChatBack = styled.div`
   clip-path: polygon(50px 0, 100% 0, 100% calc(100% - 50px), calc(100% - 50px) 100%, 0 100%, 0 50px);
 `
 
-const ChatBorder = styled.div`
+const ContentBorder = styled.div`
   width: 100%;
   height: 100%;
 
@@ -34,19 +38,15 @@ const ChatBorder = styled.div`
   50px 2px, 50px 2px, 2px 50px, 2px calc(100% - 2px), calc(100% - 50px) calc(100% - 2px), calc(100% - 2px) calc(100% - 50px), calc(100% - 2px) 2px, 50px 2px);
 `
 
-const Chat = () => {
+const ContentContainer = ({children}) => {
     return (
         <Container>
-            <ChatBack>
-
-                <div style={{flex: "1"}}></div>
-
-                <InputChatBox/>
-
-            </ChatBack>
-            <ChatBorder/>
+            <ContentBack>
+                {children}
+            </ContentBack>
+            <ContentBorder/>
         </Container>
     );
 };
 
-export default Chat;
+export default ContentContainer;
