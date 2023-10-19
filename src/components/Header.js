@@ -7,8 +7,8 @@ const EobaniyBlyr = styled.span`
   position: fixed;
   left: 0;
   right: 0;
-  margin-left: 100px;
-  margin-right: 100px;
+  margin-left: 120px;
+  margin-right: 120px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -20,7 +20,7 @@ const Container = styled.div`
 `
 
 const ContainerLR = styled(Container)`
-  flex: 0 0 20%;
+  width: 100%;  
   max-width: 300px;
 `
 
