@@ -3,7 +3,7 @@ import ContentContainer from "./ContentContainer";
 import styled from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSliders, faUser, faUserClock, faUserPlus} from "@fortawesome/free-solid-svg-icons";
-import useWindowSize from "./hooks/useWindowSize";
+import useWindowSize from "../hooks/useWindowSize";
 
 const Tabs = styled.div`
   height: 50px;
@@ -107,7 +107,7 @@ const Grid = styled.div`
   
   display: grid;
   justify-items: center;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   
   box-sizing: border-box;
   
@@ -141,6 +141,35 @@ const FriendCard = ({nick}) => {
     )
 }
 
+const SeparatorContainer = styled.div`
+  height: 40px;
+  width: 100%;
+  
+  margin-top: 5px;
+  margin-bottom: 5px;
+  
+  color: white;
+  font-size: 24px;
+  
+  filter: drop-shadow(#FC03F2 0px 0px 3px);
+  
+  grid-column-start: 1;
+  grid-column-end: -1;
+`
+
+export const Separator = styled.div`
+  height: 3px;
+
+  box-sizing: border-box;
+
+  margin-left: 20px;
+  margin-right: 20px;
+
+  background-color: #8723D6;
+
+  align-self: center;
+`
+
 const FriendsCapsule = () => {
     return (
         <ContentContainer>
@@ -149,7 +178,13 @@ const FriendsCapsule = () => {
                 <Tab name={"Add friend"} icon={faUserPlus}/>
                 <Tab name={"Pending"} icon={faUserClock}/>
             </Tabs>
+
             <Grid className={"scroll-bar"}>
+                <SeparatorContainer>
+                    <div style={{marginLeft: "20px"}}>Pending</div>
+                    <Separator/>
+                </SeparatorContainer>
+
                 <FriendCard nick={"friend"}/>
                 <FriendCard nick={"friend"}/>
                 <FriendCard nick={"friend"}/>
@@ -160,38 +195,12 @@ const FriendsCapsule = () => {
                 <FriendCard nick={"friend"}/>
                 <FriendCard nick={"friend"}/>
                 <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
+
+                <SeparatorContainer>
+                    <div style={{marginLeft: "20px"}}>Sent</div>
+                    <Separator/>
+                </SeparatorContainer>
+
                 <FriendCard nick={"friend"}/>
                 <FriendCard nick={"friend"}/>
                 <FriendCard nick={"friend"}/>
@@ -203,6 +212,13 @@ const FriendsCapsule = () => {
                 <FriendCard nick={"friend"}/>
                 <FriendCard nick={"friend"}/>
             </Grid>
+
+
+            {/*<Grid className={"scroll-bar"}>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*</Grid>*/}
         </ContentContainer>
     );
 };
