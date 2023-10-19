@@ -2,8 +2,9 @@ import React from 'react';
 import ContentContainer from "./ContentContainer";
 import styled from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSliders, faUser, faUserClock, faUserPlus} from "@fortawesome/free-solid-svg-icons";
+import {faMagnifyingGlass, faSliders, faUser, faUserClock, faUserPlus} from "@fortawesome/free-solid-svg-icons";
 import useWindowSize from "../hooks/useWindowSize";
+import IconButton from "./IconButton";
 
 const Tabs = styled.div`
   height: 50px;
@@ -104,17 +105,17 @@ const CardBorder = styled.div`
 
 const Grid = styled.div`
   width: 100%;
-  
+
   display: grid;
   justify-items: center;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  
+
   box-sizing: border-box;
-  
+
   padding-top: 10px;
 
   border-top: solid rgba(188, 44, 201, 0.62) 2px;
-  
+
   overflow-y: scroll;
 `
 
@@ -122,7 +123,13 @@ const FriendCard = ({nick}) => {
     return (
         <CardContainer>
             <CardBack>
-                <div style={{display: "flex", flexDirection: "row", width: "100%", height: "100%", alignItems: "center"}}>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    width: "100%",
+                    height: "100%",
+                    alignItems: "center"
+                }}>
                     <div style={{
                         width: "72px",
                         height: "72px",
@@ -144,15 +151,15 @@ const FriendCard = ({nick}) => {
 const SeparatorContainer = styled.div`
   height: 40px;
   width: 100%;
-  
+
   margin-top: 5px;
   margin-bottom: 5px;
-  
+
   color: white;
   font-size: 24px;
-  
+
   filter: drop-shadow(#FC03F2 0px 0px 3px);
-  
+
   grid-column-start: 1;
   grid-column-end: -1;
 `
@@ -170,6 +177,41 @@ export const Separator = styled.div`
   align-self: center;
 `
 
+const SearchField = styled.div`
+  width: 100%;
+  height: 70px;
+  padding: 16px;
+  border: 2px solid rgba(188, 44, 201, 0.62);
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+`
+
+const FriendSearchInput = styled.input`
+  color: white;
+  font-size: 20px;
+  font-family: monospace;
+  resize: none;
+  width: 100%;
+  border: 0;
+  background-color: transparent;
+
+  margin-left: 10px;
+  margin-right: 10px;
+
+  &:focus {
+    outline: none;
+  }
+`
+
+const Button = styled.button`
+  width: 200px;
+
+  color: white;
+
+  background-color: purple;
+`
+
 const FriendsCapsule = () => {
     return (
         <ContentContainer>
@@ -179,40 +221,51 @@ const FriendsCapsule = () => {
                 <Tab name={"Pending"} icon={faUserClock}/>
             </Tabs>
 
-            <Grid className={"scroll-bar"}>
-                <SeparatorContainer>
-                    <div style={{marginLeft: "20px"}}>Pending</div>
-                    <Separator/>
-                </SeparatorContainer>
+            {/* Add Friend */}
+            <div style={{boxSizing: "border-box", padding: "20px"}}>
+                <SearchField>
+                    <FriendSearchInput/>
+                    <Button>Send friend request</Button>
+                </SearchField>
+            </div>
 
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
+            {/* Pending & sent Friend */}
 
-                <SeparatorContainer>
-                    <div style={{marginLeft: "20px"}}>Sent</div>
-                    <Separator/>
-                </SeparatorContainer>
+            {/*<Grid className={"scroll-bar"}>*/}
+            {/*    <SeparatorContainer>*/}
+            {/*        <div style={{marginLeft: "20px"}}>Pending</div>*/}
+            {/*        <Separator/>*/}
+            {/*    </SeparatorContainer>*/}
 
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-                <FriendCard nick={"friend"}/>
-            </Grid>
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
 
+            {/*    <SeparatorContainer>*/}
+            {/*        <div style={{marginLeft: "20px"}}>Sent</div>*/}
+            {/*        <Separator/>*/}
+            {/*    </SeparatorContainer>*/}
+
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*    <FriendCard nick={"friend"}/>*/}
+            {/*</Grid>*/}
+
+            {/* Friend List */}
 
             {/*<Grid className={"scroll-bar"}>*/}
             {/*    <FriendCard nick={"friend"}/>*/}
