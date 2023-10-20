@@ -70,10 +70,10 @@ const LogoImage = styled.div`
   }
 `
 
-const Logotype = () => {
+const Logotype = ({onClick}) => {
     return (
         <LogoBack>
-            <LogoImage/>
+            <LogoImage onClick={() => onClick?.()}/>
             <EyesContainer>
                 <Eye/>
                 <Eye/>

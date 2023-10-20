@@ -4,6 +4,7 @@ import {useSelector} from "react-redux";
 
 import FriendsScreen from "./FriendsScreen";
 import MainScreen from "./MainScreen";
+import {FRIENDS_SCREEN, MAIN_SCREEN} from "../store/screenStateSlice";
 
 const Content = styled.div`
   width: 100%;
@@ -20,10 +21,10 @@ const MainContent = () => {
     let screen;
 
     switch (screenName) {
-        case 'mainScreen':
+        case MAIN_SCREEN:
             screen = <MainScreen/>
             break;
-        case 'friendsScreen':
+        case FRIENDS_SCREEN:
             screen = <FriendsScreen/>
             break;
     }

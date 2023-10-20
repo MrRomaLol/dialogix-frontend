@@ -5,7 +5,7 @@ import BarButton from "./BarButton";
 import {faPlus, faUser} from "@fortawesome/free-solid-svg-icons";
 import {IconSeparator} from "./styled-parts/SideIconParts";
 import {useDispatch} from "react-redux";
-import {setScreen} from "../store/screenStateSlice";
+import {FRIENDS_SCREEN, setScreen} from "../store/screenStateSlice";
 
 const EobaniyBlyr = styled.span`
   height: 100%;
@@ -27,8 +27,7 @@ const FriendsSideBar = () => {
     const dispatch = useDispatch();
 
     const goToFriendsScreen = () => {
-        console.log('click');
-        dispatch(setScreen({screenName: 'friendsScreen'}))
+        dispatch(setScreen({screenName: FRIENDS_SCREEN}))
     }
 
     return (

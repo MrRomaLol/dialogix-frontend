@@ -2,6 +2,8 @@ import React from 'react';
 import {HeaderBack, HeaderBorders, LeftRightBars} from "./styled-parts/HeaderBar";
 import styled from "styled-components";
 import Logotype from "./Logotype";
+import {MAIN_SCREEN, setScreen} from "../store/screenStateSlice";
+import {useDispatch} from "react-redux";
 
 const EobaniyBlyr = styled.span`
   position: fixed;
@@ -73,6 +75,13 @@ const LogoContainer = styled.div`
 `
 
 const Header = () => {
+
+    const dispatch = useDispatch();
+
+    const goToMainScreen = () => {
+        dispatch(setScreen({screenName: MAIN_SCREEN}))
+    }
+
     return (
         <React.Fragment>
             <EobaniyBlyr>
@@ -94,7 +103,7 @@ const Header = () => {
                 </ContainerLR>
             </EobaniyBlyr>
             <LogoContainer>
-                <Logotype/>
+                <Logotype onClick={goToMainScreen}/>
             </LogoContainer>
         </React.Fragment>
     );

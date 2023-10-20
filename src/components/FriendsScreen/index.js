@@ -4,6 +4,12 @@ import styled from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser, faUserClock, faUserPlus} from "@fortawesome/free-solid-svg-icons";
 import useWindowSize from "../../hooks/useWindowSize";
+import {useDispatch, useSelector} from "react-redux";
+import {FRIENDS_SCREEN, MAIN_SCREEN, setSubScreen} from "../../store/screenStateSlice";
+import MainScreen from "../MainScreen";
+import FriendListTab from "./FriendListTab";
+import FriendSentPendingTab from "./FriendSentPendingTab";
+import FriendAddTab from "./FriendAddTab";
 
 const Tabs = styled.div`
   height: 50px;
@@ -50,12 +56,12 @@ const TabBorder = styled.div`
   0 calc(100% - 2px), calc(100% - 52px) calc(100% - 2px), calc(100% - 2px) 0px);
 `
 
-const Tab = ({icon, name}) => {
+const Tab = ({icon, name, onClick}) => {
     const size = useWindowSize();
 
     return (
-        <TabContainer>
-            <TabBack>
+        <TabContainer >
+            <TabBack onClick={() => onClick?.()}>
                 {icon && <FontAwesomeIcon style={{marginRight: "15px"}} icon={icon}/>}
                 {size.width > 1200 && name}
             </TabBack>
@@ -64,16 +70,42 @@ const Tab = ({icon, name}) => {
     )
 }
 
+const FRIENDS = "friendsList";
+const PENDING = "friendsPending";
+const ADD_FRIENDS = "friendsAdd";
 
 
 const FriendsScreen = () => {
+
+    const dispatch = useDispatch();
+    const subScreenName = useSelector(state => state.screenState.subScreen);
+
+    let subScreen;
+
+    switch (subScreenName) {
+        case FRIENDS:
+            subScreen = <FriendListTab/>
+            break;
+        case PENDING:
+            subScreen = <FriendSentPendingTab/>
+            break;
+        case ADD_FRIENDS:
+            subScreen = <FriendAddTab/>
+            break;
+    }
+
+    const setTab = (tabName) => {
+        dispatch(setSubScreen({subScreenName: tabName}))
+    }
+
     return (
         <ContentContainer>
             <Tabs>
-                <Tab name={"Friends"} icon={faUser}/>
-                <Tab name={"Add friend"} icon={faUserPlus}/>
-                <Tab name={"Pending"} icon={faUserClock}/>
+                <Tab name={"Friends"} icon={faUser} onClick={() => setTab(FRIENDS)}/>
+                <Tab name={"Pending"} icon={faUserClock} onClick={() => setTab(PENDING)}/>
+                <Tab name={"Add friend"} icon={faUserPlus} onClick={() => setTab(ADD_FRIENDS)}/>
             </Tabs>
+            {subScreen}
         </ContentContainer>
     );
 };
