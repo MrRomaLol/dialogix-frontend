@@ -4,6 +4,8 @@ import {BarsBorder, LRBars, ScrollerBar, ScrollerBarBox} from "./styled-parts/LR
 import BarButton from "./BarButton";
 import {faPlus, faUser} from "@fortawesome/free-solid-svg-icons";
 import {IconSeparator} from "./styled-parts/SideIconParts";
+import {useDispatch} from "react-redux";
+import {setScreen} from "../store/screenStateSlice";
 
 const EobaniyBlyr = styled.span`
   height: 100%;
@@ -22,13 +24,18 @@ const Bar = styled(LRBars)`
 `
 
 const FriendsSideBar = () => {
+    const dispatch = useDispatch();
 
+    const goToFriendsScreen = () => {
+        console.log('click');
+        dispatch(setScreen({screenName: 'friendsScreen'}))
+    }
 
     return (
         <EobaniyBlyr>
             <Bar>
                 <BarButton icon={faUser}/>
-                <BarButton icon={faPlus}/>
+                <BarButton icon={faPlus} onClick={goToFriendsScreen}/>
                 <IconSeparator/>
 
                 <ScrollerBarBox>

@@ -15,10 +15,10 @@ const FriendsIconBackground = styled(IconBackground)`
   background-color: #4E1867;
 `
 
-const BarButton = ({icon}) => {
+const BarButton = ({icon, onClick}) => {
     return (
         <Container>
-            <FriendsIconBackground>
+            <FriendsIconBackground onClick={() => onClick?.()}>
                 <StyledIcon icon={icon}/>
             </FriendsIconBackground>
         </Container>

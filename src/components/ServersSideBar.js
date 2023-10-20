@@ -31,30 +31,6 @@ const ServersSideBar = () => {
                 <IconSeparator/>
                 <ScrollerBarBox>
                     <ScrollerBar>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
-                        <BarButton icon={faPlus}/>
 
                     </ScrollerBar>
                 </ScrollerBarBox>

@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from "styled-components";
-import FriendsCapsule from "./FriendsCapsule";
-import ChatCapsule from "./ChatCapsule";
+import {useSelector} from "react-redux";
+
+import FriendsScreen from "./FriendsScreen";
+import MainScreen from "./MainScreen";
 
 const Content = styled.div`
   width: 100%;
@@ -13,11 +15,22 @@ const Content = styled.div`
 `
 
 const MainContent = () => {
+    const screenName = useSelector(state => state.screenState.screen);
+
+    let screen;
+
+    switch (screenName) {
+        case 'mainScreen':
+            screen = <MainScreen/>
+            break;
+        case 'friendsScreen':
+            screen = <FriendsScreen/>
+            break;
+    }
+
     return (
         <Content>
-
-                <FriendsCapsule/>
-
+            {screen}
         </Content>
     );
 };

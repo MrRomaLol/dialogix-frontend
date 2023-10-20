@@ -1,9 +1,9 @@
 import React from 'react';
-import ContentContainer from "./ContentContainer";
+import ContentContainer from "../ContentContainer";
 import styled from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser, faUserClock, faUserPlus} from "@fortawesome/free-solid-svg-icons";
-import useWindowSize from "../hooks/useWindowSize";
+import useWindowSize from "../../hooks/useWindowSize";
 
 const Tabs = styled.div`
   height: 50px;
@@ -66,7 +66,7 @@ const Tab = ({icon, name}) => {
 
 
 
-const FriendsCapsule = () => {
+const FriendsScreen = () => {
     return (
         <ContentContainer>
             <Tabs>
@@ -74,11 +74,8 @@ const FriendsCapsule = () => {
                 <Tab name={"Add friend"} icon={faUserPlus}/>
                 <Tab name={"Pending"} icon={faUserClock}/>
             </Tabs>
-
-
-
         </ContentContainer>
     );
 };
 
-export default FriendsCapsule;
+export default FriendsScreen;
