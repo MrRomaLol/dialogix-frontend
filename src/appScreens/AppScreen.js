@@ -6,7 +6,6 @@ import ServersSideBar from "../components/ServersSideBar";
 import styled from "styled-components";
 import {ScreenContainer} from "./ScreenContainer";
 
-
 const Container = styled.div`
   display: flex;
   flex-direction: row;
