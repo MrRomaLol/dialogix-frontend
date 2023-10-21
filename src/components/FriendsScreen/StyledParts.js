@@ -11,8 +11,6 @@ export const Grid = styled.div`
 
   padding-top: 10px;
 
-  border-top: solid rgba(188, 44, 201, 0.62) 2px;
-
   overflow-y: scroll;
 `
 

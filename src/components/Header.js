@@ -1,9 +1,12 @@
 import React from 'react';
 import {HeaderBack, HeaderBorders, LeftRightBars} from "./styled-parts/HeaderBar";
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import Logotype from "./Logotype";
 import {MAIN_SCREEN, setScreen} from "../store/screenStateSlice";
 import {useDispatch} from "react-redux";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faGear} from "@fortawesome/free-solid-svg-icons";
+import {APP_SETTINGS_STATE, setAppState} from "../store/appStateSlice";
 
 const EobaniyBlyr = styled.span`
   position: fixed;
@@ -22,7 +25,7 @@ const Container = styled.div`
 `
 
 const ContainerLR = styled(Container)`
-  width: 100%;  
+  width: 100%;
   max-width: 300px;
 `
 
@@ -55,11 +58,16 @@ const Center = styled(HeaderBack)`
   width: 400px;
   height: 100px;
   clip-path: polygon(0 0, 0 calc(100% - 18px), 20px 100%, calc(100% - 20px) 100%, 100% calc(100% - 18px), 100% 0);
-
+  
   position: relative;
-
+  
+  box-sizing: border-box;
+  
+  padding-left: 16px;
+  padding-right: 16px;
+  
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `
 
@@ -74,12 +82,45 @@ const LogoContainer = styled.div`
   transform: translateX(-50%);
 `
 
+const IconsContainer = styled.div`
+  width: 100px;
+  height: 100px;
+
+  box-sizing: border-box;
+  
+  padding: 14px;
+`
+
+const SettingIcon = styled(FontAwesomeIcon)`
+  width: 100%;
+  height: 100%;
+
+  color: #9C63C8;
+    
+  transition-duration: 2s;
+  
+  &:hover {
+      rotate: 330deg;
+  }
+`
+
+const Ava = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #9C63C8;
+  border-radius: 50%;
+`
+
 const Header = () => {
 
     const dispatch = useDispatch();
 
     const goToMainScreen = () => {
         dispatch(setScreen({screenName: MAIN_SCREEN}))
+    }
+
+    const goToSettingsState = () => {
+        dispatch(setAppState({stateName: APP_SETTINGS_STATE}))
     }
 
     return (
@@ -92,7 +133,12 @@ const Header = () => {
 
                 <Container>
                     <Center>
-
+                        <IconsContainer>
+                            <SettingIcon icon={faGear} onClick={goToSettingsState}/>
+                        </IconsContainer>
+                        <IconsContainer>
+                            <Ava/>
+                        </IconsContainer>
                     </Center>
                     <CenterBorder/>
                 </Container>

@@ -73,7 +73,7 @@ const LoadingScreen = () => {
     useEffect(() => {
         setTimeout(() => {
             dispatch(setAppState({stateName: APP_OPENED_STATE}));
-        }, 4000)
+        }, 2000)
     }, []);
 
     return (

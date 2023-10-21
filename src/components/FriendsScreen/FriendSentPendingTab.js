@@ -4,7 +4,7 @@ import styled from "styled-components";
 import FriendCard from "./FriendCard";
 
 const SeparatorContainer = styled.div`
-  height: 40px;
+  height: 50px;
   width: 100%;
 
   margin-top: 5px;
@@ -19,7 +19,7 @@ const SeparatorContainer = styled.div`
   grid-column-end: -1;
 `
 
-export const Separator = styled.div`
+const Separator = styled.div`
   height: 3px;
 
   box-sizing: border-box;
@@ -32,11 +32,19 @@ export const Separator = styled.div`
   align-self: center;
 `
 
+const Name = styled.div`
+  color: #FC03F2;
+  font-family: Furore, serif;
+  
+  margin-left: 50px;
+  margin-bottom: 10px;
+`
+
 const FriendSentPendingTab = () => {
     return (
         <Grid className={"scroll-bar"}>
             <SeparatorContainer>
-                <div style={{marginLeft: "20px"}}>Pending</div>
+                <Name>Pending</Name>
                 <Separator/>
             </SeparatorContainer>
 
@@ -52,7 +60,7 @@ const FriendSentPendingTab = () => {
             <FriendCard nick={"friend"}/>
 
             <SeparatorContainer>
-                <div style={{marginLeft: "20px"}}>Sent</div>
+                <Name>Sent</Name>
                 <Separator/>
             </SeparatorContainer>
 
