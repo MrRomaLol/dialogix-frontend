@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 import ContentContainer from "../ContentContainer";
 import styled, {css} from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -141,19 +141,18 @@ const FriendsScreen = () => {
     const dispatch = useDispatch();
     const subScreenName = useSelector(state => state.screenState.subScreen);
 
-    let subScreen;
-
-    switch (subScreenName) {
-        case FRIENDS_SCREEN_FRIENDS_TAB:
-            subScreen = <FriendListTab/>
-            break;
-        case FRIENDS_SCREEN_PENDING_TAB:
-            subScreen = <FriendSentPendingTab/>
-            break;
-        case FRIENDS_SCREEN_ADD_FRIENDS_TAB:
-            subScreen = <FriendAddTab/>
-            break;
-    }
+    const subScreenComponent = useMemo (() => {
+        switch (subScreenName) {
+            case FRIENDS_SCREEN_FRIENDS_TAB:
+                 return <FriendListTab/>;
+            case FRIENDS_SCREEN_PENDING_TAB:
+                return <FriendSentPendingTab/>;
+            case FRIENDS_SCREEN_ADD_FRIENDS_TAB:
+                return <FriendAddTab/>;
+            default:
+                return null;
+        }
+    }, [subScreenName]);
 
     const setTab = (tabName) => {
         dispatch(setSubScreen({subScreenName: tabName}))
@@ -170,7 +169,7 @@ const FriendsScreen = () => {
                      onClick={() => setTab(FRIENDS_SCREEN_ADD_FRIENDS_TAB)}/>
                 {subScreenName !== FRIENDS_SCREEN_ADD_FRIENDS_TAB && <SearchField/>}
             </Tabs>
-            {subScreen}
+            {subScreenComponent}
         </ContentContainer>
     );
 };
