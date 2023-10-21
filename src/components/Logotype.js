@@ -11,6 +11,8 @@ const LogoBack = styled.div`
 
   border: solid #a263c2 3px;
 
+  cursor: pointer;
+  
   box-shadow: inset 0 0 10px rgba(255, 0, 245, 0.5);
   filter: drop-shadow(rgba(255, 0, 245, 0.8) 0 0 25px);
 

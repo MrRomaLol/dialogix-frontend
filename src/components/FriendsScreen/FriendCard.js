@@ -21,9 +21,9 @@ const CardBack = styled.div`
 
   display: flex;
 
-
   color: white;
-  font-size: 30px;
+  font-size: 24px;
+  font-family: JetBrains Mono, serif;
 `
 
 const CardBorder = styled.div`
@@ -49,7 +49,8 @@ const FriendCard = ({nick}) => {
                     flexDirection: "row",
                     width: "100%",
                     height: "100%",
-                    alignItems: "center"
+                    alignItems: "center",
+                    userSelect: "none"
                 }}>
                     <div style={{
                         width: "72px",
@@ -62,7 +63,7 @@ const FriendCard = ({nick}) => {
                     </div>
                     {nick}
                 </div>
-                <FontAwesomeIcon icon={faSliders} style={{color: "#C087D4", marginRight: "10px", marginTop: "10px"}}/>
+                <FontAwesomeIcon icon={faSliders} style={{color: "#C087D4", marginRight: "10px", marginTop: "10px", fontSize: "30px"}}/>
             </CardBack>
             <CardBorder/>
         </CardContainer>

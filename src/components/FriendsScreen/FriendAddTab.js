@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
+import {FriendsInputField} from "./StyledParts";
+
 
 const SearchField = styled.div`
   width: 100%;
@@ -11,36 +13,32 @@ const SearchField = styled.div`
   box-sizing: border-box;
 `
 
-const FriendSearchInput = styled.input`
-  color: white;
-  font-size: 20px;
-  font-family: monospace;
-  resize: none;
-  width: 100%;
-  border: 0;
-  background-color: transparent;
-
-  margin-left: 10px;
-  margin-right: 10px;
-
-  &:focus {
-    outline: none;
-  }
-`
-
 const Button = styled.button`
-  width: 200px;
-
+  min-width: 200px;
+  
   color: white;
 
-  background-color: purple;
+  background-color: rgb(188, 44, 201);
+
+  &:hover {
+    background-color: rgb(162, 35, 173);
+  }
+
+  &:active {
+    background-color: rgb(118, 10, 126);
+  }
+
+  transition-duration: 200ms;
+
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 20px) 100%, 0 100%);
+  border: none;
 `
 
 const FriendAddTab = () => {
     return (
         <div style={{boxSizing: "border-box", padding: "20px"}}>
             <SearchField>
-                <FriendSearchInput/>
+                <FriendsInputField/>
                 <Button>Send friend request</Button>
             </SearchField>
         </div>

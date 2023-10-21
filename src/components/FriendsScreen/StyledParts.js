@@ -16,5 +16,19 @@ export const Grid = styled.div`
   overflow-y: scroll;
 `
 
+export const FriendsInputField = styled.input`
+  color: white;
+  font-size: 20px;
+  font-family: monospace;
+  resize: none;
+  width: 100%;
+  border: 0;
+  background-color: transparent;
 
+  margin-left: 10px;
+  margin-right: 10px;
 
+  &:focus {
+    outline: none;
+  }
+`

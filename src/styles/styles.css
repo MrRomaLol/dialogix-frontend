@@ -19,3 +19,14 @@
 .scroll-barchat::-webkit-scrollbar-button {
     display: none;
 }
+
+@font-face {
+    font-family: 'Furore';
+    src: local('Furore'), url(../fonts/Furore.otf) format('opentype');
+    /* other formats include: 'woff2', 'truetype, 'opentype', 'embedded-opentype', and 'svg' */
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: local('JetBrains Mono'), url(../fonts/JBRegular.ttf) format('truetype');
+}

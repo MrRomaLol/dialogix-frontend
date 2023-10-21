@@ -1,15 +1,31 @@
 import React from 'react';
-import FriendsSideBar from "../components/FriendsSideBar";
-import MainContent from "../components/MainContent";
-import ServersSideBar from "../components/ServersSideBar";
-import Header from "../components/Header";
 import {AppBackground, AppContent} from "../components/styled-parts/AppBackground";
 import SmallScreen from "../components/SmallScreen";
-import ElectronHeader from "../components/ElectronHeader";
 import useWindowSize from "../hooks/useWindowSize";
+import {useSelector} from "react-redux";
+import ElectronHeader from "../components/ElectronHeader";
+import {APP_LOADING_STATE, APP_OPENED_STATE, APP_SETTINGS_STATE} from "../store/appStateSlice";
+import LoadingScreen from "../appScreens/LoadingScreen";
+import AppScreen from "../appScreens/AppScreen";
+import SettingsScreen from "../appScreens/SettingsScreen";
 
 const AppPage = () => {
     const size = useWindowSize();
+    const appStateName = useSelector(state => state.appState.state)
+
+    let stateComponent;
+
+    switch (appStateName) {
+        case APP_LOADING_STATE:
+            stateComponent = <LoadingScreen/>
+            break;
+        case APP_OPENED_STATE:
+            stateComponent = <AppScreen/>
+            break;
+        case APP_SETTINGS_STATE:
+            stateComponent = <SettingsScreen/>
+            break;
+    }
 
     return (
         <React.Fragment>
@@ -19,12 +35,7 @@ const AppPage = () => {
                     <AppBackground/>
                     <AppContent>
                         {window.IS_USING_DIALOGIX_APP && <ElectronHeader/>}
-                        <div style={{display: "flex", flexDirection: "row", flex: 1}}>
-                            <FriendsSideBar/>
-                            <Header/>
-                            <MainContent/>
-                            <ServersSideBar/>
-                        </div>
+                        {stateComponent}
                     </AppContent>
                 </React.Fragment>)}
         </React.Fragment>
