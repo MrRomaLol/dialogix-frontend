@@ -9,6 +9,8 @@ import {ThemeProvider, themes} from "./theme";
 import AppPage from "./pages/AppPage";
 
 import "./styles/styles.css"
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -25,8 +27,10 @@ function App() {
             <GlobalStyle/>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<MainPage/>}/>
-                    <Route path="/app" element={<AppPage/>}/>
+                    <Route path="/"         element={<MainPage/>}/>
+                    <Route path="/app"      element={<AppPage/>}/>
+                    <Route path="/login"    element={<LoginPage/>}/>
+                    <Route path="/register" element={<RegisterPage/>}/>
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>
