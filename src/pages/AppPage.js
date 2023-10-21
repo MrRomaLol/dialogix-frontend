@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {AppBackground, AppContent} from "../components/styled-parts/AppBackground";
 import SmallScreen from "../components/SmallScreen";
 import useWindowSize from "../hooks/useWindowSize";
@@ -8,24 +8,32 @@ import {APP_LOADING_STATE, APP_OPENED_STATE, APP_SETTINGS_STATE} from "../store/
 import LoadingScreen from "../appScreens/LoadingScreen";
 import AppScreen from "../appScreens/AppScreen";
 import SettingsScreen from "../appScreens/SettingsScreen";
+import {useTransition, animated} from 'react-spring';
+import {easings} from '@react-spring/web'
 
 const AppPage = () => {
     const size = useWindowSize();
     const appStateName = useSelector(state => state.appState.state)
 
-    let stateComponent;
+    const stateComponent = useMemo(() => {
+        switch (appStateName) {
+            case APP_LOADING_STATE:
+                return <LoadingScreen/>;
+            case APP_OPENED_STATE:
+                return <AppScreen/>;
+            case APP_SETTINGS_STATE:
+                return <SettingsScreen/>;
+            default:
+                return null;
+        }
+    }, [appStateName]);
 
-    switch (appStateName) {
-        case APP_LOADING_STATE:
-            stateComponent = <LoadingScreen/>
-            break;
-        case APP_OPENED_STATE:
-            stateComponent = <AppScreen/>
-            break;
-        case APP_SETTINGS_STATE:
-            stateComponent = <SettingsScreen/>
-            break;
-    }
+    const transitions = useTransition(stateComponent, {
+        from: {opacity: 0, transform: 'scale(1.3)'},
+        enter: {opacity: 1, transform: 'scale(1)'},
+        leave: {opacity: 0, transform: 'scale(0.7)'},
+        config: {duration: 500, easing: easings.easeInOutBack}
+    });
 
     return (
         <React.Fragment>
@@ -35,7 +43,21 @@ const AppPage = () => {
                     <AppBackground/>
                     <AppContent>
                         {window.IS_USING_DIALOGIX_APP && <ElectronHeader/>}
-                        {stateComponent}
+                        <div style={{width: "100%", height: "100%", position: "relative"}}>
+                            {transitions((props, item) =>
+                                item ? (
+                                    <animated.div style={{
+                                        ...props,
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        display: 'flex',
+                                        width: "100%",
+                                        height: "100%"
+                                    }}>{item}</animated.div>
+                                ) : null
+                            )}
+                        </div>
                     </AppContent>
                 </React.Fragment>)}
         </React.Fragment>

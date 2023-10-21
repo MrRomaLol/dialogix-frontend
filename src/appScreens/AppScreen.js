@@ -3,17 +3,26 @@ import FriendsSideBar from "../components/FriendsSideBar";
 import Header from "../components/Header";
 import MainContent from "../components/MainContent";
 import ServersSideBar from "../components/ServersSideBar";
+import styled from "styled-components";
+import {ScreenContainer} from "./ScreenContainer";
+
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+`
 
 const AppScreen = () => {
     return (
-        <React.Fragment>
-            <div style={{display: "flex", flexDirection: "row", flex: 1}}>
+        <ScreenContainer>
+            <Container>
                 <FriendsSideBar/>
                 <Header/>
                 <MainContent/>
                 <ServersSideBar/>
-            </div>
-        </React.Fragment>
+            </Container>
+        </ScreenContainer>
     );
 };
 

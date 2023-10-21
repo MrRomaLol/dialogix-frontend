@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import styled, {keyframes} from "styled-components";
 import {useDispatch} from "react-redux";
 import {APP_OPENED_STATE, setAppState} from "../store/appStateSlice";
+import {ScreenContainer} from "./ScreenContainer";
 
 const Container = styled.div`
   height: 100%;
@@ -13,6 +14,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
 `
+
 const RotateLogo = keyframes`
   from {
     rotate: 0deg;
@@ -71,17 +73,17 @@ const LoadingScreen = () => {
     useEffect(() => {
         setTimeout(() => {
             dispatch(setAppState({stateName: APP_OPENED_STATE}));
-        }, 2000)
+        }, 4000)
     }, []);
 
     return (
-        <React.Fragment>
+        <ScreenContainer>
             <Container>
                 <SpinningLogo/>
                 <PMain>Did you know?</PMain>
                 <PSecondary>This project is still in development</PSecondary>
             </Container>
-        </React.Fragment>
+        </ScreenContainer>
     );
 };
 
