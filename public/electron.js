@@ -13,9 +13,9 @@ let trayIcon;
 function createWindow() {
     const mainWindow = new BrowserWindow({
         width: 1000,
-        height: 800,
+        height: 900,
         minWidth: 920,
-        minHeight: 600,
+        minHeight: 800,
         show: false,
         frame: false,
         icon: iconPath,
