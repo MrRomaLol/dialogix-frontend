@@ -17,6 +17,7 @@ const Button = styled.button`
   min-width: 200px;
   
   color: white;
+  font-family: JetBrains Mono, serif;;
 
   background-color: rgb(188, 44, 201);
 

@@ -1,10 +1,10 @@
 import React, {useLayoutEffect, useRef, useState} from 'react';
-import IconButton from "./IconButton";
+import IconButton from "../IconButton";
 import {faPaperclip, faPaperPlane} from "@fortawesome/free-solid-svg-icons";
 import styled, {css} from "styled-components";
 
 const Container = styled.div`
-  margin: 15px;
+  margin: 0 15px 15px;
   position: relative;
 `
 const InputBack = styled.div`

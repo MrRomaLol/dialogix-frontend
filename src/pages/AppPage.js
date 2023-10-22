@@ -13,7 +13,7 @@ import {easings} from '@react-spring/web'
 
 const AppPage = () => {
     const size = useWindowSize();
-    const appStateName = useSelector(state => state.appState.state)
+    const appStateName = useSelector(state => state.appState.state);
 
     const stateComponent = useMemo(() => {
         switch (appStateName) {
