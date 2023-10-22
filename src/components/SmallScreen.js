@@ -34,10 +34,12 @@ const Border = styled.div`
 
 const H1 = styled.h1`
   color: white;
+  font-family: Furore, serif;
 `
 
 const P = styled.p`
   color: white;
+  font-family: JetBrains Mono, serif;
 `
 
 const Container = styled.div`

@@ -27,9 +27,9 @@ function App() {
             <GlobalStyle/>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/"         element={<MainPage/>}/>
-                    <Route path="/app"      element={<AppPage/>}/>
-                    <Route path="/login"    element={<LoginPage/>}/>
+                    <Route path="/" element={<MainPage/>}/>
+                    <Route path="/app" element={<AppPage/>}/>
+                    <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/register" element={<RegisterPage/>}/>
                 </Routes>
             </BrowserRouter>
