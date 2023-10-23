@@ -11,7 +11,7 @@ const StyledAppContent = styled(AppContent)`
   align-items: center;
 `
 
-const Container = styled.div`
+const Container = styled(ContentContainer)`
   width: 525px;
   height: 635px;
 `
@@ -25,7 +25,7 @@ export const LRNameDX = styled.p`
   justify-content: center;
 `
 
-const LTGS = styled.p`
+export const LTGS = styled.p`
   font-family: JetBrains Mono, serif;
   font-size: 26px;
   color: #BF94D4;
@@ -37,7 +37,7 @@ const LTGS = styled.p`
   justify-content: center;
 `
 
-const LRInput = styled.input`
+export const LRInput = styled.input`
   width: 100%;
   margin-bottom: 25px;
 
@@ -69,21 +69,21 @@ const RemMeForgotPassword = () => {
     );
 }
 
-const CutButton = styled.button`
+export const CutButton = styled.button`
   height: 50px;
   width: 190px;
 
   background-color: #5F3170;
   border: 0;
- 
+
   color: white;
   font-family: Furore, serif;
   font-size: 24px;
-  
+
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
 `
 
-const ButtonEobaniyBlur = styled.div`
+export const ButtonEobaniyBlur = styled.div`
   display: flex;
   justify-content: center;
   filter: drop-shadow(#BC2CC9 0 0 16px);
@@ -101,16 +101,16 @@ const Line = styled.div`
   width: 100%;
 
   height: 3px;
-  
+
   background-color: #8723D6;
 
   filter: drop-shadow(#BC2CC9 0 0 4px);
-  
+
   display: flex;
   align-self: center;
 `
 
-const OrLine = () => (
+export const OrLine = () => (
     <div style={{display: "flex", flexDirection: "row", marginTop: "20px"}}>
         <Line/>
         <OrText>OR</OrText>
@@ -126,30 +126,28 @@ const LoginPage = () => {
                 {window.IS_USING_DIALOGIX_APP && <ElectronHeader/>}
                 <StyledAppContent>
                     <Container>
-                        <ContentContainer>
-                            <div style={{padding: "30px 60px 30px 60px"}}>
-                                <LRNameDX>DIALOGIX</LRNameDX>
-                                <LTGS>Login to get started!</LTGS>
+                        <div style={{padding: "30px 60px 30px 60px"}}>
+                            <LRNameDX>DIALOGIX</LRNameDX>
+                            <LTGS>Login to get started!</LTGS>
 
-                                <LRInput placeholder={"Email / Username"}/>
-                                <LRInput placeholder={"Password"}/>
+                            <LRInput placeholder={"Email / Username"}/>
+                            <LRInput placeholder={"Password"}/>
 
-                                <RemMeForgotPassword/>
+                            <RemMeForgotPassword/>
 
-                                <ButtonEobaniyBlur>
-                                    <CutButton>Login</CutButton>
-                                </ButtonEobaniyBlur>
+                            <ButtonEobaniyBlur>
+                                <CutButton>Login</CutButton>
+                            </ButtonEobaniyBlur>
 
-                                <OrLine/>
+                            <OrLine/>
 
-                                <LTGS>Login to get started!</LTGS>
+                            <LTGS>Don't have account yet?</LTGS>
 
-                                <ButtonEobaniyBlur>
-                                    <CutButton>Register</CutButton>
-                                </ButtonEobaniyBlur>
+                            <ButtonEobaniyBlur>
+                                <CutButton>Register</CutButton>
+                            </ButtonEobaniyBlur>
 
-                            </div>
-                        </ContentContainer>
+                        </div>
                     </Container>
                 </StyledAppContent>
             </AppContent>

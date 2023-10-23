@@ -38,9 +38,9 @@ const ContentBorder = styled.div`
   50px 2px, 50px 2px, 2px 50px, 2px calc(100% - 2px), calc(100% - 50px) calc(100% - 2px), calc(100% - 2px) calc(100% - 50px), calc(100% - 2px) 2px, 50px 2px);
 `
 
-const ContentContainer = ({children}) => {
+const ContentContainer = ({children, className}) => {
     return (
-        <Container>
+        <Container className={className}>
             <ContentBack>
                 {children}
             </ContentBack>
