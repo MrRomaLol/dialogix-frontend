@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {AppBackground, AppContent} from "../components/styled-parts/AppBackground";
 import SmallScreen from "../components/SmallScreen";
 import useWindowSize from "../hooks/useWindowSize";
@@ -10,6 +10,7 @@ import AppScreen from "../appScreens/AppScreen";
 import SettingsScreen from "../appScreens/SettingsScreen";
 import {useTransition, animated} from 'react-spring';
 import {easings} from '@react-spring/web'
+import {postData} from "../axios";
 
 const AppPage = () => {
     const size = useWindowSize();
@@ -34,6 +35,12 @@ const AppPage = () => {
         leave: {opacity: 0, transform: 'scale(0.7)'},
         config: {duration: 500, easing: easings.easeInOutBack}
     });
+
+    useEffect(() => {
+        postData('/api/v1/test').then((res) => {
+            console.log(res);
+        })
+    }, [])
 
     return (
         <React.Fragment>

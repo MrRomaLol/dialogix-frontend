@@ -1,11 +1,16 @@
 const path = require('path');
 
 const electronLocalShortcut = require('electron-localshortcut');
+const Store = require('electron-store');
 
-const {app, BrowserWindow, ipcMain, Tray, Menu} = require('electron');
+const {app, BrowserWindow, session, ipcMain, Tray, Menu} = require('electron');
 const isDev = require('electron-is-dev');
 
 const iconPath = path.join(__dirname, 'icons', 'DialogiX256.ico');
+
+const store = new Store();
+
+const DIALOGIX_APP_URL = 'http://localhost:3000'
 
 let mainWindow;
 let trayIcon;
@@ -16,6 +21,7 @@ function createWindow() {
         height: 900,
         minWidth: 920,
         minHeight: 800,
+        backgroundColor: "#140a14",
         show: false,
         frame: false,
         icon: iconPath,
@@ -25,13 +31,27 @@ function createWindow() {
         },
     });
 
+    //setting cookies
+    session.defaultSession.clearStorageData([], (data) => {});
+    const cookies = store.get('App-Cookies');
+
+    for (const cookie of cookies) {
+        session.defaultSession.cookies.set({
+            url: DIALOGIX_APP_URL,
+            ...cookie
+        });
+    }
+
     mainWindow.maximize();
     mainWindow.loadURL(
         isDev
-            ? 'http://localhost:3000'
+            ? DIALOGIX_APP_URL + '/app'
             : `file://${path.join(__dirname, '../build/index.html')}`
     );
-    mainWindow.show();
+
+    mainWindow.on('ready-to-show', () => {
+        mainWindow.show();
+    })
 
     if (isDev) {
         mainWindow.webContents.openDevTools({mode: 'detach'});
@@ -118,6 +138,12 @@ function update() {
 }
 
 app.on('ready', isDev ? createWindow : update);
+
+app.on('before-quit', () => {
+    session.defaultSession.cookies.get({url: DIALOGIX_APP_URL}).then((cookies) => {
+        store.set('App-Cookies', cookies);
+    });
+})
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {

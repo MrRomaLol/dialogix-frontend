@@ -30,3 +30,21 @@
     font-family: 'JetBrains Mono';
     src: local('JetBrains Mono'), url(../fonts/JBRegular.ttf) format('truetype');
 }
+
+.notification-parent,
+.notification-title,
+.notification-message,
+.notification-item {
+    font-family: "JetBrains Mono", serif;
+}
+
+div[class^="rnc__notification-container--"] {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+}
+
+div[class^="rnc__notification-container--"]:has(> .rnc__notification) {
+    visibility: visible;
+    opacity: 1;
+}

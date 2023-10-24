@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {AppBackground, AppContent} from "../components/styled-parts/AppBackground";
 import ElectronHeader from "../components/ElectronHeader";
 import {ButtonEobaniyBlur, CutButton, LRInput, LRNameDX, LTGS, OrLine} from "./LoginPage";
 import styled from "styled-components";
 import ContentContainer from "../components/ContentContainer";
+import {useNavigate} from "react-router-dom";
+import {Store} from "react-notifications-component";
+import {useDispatch, useSelector} from "react-redux";
+import {registerUser} from "../store/authSlice";
+
+const validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+const validUsername = /^[A-Za-z_]{4,20}$/;
 
 const StyledAppContent = styled(AppContent)`
   position: relative;
@@ -17,6 +24,77 @@ const Container = styled(ContentContainer)`
 `
 
 const RegisterPage = () => {
+    const navigate = useNavigate();
+
+    const {loading, userInfo, error, success} = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+
+    const [formData, setFormData] = useState({
+        username: "",
+        email: "",
+        password: "",
+        rpassword: "",
+    });
+
+    const handleChange = e => {
+        setFormData(prev => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const handleRegister = () => {
+        const notification = {
+            title: "Error!",
+            type: "danger",
+            insert: "top",
+            container: "bottom-right",
+            animationIn: ["animate__animated", "animate__fadeInDown"],
+            dismiss: {
+                duration: 5000,
+                pauseOnHover: true,
+            }
+        }
+        if (!formData.username.match(validUsername)) {
+            return Store.addNotification({
+                ...notification,
+                message: "Username is invalid"
+            })
+        }
+
+        if (!formData.email.match(validEmail)) {
+            return Store.addNotification({
+                ...notification,
+                message: "Email is invalid"
+            })
+        }
+
+        if (formData.password.length < 6) {
+            return Store.addNotification({
+                ...notification,
+                message: "Password is too short"
+            })
+        }
+
+        if (formData.password !== formData.rpassword) {
+            return Store.addNotification({
+                ...notification,
+                message: "Passwords doesn't match"
+            })
+        }
+
+
+        dispatch(registerUser(formData));
+    }
+
+    const goToLogin = () => {
+        navigate('/login');
+    }
+
+    useEffect(() => {
+        if (success) navigate('/app');
+    }, [navigate, userInfo, success])
+
     return (
         <React.Fragment>
             <AppBackground/>
@@ -28,13 +106,15 @@ const RegisterPage = () => {
                             <LRNameDX>DIALOGIX</LRNameDX>
                             <LTGS>Create new account!</LTGS>
 
-                            <LRInput placeholder={"Username"}/>
-                            <LRInput placeholder={"Email"}/>
-                            <LRInput placeholder={"Password"}/>
-                            <LRInput placeholder={"Repeat password"}/>
+                            <LRInput placeholder={"Username"} name={'username'} onChange={handleChange} type={'text'}/>
+                            <LRInput placeholder={"Email"} name={'email'} onChange={handleChange} type={'email'}/>
+                            <LRInput placeholder={"Password"} name={'password'} onChange={handleChange}
+                                     type={'password'}/>
+                            <LRInput placeholder={"Repeat password"} name={'rpassword'} onChange={handleChange}
+                                     type={'password'}/>
 
                             <ButtonEobaniyBlur>
-                                <CutButton>Register</CutButton>
+                                <CutButton onClick={handleRegister}>Register</CutButton>
                             </ButtonEobaniyBlur>
 
                             <OrLine/>
@@ -42,7 +122,7 @@ const RegisterPage = () => {
                             <LTGS>Already have an account?</LTGS>
 
                             <ButtonEobaniyBlur>
-                                <CutButton>Login</CutButton>
+                                <CutButton onClick={goToLogin}>Login</CutButton>
                             </ButtonEobaniyBlur>
 
                         </div>

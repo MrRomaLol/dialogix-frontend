@@ -10,7 +10,7 @@ import {
 const WindowFrame = styled.div`
   width: 100%;
   height: 30px;
-
+  
   box-sizing: border-box;
 
   padding-left: 10px;

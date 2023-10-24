@@ -1,9 +1,14 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import styled from "styled-components";
 import ContentContainer from "../components/ContentContainer";
 import {AppBackground, AppContent} from "../components/styled-parts/AppBackground";
 import ElectronHeader from "../components/ElectronHeader";
+import {useNavigate} from "react-router-dom";
+import {Store} from "react-notifications-component";
+import {postData} from "../axios";
+import {useDispatch, useSelector} from "react-redux";
+import {loginUser} from "../store/authSlice";
 
 const StyledAppContent = styled(AppContent)`
   position: relative;
@@ -81,6 +86,16 @@ export const CutButton = styled.button`
   font-size: 24px;
 
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+
+  transition-duration: 200ms;
+
+  &:hover {
+    background-color: #4d245d;
+  }
+
+  &:active {
+    background-color: #3c194d;
+  }
 `
 
 export const ButtonEobaniyBlur = styled.div`
@@ -119,6 +134,97 @@ export const OrLine = () => (
 )
 
 const LoginPage = () => {
+    const navigate = useNavigate();
+
+    const {loading, error, success} = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+
+    const [formData, setFormData] = useState({
+        username: "",
+        password: "",
+    })
+
+    const handleChange = e => {
+        setFormData(prev => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const notification = {
+        title: "Error!",
+        type: "danger",
+        insert: "top",
+        container: "bottom-right",
+        animationIn: ["animate__animated", "animate__fadeInDown"],
+        dismiss: {
+            duration: 5000,
+            pauseOnHover: true,
+        }
+    }
+
+    const handleLogin = () => {
+        if (formData.username.length < 4 || formData.password.length < 6) {
+            return Store.addNotification({
+                ...notification,
+                message: "Invalid username or password"
+            })
+        }
+
+        dispatch(loginUser(formData));
+
+        // postData('/api/v1/login', user).then((res) => {
+        //     if (res.status === 'notauser') {
+        //         return Store.addNotification({
+        //             ...notification,
+        //             message: "Invalid username or password"
+        //         })
+        //     }
+        //
+        //     if (res.status === 'error') {
+        //         return Store.addNotification({
+        //             ...notification,
+        //             message: `Something went wrong: ${res.message}`
+        //         })
+        //     }
+        //
+        //     if (res.ok) {
+        //         Store.addNotification({
+        //             ...notification,
+        //             title: "Success!",
+        //             type: "success",
+        //             message: "Login completed"
+        //         })
+        //         return navigate('/app');
+        //     }
+        // })
+    }
+
+    const goToRegister = () => {
+        navigate('/register');
+    }
+
+    useEffect(() => {
+        console.log(success);
+        console.log(error);
+
+        if (error === 'notauser') {
+            Store.addNotification({
+                ...notification,
+                message: `Invalid username or password`
+            })
+        }
+        if (success) {
+            Store.addNotification({
+                ...notification,
+                title: "Success!",
+                type: "success",
+                message: "Login completed"
+            })
+            navigate('/app');
+        }
+    }, [navigate, error, success])
+
     return (
         <React.Fragment>
             <AppBackground/>
@@ -130,13 +236,13 @@ const LoginPage = () => {
                             <LRNameDX>DIALOGIX</LRNameDX>
                             <LTGS>Login to get started!</LTGS>
 
-                            <LRInput placeholder={"Email / Username"}/>
-                            <LRInput placeholder={"Password"}/>
+                            <LRInput placeholder={"Email / Username"} name={'username'} onChange={handleChange}/>
+                            <LRInput placeholder={"Password"} name={'password'} onChange={handleChange}/>
 
                             <RemMeForgotPassword/>
 
                             <ButtonEobaniyBlur>
-                                <CutButton>Login</CutButton>
+                                <CutButton onClick={handleLogin}>Login</CutButton>
                             </ButtonEobaniyBlur>
 
                             <OrLine/>
@@ -144,7 +250,7 @@ const LoginPage = () => {
                             <LTGS>Don't have account yet?</LTGS>
 
                             <ButtonEobaniyBlur>
-                                <CutButton>Register</CutButton>
+                                <CutButton onClick={goToRegister}>Register</CutButton>
                             </ButtonEobaniyBlur>
 
                         </div>

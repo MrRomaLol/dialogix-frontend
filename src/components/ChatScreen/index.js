@@ -19,7 +19,7 @@ const ChatCapsule = () => {
 
     for (let i = 0; i < 100; i++) {
         arr.push({
-            content: "message " + i,
+            content: "Message" + i,
             date: "01.01.2000",
             nick: i % 2 === 0 ? "GetTheNya" : "Exodus",
             type: i % 2 === 0 ? "my" : "member"
