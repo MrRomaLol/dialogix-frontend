@@ -1,29 +1,30 @@
 import React from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSliders} from "@fortawesome/free-solid-svg-icons";
+import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
 import {
+    CardContainer,
     FriendCardBack,
     FriendCardBorder,
-    CardContainer,
     FriendCardContainer,
-    FriendCardIcon
+    FriendCardIconsContainer
 } from "./FriendCardStyledParts";
-import styled from "styled-components";
 
-const SettingsIcon = styled(FriendCardIcon)`
-  color: #C087D4;
-  margin-right: 10px;
-  margin-top: 10px;
-
-  &:hover {
-    color: #905fa1;
-  }
+const FriendSentCardIconsContainer = styled(FriendCardIconsContainer)`
+  justify-content: center;
 `
 
 const FriendCard = ({nick}) => {
     return (
         <CardContainer>
             <FriendCardBack>
+                <FriendSentCardIconsContainer>
+                    <FontAwesomeIcon icon={faXmark}
+                                     style={{
+                                         color: "#B13470",
+                                         fontSize: "28px"
+                                     }}/>
+                </FriendSentCardIconsContainer>
                 <FriendCardContainer>
                     <div style={{
                         width: "72px",
@@ -36,7 +37,6 @@ const FriendCard = ({nick}) => {
                     </div>
                     {nick}
                 </FriendCardContainer>
-                <SettingsIcon icon={faSliders}/>
             </FriendCardBack>
             <FriendCardBorder/>
         </CardContainer>

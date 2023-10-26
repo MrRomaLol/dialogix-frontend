@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components";
 import {FriendsInputField} from "./StyledParts";
 
@@ -15,7 +15,7 @@ const SearchField = styled.div`
 
 const Button = styled.button`
   min-width: 200px;
-  
+
   color: white;
   font-family: JetBrains Mono, serif;;
 
@@ -36,11 +36,23 @@ const Button = styled.button`
 `
 
 const FriendAddTab = () => {
+    const [friendsName, setFriendsName] = useState('');
+
+
+
+    const handleAddChange = e => {
+        setFriendsName(e.target.value);
+    }
+
+    const addFriend = () => {
+
+    }
+
     return (
         <div style={{boxSizing: "border-box", padding: "20px"}}>
             <SearchField>
-                <FriendsInputField/>
-                <Button>Send friend request</Button>
+                <FriendsInputField onChange={handleAddChange}/>
+                <Button onClick={addFriend}>Send friend request</Button>
             </SearchField>
         </div>
     );

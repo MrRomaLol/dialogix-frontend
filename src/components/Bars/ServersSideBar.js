@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from "styled-components";
-import {BarsBorder, LRBars, ScrollerBar, ScrollerBarBox} from "./styled-parts/LRBars";
+import {BarsBorder, LRBars, ScrollerBar, ScrollerBarBox} from "./LRBars";
 import BarButton from "./BarButton";
 import {faPlus, faUsers} from "@fortawesome/free-solid-svg-icons";
-import {IconSeparator} from "./styled-parts/SideIconParts";
+import {IconSeparator} from "./SideIconParts";
 
 const EobaniyBlyr = styled.span`
   height: 100%;

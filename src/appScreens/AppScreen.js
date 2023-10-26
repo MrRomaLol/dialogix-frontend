@@ -1,8 +1,8 @@
 import React from 'react';
-import FriendsSideBar from "../components/FriendsSideBar";
+import FriendsSideBar from "../components/Bars/FriendsSideBar";
 import Header from "../components/Header";
 import MainContent from "../components/MainContent";
-import ServersSideBar from "../components/ServersSideBar";
+import ServersSideBar from "../components/Bars/ServersSideBar";
 import styled from "styled-components";
 import {ScreenContainer} from "./ScreenContainer";
 

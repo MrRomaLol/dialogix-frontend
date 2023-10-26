@@ -1,9 +1,9 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {postData} from "../axios";
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query";
+import {getData, postData} from "../axios";
 
 const initialState = {
     loading: false,
+    isAuthenticated: false,
     userInfo: {},
     error: null,
     success: null,
@@ -18,7 +18,8 @@ export const registerUser = createAsyncThunk(
                 email,
                 password
             }
-            const res = postData('/api/v1/register', user);
+            const res = await postData('/api/v1/register', user);
+
             if (!res.ok) {
                 return rejectWithValue(res.message);
             }
@@ -43,53 +44,70 @@ export const loginUser = createAsyncThunk(
     }
 )
 
-export const authApi = createApi({
-    reducerPath: "authApi",
-    baseQuery: fetchBaseQuery({baseUrl: '/api/v1/'}),
-    endpoints: (builder) => ({
-        getUserDetails: builder.query({
-            query: () => ({
-                url: 'loginstatus',
-                method: 'GET',
-            })
-        })
-    }),
-})
+export const checkAuthentication = createAsyncThunk(
+    'auth/check',
+    async (_, {rejectWithValue}) => {
+        const res = await getData('/api/v1/loginstatus');
+        if (!res.ok) {
+            return rejectWithValue('notAuthenticated');
+        }
+    }
+)
 
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {},
-    extraReducers: {
-        [registerUser.pending]: (state) => {
+    extraReducers: (builder) => {
+        builder.addCase(registerUser.pending, (state) => {
             state.loading = true
+            state.success = null
             state.error = null
-        },
-        [registerUser.fulfilled]: (state, {payload}) => {
+        })
+        builder.addCase(registerUser.fulfilled, (state, {payload}) => {
             state.loading = false
             state.success = true
-            state.userInfo = payload
-        },
-        [registerUser.rejected]: (state, {payload}) => {
+            state.isAuthenticated = true
+            // state.userInfo = payload
+        })
+        builder.addCase(registerUser.rejected, (state, {payload}) => {
             state.loading = false
+            state.success = false
             state.error = payload
-        },
-        [loginUser.pending]: (state) => {
+        })
+        builder.addCase(loginUser.pending, (state) => {
             state.loading = true
+            state.success = null
             state.error = null
-        },
-        [loginUser.fulfilled]: (state, {payload}) => {
+        })
+        builder.addCase(loginUser.fulfilled, (state, {payload}) => {
             state.loading = false
             state.success = true
-            state.userInfo = payload
-        },
-        [loginUser.rejected]: (state, {payload}) => {
+            state.isAuthenticated = true
+            // state.userInfo = payload
+        })
+        builder.addCase(loginUser.rejected, (state, {payload}) => {
             state.loading = false
+            state.success = false
             state.error = payload
-        },
+        })
+        builder.addCase(checkAuthentication.pending, (state) => {
+            state.loading = true
+            state.success = null
+            state.error = null
+        })
+        builder.addCase(checkAuthentication.fulfilled, (state, {payload}) => {
+            state.loading = false
+            state.success = true
+            state.isAuthenticated = true
+            // state.userInfo = payload
+        })
+        builder.addCase(checkAuthentication.rejected, (state, {payload}) => {
+            state.loading = false
+            state.success = false
+            state.isAuthenticated = false
+        })
     }
 })
-
-export const {useGetUserDetails} = authApi;
 
 export default authSlice.reducer;

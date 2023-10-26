@@ -8,9 +8,11 @@ import {useNavigate} from "react-router-dom";
 import {Store} from "react-notifications-component";
 import {useDispatch, useSelector} from "react-redux";
 import {registerUser} from "../store/authSlice";
+import DxSpinner from "../components/DXSpinner";
+import DXSpinner from "../components/DXSpinner";
 
 const validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-const validUsername = /^[A-Za-z_]{4,20}$/;
+const validUsername = /^[A-Za-z0-9_]{4,20}$/;
 
 const StyledAppContent = styled(AppContent)`
   position: relative;
@@ -43,18 +45,21 @@ const RegisterPage = () => {
         }))
     }
 
-    const handleRegister = () => {
-        const notification = {
-            title: "Error!",
-            type: "danger",
-            insert: "top",
-            container: "bottom-right",
-            animationIn: ["animate__animated", "animate__fadeInDown"],
-            dismiss: {
-                duration: 5000,
-                pauseOnHover: true,
-            }
+    const notification = {
+        title: "Error!",
+        type: "danger",
+        insert: "top",
+        container: "bottom-right",
+        animationIn: ["animate__animated", "animate__fadeInDown"],
+        dismiss: {
+            duration: 5000,
+            pauseOnHover: true,
         }
+    }
+
+    const handleRegister = () => {
+        if (loading) return;
+
         if (!formData.username.match(validUsername)) {
             return Store.addNotification({
                 ...notification,
@@ -83,7 +88,6 @@ const RegisterPage = () => {
             })
         }
 
-
         dispatch(registerUser(formData));
     }
 
@@ -92,8 +96,23 @@ const RegisterPage = () => {
     }
 
     useEffect(() => {
-        if (success) navigate('/app');
-    }, [navigate, userInfo, success])
+        if (error) {
+            Store.addNotification({
+                ...notification,
+                message: `Something went wrong: ${error}`
+            })
+        }
+
+        if (success) {
+            Store.addNotification({
+                ...notification,
+                title: "Success!",
+                type: "success",
+                message: "Registration completed"
+            })
+            navigate('/app');
+        }
+    }, [navigate, success, error])
 
     return (
         <React.Fragment>
@@ -114,7 +133,7 @@ const RegisterPage = () => {
                                      type={'password'}/>
 
                             <ButtonEobaniyBlur>
-                                <CutButton onClick={handleRegister}>Register</CutButton>
+                                <CutButton onClick={handleRegister}>{loading ? <DXSpinner/> : 'Register'}</CutButton>
                             </ButtonEobaniyBlur>
 
                             <OrLine/>

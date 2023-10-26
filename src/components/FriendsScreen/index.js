@@ -121,38 +121,37 @@ const SearchFiledBack = styled(BackContainer)`
   }
 `
 
-const SearchField = () => {
-    const [searchInput, setSearchInput] = useState('');
-
-    const handleInputChange = (e) => {
-        setSearchInput(e.target.value);
-    }
-
+const SearchField = ({searchInput, onInputChange}) => {
     return (
         <SearchFiledBack hasInput={searchInput}>
             <Icons icon={faMagnifyingGlass}/>
-            <FriendsInputField value={searchInput} onChange={handleInputChange}/>
+            <FriendsInputField value={searchInput} onChange={onInputChange}/>
         </SearchFiledBack>
     )
 }
 
 const FriendsScreen = () => {
-
     const dispatch = useDispatch();
     const subScreenName = useSelector(state => state.screenState.subScreen);
 
-    const subScreenComponent = useMemo (() => {
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handleInputChange = e => {
+        setSearchQuery(e.target.value);
+    }
+
+    const subScreenComponent = useMemo(() => {
         switch (subScreenName) {
             case FRIENDS_SCREEN_FRIENDS_TAB:
-                 return <FriendListTab/>;
+                return <FriendListTab searchQuery={searchQuery}/>;
             case FRIENDS_SCREEN_PENDING_TAB:
-                return <FriendSentPendingTab/>;
+                return <FriendSentPendingTab searchQuery={searchQuery}/>;
             case FRIENDS_SCREEN_ADD_FRIENDS_TAB:
                 return <FriendAddTab/>;
             default:
                 return null;
         }
-    }, [subScreenName]);
+    }, [subScreenName, searchQuery]);
 
     const setTab = (tabName) => {
         dispatch(setSubScreen({subScreenName: tabName}))
@@ -167,7 +166,8 @@ const FriendsScreen = () => {
                      onClick={() => setTab(FRIENDS_SCREEN_PENDING_TAB)}/>
                 <Tab name={"Add friend"} isSelected={subScreenName === FRIENDS_SCREEN_ADD_FRIENDS_TAB} icon={faUserPlus}
                      onClick={() => setTab(FRIENDS_SCREEN_ADD_FRIENDS_TAB)}/>
-                {subScreenName !== FRIENDS_SCREEN_ADD_FRIENDS_TAB && <SearchField/>}
+                {subScreenName !== FRIENDS_SCREEN_ADD_FRIENDS_TAB &&
+                    <SearchField searchInput={searchQuery} onInputChange={handleInputChange}/>}
             </Tabs>
             {subScreenComponent}
         </ContentContainer>

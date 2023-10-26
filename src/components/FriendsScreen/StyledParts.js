@@ -11,7 +11,7 @@ export const Grid = styled.div`
 
   padding-top: 10px;
 
-  overflow-y: scroll;
+  overflow-y: auto;
 `
 
 export const FriendsInputField = styled.input`

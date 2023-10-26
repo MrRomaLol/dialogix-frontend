@@ -32,15 +32,17 @@ function createWindow() {
     });
 
     //setting cookies
-    session.defaultSession.clearStorageData([], (data) => {});
+    session.defaultSession.clearStorageData([], (data) => {
+    });
     const cookies = store.get('App-Cookies');
 
-    for (const cookie of cookies) {
-        session.defaultSession.cookies.set({
-            url: DIALOGIX_APP_URL,
-            ...cookie
-        });
-    }
+    if (cookies)
+        for (const cookie of cookies) {
+            session.defaultSession.cookies.set({
+                url: DIALOGIX_APP_URL,
+                ...cookie
+            });
+        }
 
     mainWindow.maximize();
     mainWindow.loadURL(

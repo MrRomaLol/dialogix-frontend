@@ -5,7 +5,6 @@ import {useSelector} from "react-redux";
 import FriendsScreen from "./FriendsScreen";
 import MainScreen from "./MainScreen";
 import {FRIENDS_SCREEN, MAIN_SCREEN} from "../store/screenStateSlice";
-import ChatCapsule from "./ChatScreen";
 
 const Content = styled.div`
   width: 100%;
@@ -32,8 +31,7 @@ const MainContent = () => {
 
     return (
         <Content>
-            {/*{screen}*/}
-            <ChatCapsule/>
+            {screen}
         </Content>
     );
 };

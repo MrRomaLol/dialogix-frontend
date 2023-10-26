@@ -9,6 +9,7 @@ import {Store} from "react-notifications-component";
 import {postData} from "../axios";
 import {useDispatch, useSelector} from "react-redux";
 import {loginUser} from "../store/authSlice";
+import DXSpinner from "../components/DXSpinner";
 
 const StyledAppContent = styled(AppContent)`
   position: relative;
@@ -164,6 +165,8 @@ const LoginPage = () => {
     }
 
     const handleLogin = () => {
+        if (loading) return;
+
         if (formData.username.length < 4 || formData.password.length < 6) {
             return Store.addNotification({
                 ...notification,
@@ -172,32 +175,6 @@ const LoginPage = () => {
         }
 
         dispatch(loginUser(formData));
-
-        // postData('/api/v1/login', user).then((res) => {
-        //     if (res.status === 'notauser') {
-        //         return Store.addNotification({
-        //             ...notification,
-        //             message: "Invalid username or password"
-        //         })
-        //     }
-        //
-        //     if (res.status === 'error') {
-        //         return Store.addNotification({
-        //             ...notification,
-        //             message: `Something went wrong: ${res.message}`
-        //         })
-        //     }
-        //
-        //     if (res.ok) {
-        //         Store.addNotification({
-        //             ...notification,
-        //             title: "Success!",
-        //             type: "success",
-        //             message: "Login completed"
-        //         })
-        //         return navigate('/app');
-        //     }
-        // })
     }
 
     const goToRegister = () => {
@@ -205,9 +182,6 @@ const LoginPage = () => {
     }
 
     useEffect(() => {
-        console.log(success);
-        console.log(error);
-
         if (error === 'notauser') {
             Store.addNotification({
                 ...notification,
@@ -242,7 +216,7 @@ const LoginPage = () => {
                             <RemMeForgotPassword/>
 
                             <ButtonEobaniyBlur>
-                                <CutButton onClick={handleLogin}>Login</CutButton>
+                                <CutButton onClick={handleLogin}>{loading ? <DXSpinner/> : 'Login'}</CutButton>
                             </ButtonEobaniyBlur>
 
                             <OrLine/>

@@ -1,7 +1,10 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Grid} from "./StyledParts";
 import styled from "styled-components";
 import FriendCard from "./FriendCard";
+import {useSelector} from "react-redux";
+import FriendCardPending from "./FriendCardPending";
+import FriendCardSent from "./FriendCardSent";
 
 const SeparatorContainer = styled.div`
   height: 50px;
@@ -35,45 +38,45 @@ const Separator = styled.div`
 const Name = styled.div`
   color: #FC03F2;
   font-family: Furore, serif;
-  
+
   margin-left: 50px;
   margin-bottom: 10px;
+  
+  user-select: none;
 `
 
-const FriendSentPendingTab = () => {
+const FriendSentPendingTab = ({searchQuery}) => {
+    const {pending, sent} = useSelector((state) => state.friends);
+
+    const filteredPending = useMemo(() => {
+        return pending.filter(item => {
+            return item.nickname.toLowerCase().includes(searchQuery.toLowerCase())
+        })
+    }, [pending, searchQuery]);
+
+    const filteredSent = useMemo(() => {
+        return sent.filter(item => {
+            return item.nickname.toLowerCase().includes(searchQuery.toLowerCase())
+        })
+    }, [sent, searchQuery]);
+
     return (
         <Grid className={"scroll-bar"}>
-            <SeparatorContainer>
-                <Name>Pending</Name>
-                <Separator/>
-            </SeparatorContainer>
+            {filteredPending.length && <>
+                <SeparatorContainer>
+                    <Name>Pending</Name>
+                    <Separator/>
+                </SeparatorContainer>
+                {filteredPending.map((friend) => (<FriendCardPending key={friend.id} nick={friend.nickname}/>))}
+            </>}
 
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-
-            <SeparatorContainer>
-                <Name>Sent</Name>
-                <Separator/>
-            </SeparatorContainer>
-
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
-            <FriendCard nick={"friend"}/>
+            {filteredSent.length && <>
+                <SeparatorContainer>
+                    <Name>Sent</Name>
+                    <Separator/>
+                </SeparatorContainer>
+                {filteredSent.map((friend) => (<FriendCardSent key={friend.id} nick={friend.nickname}/>))}
+            </>}
         </Grid>
     );
 };
