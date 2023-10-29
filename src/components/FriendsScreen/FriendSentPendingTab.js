@@ -62,20 +62,20 @@ const FriendSentPendingTab = ({searchQuery}) => {
 
     return (
         <Grid className={"scroll-bar"}>
-            {filteredPending.length && <>
+            {!!filteredPending.length && <>
                 <SeparatorContainer>
                     <Name>Pending</Name>
                     <Separator/>
                 </SeparatorContainer>
-                {filteredPending.map((friend) => (<FriendCardPending key={friend.id} nick={friend.nickname}/>))}
+                {filteredPending.map((friend) => (<FriendCardPending key={friend.id} nick={friend.nickname} id={friend.id}/>))}
             </>}
 
-            {filteredSent.length && <>
+            {!!filteredSent.length && <>
                 <SeparatorContainer>
                     <Name>Sent</Name>
                     <Separator/>
                 </SeparatorContainer>
-                {filteredSent.map((friend) => (<FriendCardSent key={friend.id} nick={friend.nickname}/>))}
+                {filteredSent.map((friend) => (<FriendCardSent key={friend.id} nick={friend.nickname} id={friend.id}/>))}
             </>}
         </Grid>
     );

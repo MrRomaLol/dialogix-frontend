@@ -32,7 +32,7 @@ const WindowFrame = styled.div`
 
 const StyledButtons = styled(FontAwesomeIcon)`
   color: white;
-
+  
   padding: 4px;
 
   width: 16px;
@@ -54,7 +54,7 @@ const StyledButtons = styled(FontAwesomeIcon)`
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;
-
+  
   -webkit-app-region: no-drag;
 `
 

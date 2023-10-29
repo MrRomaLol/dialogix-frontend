@@ -69,7 +69,8 @@ const PSecondary = styled(P)`
 `
 
 const LoadingScreen = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
+
     const {loading: loadingFriends} = useSelector((state) => state.friends)
 
     useEffect(() => {
@@ -77,7 +78,7 @@ const LoadingScreen = () => {
     }, [])
 
     useEffect(() => {
-        if (loadingFriends) {
+        if (!loadingFriends) {
             dispatch(setAppState({stateName: APP_OPENED_STATE}));
         }
     }, [dispatch, loadingFriends]);

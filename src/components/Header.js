@@ -3,7 +3,7 @@ import {HeaderBack, HeaderBorders, LeftRightBars} from "./styled-parts/HeaderBar
 import styled, {keyframes} from "styled-components";
 import Logotype from "./Logotype";
 import {MAIN_SCREEN, setScreen} from "../store/screenStateSlice";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGear} from "@fortawesome/free-solid-svg-icons";
 import {APP_SETTINGS_STATE, setAppState} from "../store/appStateSlice";
@@ -72,7 +72,10 @@ const Center = styled(HeaderBack)`
 `
 
 const Right = styled(LeftRightBars)`
-  display: block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
   clip-path: polygon(0 0, 0 100%, calc(100% - 20px) 100%, 100% calc(100% - 18px), 100% 0);
 `
 
@@ -111,8 +114,14 @@ const Ava = styled.div`
   border-radius: 50%;
 `
 
-const Header = () => {
+const Nickname = styled.p`
+  color: #A684DF;
+  font-family: "JetBrains Mono", serif;
+  font-size: 20px;
+`
 
+const Header = () => {
+    const {userInfo} = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
     const goToMainScreen = () => {
@@ -144,7 +153,9 @@ const Header = () => {
                 </Container>
 
                 <ContainerLR>
-                    <Right/>
+                    <Right>
+                        <Nickname>{userInfo.nickname}</Nickname>
+                    </Right>
                     <RightBorder/>
                 </ContainerLR>
             </EobaniyBlyr>

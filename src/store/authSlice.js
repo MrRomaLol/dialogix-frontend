@@ -23,6 +23,9 @@ export const registerUser = createAsyncThunk(
             if (!res.ok) {
                 return rejectWithValue(res.message);
             }
+
+            return res.userInfo;
+
         } catch (err) {
             return rejectWithValue(err.message);
         }
@@ -38,9 +41,12 @@ export const loginUser = createAsyncThunk(
         };
 
         const res = await postData('/api/v1/login', user);
+
         if (res.status === 'notauser') {
             return rejectWithValue('notauser');
         }
+
+        return res.userInfo;
     }
 )
 
@@ -51,6 +57,7 @@ export const checkAuthentication = createAsyncThunk(
         if (!res.ok) {
             return rejectWithValue('notAuthenticated');
         }
+        return res.userInfo;
     }
 )
 
@@ -68,7 +75,7 @@ const authSlice = createSlice({
             state.loading = false
             state.success = true
             state.isAuthenticated = true
-            // state.userInfo = payload
+            state.userInfo = payload
         })
         builder.addCase(registerUser.rejected, (state, {payload}) => {
             state.loading = false
@@ -84,7 +91,7 @@ const authSlice = createSlice({
             state.loading = false
             state.success = true
             state.isAuthenticated = true
-            // state.userInfo = payload
+            state.userInfo = payload
         })
         builder.addCase(loginUser.rejected, (state, {payload}) => {
             state.loading = false
@@ -100,7 +107,7 @@ const authSlice = createSlice({
             state.loading = false
             state.success = true
             state.isAuthenticated = true
-            // state.userInfo = payload
+            state.userInfo = payload
         })
         builder.addCase(checkAuthentication.rejected, (state, {payload}) => {
             state.loading = false

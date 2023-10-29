@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components";
 import {BarsBorder, LRBars, ScrollerBar, ScrollerBarBox} from "./LRBars";
 import BarButton from "./BarButton";
 import {faPlus, faUsers} from "@fortawesome/free-solid-svg-icons";
 import {IconSeparator} from "./SideIconParts";
+import CreateServerModal from "../Modals/CreateServerModal";
 
 const EobaniyBlyr = styled.span`
   height: 100%;
@@ -22,20 +23,33 @@ const Bar = styled(LRBars)`
 `
 
 const ServersSideBar = () => {
-    return (
-        <EobaniyBlyr>
-            <BarBorder/>
-            <Bar>
-                <BarButton icon={faUsers}/>
-                <BarButton icon={faPlus}/>
-                <IconSeparator/>
-                <ScrollerBarBox>
-                    <ScrollerBar>
+    const [isCrateServerModalOpened, setIsCrateServerModalOpened] = useState(false);
 
-                    </ScrollerBar>
-                </ScrollerBarBox>
-            </Bar>
-        </EobaniyBlyr>
+    const handleOpenCreateServerModal = () => {
+        setIsCrateServerModalOpened(true);
+    }
+
+    const handleCloseCreateServerModal = () => {
+        setIsCrateServerModalOpened(false);
+    }
+    
+    return (
+        <>
+            <EobaniyBlyr>
+                <BarBorder/>
+                <Bar>
+                    <BarButton icon={faUsers}/>
+                    <BarButton icon={faPlus} onClick={handleOpenCreateServerModal}/>
+                    <IconSeparator/>
+                    <ScrollerBarBox>
+                        <ScrollerBar>
+
+                        </ScrollerBar>
+                    </ScrollerBarBox>
+                </Bar>
+            </EobaniyBlyr>
+            <CreateServerModal isOpen={isCrateServerModalOpened} onRequestClose={handleCloseCreateServerModal}/>
+        </>
     );
 };
 

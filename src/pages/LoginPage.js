@@ -139,7 +139,7 @@ const LoginPage = () => {
 
     const {loading, error, success} = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-
+    const [tryingToLogin, setTryingToLogin] = useState(false)
     const [formData, setFormData] = useState({
         username: "",
         password: "",
@@ -166,7 +166,7 @@ const LoginPage = () => {
 
     const handleLogin = () => {
         if (loading) return;
-
+        setTryingToLogin(false);
         if (formData.username.length < 4 || formData.password.length < 6) {
             return Store.addNotification({
                 ...notification,
@@ -175,6 +175,7 @@ const LoginPage = () => {
         }
 
         dispatch(loginUser(formData));
+        setTryingToLogin(true);
     }
 
     const goToRegister = () => {
@@ -182,21 +183,26 @@ const LoginPage = () => {
     }
 
     useEffect(() => {
-        if (error === 'notauser') {
-            Store.addNotification({
-                ...notification,
-                message: `Invalid username or password`
-            })
+        const showNotification = () => {
+            if (!tryingToLogin) return;
+            if (error === 'notauser') {
+                Store.addNotification({
+                    ...notification,
+                    message: `Invalid username or password`
+                })
+            }
+            if (success) {
+                Store.addNotification({
+                    ...notification,
+                    title: "Success!",
+                    type: "success",
+                    message: "Login completed"
+                })
+                navigate('/app');
+            }
         }
-        if (success) {
-            Store.addNotification({
-                ...notification,
-                title: "Success!",
-                type: "success",
-                message: "Login completed"
-            })
-            navigate('/app');
-        }
+
+        showNotification()
     }, [navigate, error, success])
 
     return (

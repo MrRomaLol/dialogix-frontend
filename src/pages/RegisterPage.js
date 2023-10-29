@@ -8,7 +8,6 @@ import {useNavigate} from "react-router-dom";
 import {Store} from "react-notifications-component";
 import {useDispatch, useSelector} from "react-redux";
 import {registerUser} from "../store/authSlice";
-import DxSpinner from "../components/DXSpinner";
 import DXSpinner from "../components/DXSpinner";
 
 const validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
@@ -27,8 +26,8 @@ const Container = styled(ContentContainer)`
 
 const RegisterPage = () => {
     const navigate = useNavigate();
-
-    const {loading, userInfo, error, success} = useSelector((state) => state.auth);
+    const [tryingToRegister, setTryingToRegister] = useState(false);
+    const {loading, error, success} = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
     const [formData, setFormData] = useState({
@@ -59,6 +58,7 @@ const RegisterPage = () => {
 
     const handleRegister = () => {
         if (loading) return;
+        setTryingToRegister(false);
 
         if (!formData.username.match(validUsername)) {
             return Store.addNotification({
@@ -89,6 +89,7 @@ const RegisterPage = () => {
         }
 
         dispatch(registerUser(formData));
+        setTryingToRegister(true);
     }
 
     const goToLogin = () => {
@@ -96,23 +97,27 @@ const RegisterPage = () => {
     }
 
     useEffect(() => {
-        if (error) {
-            Store.addNotification({
-                ...notification,
-                message: `Something went wrong: ${error}`
-            })
-        }
+        const showNotification = () => {
+            if (!tryingToRegister) return;
+            if (error) {
+                Store.addNotification({
+                    ...notification,
+                    message: `Something went wrong: ${error}`
+                })
+            }
 
-        if (success) {
-            Store.addNotification({
-                ...notification,
-                title: "Success!",
-                type: "success",
-                message: "Registration completed"
-            })
-            navigate('/app');
+            if (success) {
+                Store.addNotification({
+                    ...notification,
+                    title: "Success!",
+                    type: "success",
+                    message: "Registration completed"
+                })
+                navigate('/app');
+            }
         }
-    }, [navigate, success, error])
+        showNotification();
+    }, [navigate, success, error, tryingToRegister])
 
     return (
         <React.Fragment>

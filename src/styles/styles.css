@@ -31,6 +31,10 @@
     src: local('JetBrains Mono'), url(../fonts/JBRegular.ttf) format('truetype');
 }
 
+.modal-animation {
+    animation-duration: 0.5s;
+}
+
 .notification-parent,
 .notification-title,
 .notification-message,

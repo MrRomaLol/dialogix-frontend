@@ -12,5 +12,5 @@ export default configureStore({
         screenState: screenStateReducer,
         friends: friendsReducer,
         theme: themeReducer,
-    }
+    },
 })

@@ -34,9 +34,18 @@ export const putData = async (url, data) => {
     }
 };
 
-export const deleteData = async (url) => {
+export const patchData = async (url, data) => {
     try {
-        const response = await axiosInstance.delete(url);
+        const response = await axiosInstance.patch(url, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const deleteData = async (url, data) => {
+    try {
+        const response = await axiosInstance.delete(url, data);
         return response.data;
     } catch (error) {
         throw error;

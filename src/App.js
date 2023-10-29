@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {ReactNotifications} from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
 import 'animate.css/animate.min.css';
@@ -15,8 +15,10 @@ import AppPage from "./pages/AppPage";
 import "./styles/styles.css"
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import {getData} from "./axios";
-import {checkAuthentication, useGetUserDetails} from "./store/authSlice";
+import {checkAuthentication} from "./store/authSlice";
+import Modal from "react-modal";
+
+Modal.setAppElement('#root')
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -48,6 +50,7 @@ function App() {
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>
+
     )
 }
 

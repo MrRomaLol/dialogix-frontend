@@ -9,6 +9,8 @@ import {
     FriendCardIcon
 } from "./FriendCardStyledParts";
 import styled from "styled-components";
+import {useDispatch} from "react-redux";
+import {deleteFriend} from "../../store/friendsSlice";
 
 const SettingsIcon = styled(FriendCardIcon)`
   color: #C087D4;
@@ -20,7 +22,13 @@ const SettingsIcon = styled(FriendCardIcon)`
   }
 `
 
-const FriendCard = ({nick}) => {
+const FriendCard = ({nick, id}) => {
+    const dispatch = useDispatch();
+
+    const handleDeleteFriend = () => {
+        dispatch(deleteFriend({id}))
+    }
+
     return (
         <CardContainer>
             <FriendCardBack>
@@ -36,7 +44,7 @@ const FriendCard = ({nick}) => {
                     </div>
                     {nick}
                 </FriendCardContainer>
-                <SettingsIcon icon={faSliders}/>
+                <SettingsIcon icon={faSliders} onClick={handleDeleteFriend}/>
             </FriendCardBack>
             <FriendCardBorder/>
         </CardContainer>

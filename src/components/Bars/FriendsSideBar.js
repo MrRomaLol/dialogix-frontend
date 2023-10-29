@@ -58,13 +58,13 @@ const FriendsSideBar = () => {
             <Bar>
                 <BarButton icon={faUser} isSelected={screenName === FRIENDS_SCREEN}/>
                 <BarButton icon={faPlus} onClick={goToFriendsScreen}>
-                    {pending.length && <NewFriendsAlert onClick={goToPending} isAnimated/>}
+                    {!!pending.length && <NewFriendsAlert onClick={goToPending} isAnimated/>}
                 </BarButton>
                 <IconSeparator/>
 
                 <ScrollerBarBox>
                     <ScrollerBar>
-                        {friends.map((obj, idx) => (<BarIcon/>))}
+                        {friends.map((obj, idx) => (<BarIcon key={obj.id}/>))}
                     </ScrollerBar>
                 </ScrollerBarBox>
 

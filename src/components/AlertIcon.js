@@ -23,7 +23,7 @@ const AlertIconStyle = styled(FontAwesomeIcon)`
   border-radius: 50%;
   aspect-ratio: 1 / 1;
 
-  ${({isAnimated}) => isAnimated && css`
+  ${({$isAnimated}) => $isAnimated && css`
     animation: ${OnHover} 2s ease-in-out infinite;
   `}
   
@@ -41,7 +41,7 @@ const AlertIconStyle = styled(FontAwesomeIcon)`
 `
 
 const AlertIcon = ({className, onClick, isAnimated}) => {
-    return <AlertIconStyle className={className} icon={faExclamation} onClick={onClick ? onClick : null} isAnimated={isAnimated}/>
+    return <AlertIconStyle className={className} icon={faExclamation} onClick={onClick ? onClick : null} $isAnimated={isAnimated}/>
 }
 
 export default AlertIcon;

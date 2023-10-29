@@ -6,24 +6,36 @@ import {
     CardContainer,
     FriendCardBack,
     FriendCardBorder,
-    FriendCardContainer,
+    FriendCardContainer, FriendCardIcon,
     FriendCardIconsContainer
 } from "./FriendCardStyledParts";
+import {useDispatch} from "react-redux";
+import {unSendFriendRequest} from "../../store/friendsSlice";
 
 const FriendSentCardIconsContainer = styled(FriendCardIconsContainer)`
   justify-content: center;
 `
 
-const FriendCard = ({nick}) => {
+const XIcon = styled(FriendCardIcon)`
+  color: #B13470;
+
+  &:hover {
+    color: #98255c;
+  }
+`
+
+const FriendCardSent = ({nick, id}) => {
+    const dispatch = useDispatch();
+
+    const handleUnset = () => {
+        dispatch(unSendFriendRequest({id}))
+    }
+
     return (
         <CardContainer>
             <FriendCardBack>
                 <FriendSentCardIconsContainer>
-                    <FontAwesomeIcon icon={faXmark}
-                                     style={{
-                                         color: "#B13470",
-                                         fontSize: "28px"
-                                     }}/>
+                    <XIcon icon={faXmark} onClick={handleUnset}/>
                 </FriendSentCardIconsContainer>
                 <FriendCardContainer>
                     <div style={{
@@ -43,4 +55,4 @@ const FriendCard = ({nick}) => {
     )
 };
 
-export default FriendCard;
+export default FriendCardSent;

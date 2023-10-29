@@ -9,6 +9,8 @@ import {
     FriendCardIconsContainer
 } from "./FriendCardStyledParts";
 import styled from "styled-components";
+import {acceptFriendRequest, rejectFriendRequest, unSendFriendRequest} from "../../store/friendsSlice";
+import {useDispatch} from "react-redux";
 
 
 const CheckIcon = styled(FriendCardIcon)`
@@ -27,13 +29,23 @@ const XIcon = styled(FriendCardIcon)`
   }
 `
 
-const FriendCard = ({nick}) => {
+const FriendCardPending = ({nick, id}) => {
+    const dispatch = useDispatch();
+
+    const handleAccept = () => {
+        dispatch(acceptFriendRequest({id}));
+    }
+
+    const handleReject = () => {
+        dispatch(rejectFriendRequest({id}));
+    }
+
     return (
         <CardContainer>
             <FriendCardBack>
                 <FriendCardIconsContainer>
-                    <CheckIcon icon={faCheck}/>
-                    <XIcon icon={faXmark}/>
+                    <CheckIcon icon={faCheck} onClick={handleAccept}/>
+                    <XIcon icon={faXmark} onClick={handleReject}/>
                 </FriendCardIconsContainer>
                 <FriendCardContainer>
                     <div style={{
@@ -53,4 +65,4 @@ const FriendCard = ({nick}) => {
     )
 };
 
-export default FriendCard;
+export default FriendCardPending;
