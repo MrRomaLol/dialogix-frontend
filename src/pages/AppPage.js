@@ -11,7 +11,7 @@ import SettingsScreen from "../appScreens/SettingsScreen";
 import {useTransition, animated} from 'react-spring';
 import {easings} from '@react-spring/web'
 import {socket} from "../socket";
-import {addPending} from "../store/friendsSlice";
+import {getFriends} from "../store/friendsSlice";
 
 const AppPage = () => {
     const size = useWindowSize();
@@ -51,8 +51,8 @@ const AppPage = () => {
                 socket.emit('my-id', userInfo.id);
             })
 
-            socket.on('new-friend-request', (userData) => {
-                dispatch(addPending(userData));
+            socket.on('update-friend-list-request', () => {
+                dispatch(getFriends());
             })
         }
 

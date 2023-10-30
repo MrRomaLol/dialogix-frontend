@@ -1,7 +1,6 @@
 import React, {useMemo} from 'react';
 import {Grid} from "./StyledParts";
 import styled from "styled-components";
-import FriendCard from "./FriendCard";
 import {useSelector} from "react-redux";
 import FriendCardPending from "./FriendCardPending";
 import FriendCardSent from "./FriendCardSent";

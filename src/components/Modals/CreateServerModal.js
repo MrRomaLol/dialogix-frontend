@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ModalComponent from "./ModalComponent";
 import ContentContainer from "../ContentContainer";
 import styled from "styled-components";
@@ -6,6 +6,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCamera} from "@fortawesome/free-solid-svg-icons";
 
 const Content = styled.div`
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
   padding: 30px 60px 30px 60px;
   display: flex;
   flex-direction: column;
@@ -48,21 +51,30 @@ const Input = styled.input`
   }
 `
 
-const Outline = styled.div`
+const ImageContainer = styled.div`
   width: 100px;
   height: 100px;
-  border: dashed white 3px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
   margin-bottom: 40px;
-  transition-duration: 200ms;
-
+  transition: filter 200ms;
+  box-sizing: border-box;
+  
   &:hover {
     filter: brightness(60%);
   }
+`
+
+const Outline = styled(ImageContainer)`
+  border: dashed white 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const AvatarImage = styled(ImageContainer)`
+  background-size: cover;
+  background-position: center;
 `
 
 const CameraIcon = styled(FontAwesomeIcon)`
@@ -71,10 +83,31 @@ const CameraIcon = styled(FontAwesomeIcon)`
 `
 
 const ServerImage = () => {
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setSelectedImage(reader.result);
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+    };
+
     return (
-        <Outline>
-            <CameraIcon icon={faCamera}/>
-        </Outline>
+        <div>
+            <label htmlFor={"fileInput"}>
+                {selectedImage ?
+                    <AvatarImage style={{backgroundImage: `url(${selectedImage})`}}/> :
+                    <Outline>
+                        <CameraIcon icon={faCamera}/>
+                    </Outline>}
+            </label>
+            <input id={"fileInput"} type={"file"} accept={"image/*"} onChange={handleFileChange}
+                   style={{display: 'none'}}/>
+        </div>
     )
 }
 

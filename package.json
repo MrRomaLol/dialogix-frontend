@@ -36,6 +36,7 @@
     "react-awesome-reveal": "^4.2.5",
     "react-dom": "^18.2.0",
     "react-i18next": "^13.2.2",
+    "react-image-crop": "^10.1.8",
     "react-modal": "^3.16.1",
     "react-notifications-component": "^4.0.1",
     "react-redux": "^8.1.3",

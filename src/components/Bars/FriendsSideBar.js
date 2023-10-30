@@ -6,7 +6,7 @@ import {faPlus, faUser} from "@fortawesome/free-solid-svg-icons";
 import {IconSeparator} from "./SideIconParts";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    FRIENDS_SCREEN,
+    FRIENDS_SCREEN, FRIENDS_SCREEN_ADD_FRIENDS_TAB,
     FRIENDS_SCREEN_FRIENDS_TAB,
     FRIENDS_SCREEN_PENDING_TAB,
     setScreen,
@@ -53,13 +53,18 @@ const FriendsSideBar = () => {
         e.stopPropagation();
     }
 
+    const goToAdd = () => {
+        dispatch(setScreen({screenName: FRIENDS_SCREEN}));
+        dispatch(setSubScreen({subScreenName: FRIENDS_SCREEN_ADD_FRIENDS_TAB}));
+    }
+
     return (
         <EobaniyBlyr>
             <Bar>
-                <BarButton icon={faUser} isSelected={screenName === FRIENDS_SCREEN}/>
-                <BarButton icon={faPlus} onClick={goToFriendsScreen}>
+                <BarButton icon={faUser} onClick={goToFriendsScreen} isSelected={screenName === FRIENDS_SCREEN}>
                     {!!pending.length && <NewFriendsAlert onClick={goToPending} isAnimated/>}
                 </BarButton>
+                <BarButton icon={faPlus} onClick={goToAdd}/>
                 <IconSeparator/>
 
                 <ScrollerBarBox>
