@@ -5,6 +5,9 @@ import BarButton from "./BarButton";
 import {faPlus, faUsers} from "@fortawesome/free-solid-svg-icons";
 import {IconSeparator} from "./SideIconParts";
 import CreateServerModal from "../Modals/CreateServerModal";
+import {useSelector} from "react-redux";
+import BarIcon from "./BarIcon";
+import ServerBarIcon from "./ServerBarIcon";
 
 const EobaniyBlyr = styled.span`
   height: 100%;
@@ -23,7 +26,10 @@ const Bar = styled(LRBars)`
 `
 
 const ServersSideBar = () => {
+    const {guilds} = useSelector(state => state.guilds);
     const [isCrateServerModalOpened, setIsCrateServerModalOpened] = useState(false);
+
+    console.log(guilds);
 
     const handleOpenCreateServerModal = () => {
         setIsCrateServerModalOpened(true);
@@ -32,7 +38,7 @@ const ServersSideBar = () => {
     const handleCloseCreateServerModal = () => {
         setIsCrateServerModalOpened(false);
     }
-    
+
     return (
         <>
             <EobaniyBlyr>
@@ -43,7 +49,7 @@ const ServersSideBar = () => {
                     <IconSeparator/>
                     <ScrollerBarBox>
                         <ScrollerBar>
-
+                            {guilds.map((obj, idx) => (<ServerBarIcon key={obj.id} id={obj.id} avatarUrl={obj.avatarUrl}/>))}
                         </ScrollerBar>
                     </ScrollerBarBox>
                 </Bar>

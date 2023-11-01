@@ -1,11 +1,12 @@
-import React, {useEffect} from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import {ScreenContainer} from "./ScreenContainer";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import ContentContainer from "../components/ContentContainer";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-regular-svg-icons";
-import {APP_OPENED_STATE, APP_SETTINGS_STATE, setAppState} from "../store/appStateSlice";
+import {APP_OPENED_STATE, setAppState} from "../store/appStateSlice";
 import {useDispatch} from "react-redux";
+import MyAccount from "../components/SettingsTabs/MyAccount";
 
 const Container = styled.div`
   height: 100%;
@@ -50,11 +51,12 @@ const Cont = styled.div`
   justify-content: center;
 `
 
-const SettingsMenu = styled.div`
+const SettingsMenuStyle = styled.div`
   height: 100%;
   width: 100%;
-  max-width: 200px;
+  max-width: 250px;
   padding-left: 50px;
+  overflow: auto;
 `
 
 const SettingTabsHeader = styled.div`
@@ -65,11 +67,11 @@ const SettingTabsHeader = styled.div`
 
   padding-top: 20px;
   padding-bottom: 10px;
-  
+
   user-select: none;
 `
 
-const SettingTab = styled.div`
+const SettingTabStyle = styled.div`
   color: white;
   font-family: JetBrains Mono, serif;
 
@@ -80,10 +82,20 @@ const SettingTab = styled.div`
   user-select: none;
 
   transition-duration: 200ms;
-  
-  &:hover {
-    background-color: rgba(188, 44, 201, 0.1);
-  }
+
+  ${({isActive}) => !isActive && css`
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(188, 44, 201, 0.1);
+    }
+  `}
+
+
+  ${({isActive}) => isActive && css`
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.1);
+  `}
 `
 
 const SettingTabsSeparator = styled.div`
@@ -92,21 +104,74 @@ const SettingTabsSeparator = styled.div`
   margin: 10px 20px 0;
 `
 
-const Settings = styled.div`
+const SettingsStyle = styled.div`
   height: 100%;
   width: 100%;
   max-width: 1100px;
 
   padding-right: 50px;
 
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.1);
+  
+  overflow: auto;
 `
+
+const SettingsContext = createContext();
+
+const SettingTab = ({children, onClick, isActive, content}) => (
+    <SettingTabStyle onClick={onClick} isActive={isActive}>
+        {children}
+    </SettingTabStyle>
+);
+
+const Settings = () => {
+    const {tabContent} = useContext(SettingsContext);
+
+    return (
+        <SettingsStyle className={'scroll-bar'}>
+            {tabContent !== null && (
+                <div>
+                    {tabContent}
+                </div>
+            )}
+        </SettingsStyle>
+    )
+}
+
+const SettingsMenu = ({children}) => {
+    const [activeTab, setActiveTab] = useState(null);
+    const [tabContent, setTabContent] = useState(null);
+
+    const handleTabClick = (tabIndex, content) => {
+        setActiveTab(tabIndex);
+        setTabContent(content);
+    };
+
+    return (
+        <SettingsContext.Provider value={{tabContent}}>
+            <SettingsMenuStyle className={'scroll-bar'}>
+                {React.Children.map(children, (child, index) => {
+                    if (child.type === SettingTab) {
+                        const isActive = index === activeTab;
+                        return React.cloneElement(child, {
+                            onClick: () => handleTabClick(index, child.props.content),
+                            isActive,
+                        });
+                    }
+                    return child;
+                })}
+            </SettingsMenuStyle>
+            <Settings/>
+        </SettingsContext.Provider>
+    );
+};
+
 
 const SettingsScreen = () => {
     const dispatch = useDispatch();
 
     const goToAppState = () => {
-        dispatch(setAppState({stateName: APP_OPENED_STATE}))
+        dispatch(setAppState({stateName: APP_OPENED_STATE}));
     }
 
     const handler = (e) => {
@@ -124,11 +189,11 @@ const SettingsScreen = () => {
         <ScreenContainer>
             <Container>
                 <ContentContainer>
-                        <CloseIcon icon={faCircleXmark} onClick={goToAppState}/>
+                    <CloseIcon icon={faCircleXmark} onClick={goToAppState}/>
                     <Cont>
                         <SettingsMenu>
                             <SettingTabsHeader>User Settings</SettingTabsHeader>
-                            <SettingTab>Tab1</SettingTab>
+                            <SettingTab content={<MyAccount/>}>My Account</SettingTab>
                             <SettingTab>Tab2</SettingTab>
                             <SettingTab>Tab3</SettingTab>
                             <SettingTab>Tab4</SettingTab>
@@ -138,13 +203,7 @@ const SettingsScreen = () => {
                             <SettingTab>Tab1</SettingTab>
                             <SettingTab>Tab2</SettingTab>
                             <SettingTabsSeparator/>
-
-                            <SettingTabsHeader>Another Settings</SettingTabsHeader>
-                            <SettingTab>Tab1</SettingTab>
-                            <SettingTab>Tab2</SettingTab>
-                            <SettingTabsSeparator/>
                         </SettingsMenu>
-                        <Settings/>
                     </Cont>
                 </ContentContainer>
             </Container>

@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {deleteData, getData, patchData, postData} from "../axios";
+import {getData, patchData, postData} from "../axios";
 
 const initialState = {
     friends: [],
@@ -247,7 +247,5 @@ const friendsSlice = createSlice({
         })
     }
 })
-
-export const {addPending} = friendsSlice.actions;
 
 export default friendsSlice.reducer;

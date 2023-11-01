@@ -1,9 +1,17 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ModalComponent from "./ModalComponent";
 import ContentContainer from "../ContentContainer";
 import styled from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCamera} from "@fortawesome/free-solid-svg-icons";
+import {faCamera, faCloudArrowUp} from "@fortawesome/free-solid-svg-icons";
+import CropImageModal from "./CropImageModal";
+import {ModalName, ModalSubName} from "./ModalsElements";
+import CutButton from "../UIElements/CutButton";
+import {useDropzone} from "react-dropzone";
+import {Store} from "react-notifications-component";
+import {useDispatch, useSelector} from "react-redux";
+import {createGuild} from "../../store/guildsSlice";
+import DXSpinner from "../DXSpinner";
 
 const Content = styled.div`
   width: 100%;
@@ -14,19 +22,6 @@ const Content = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: rgba(61, 38, 84, 0.3);
-`
-
-const ModalName = styled.p`
-  font-family: Furore, serif;
-  font-size: 28px;
-  color: white;
-`
-
-const ModalSubname = styled.p`
-  font-size: 14px;
-  color: white;
-  margin-top: 10px;
-  font-family: "JetBrains Mono", serif;
 `
 
 const SectionName = styled.div`
@@ -59,7 +54,7 @@ const ImageContainer = styled.div`
   margin-bottom: 40px;
   transition: filter 200ms;
   box-sizing: border-box;
-  
+
   &:hover {
     filter: brightness(60%);
   }
@@ -77,84 +72,161 @@ const AvatarImage = styled(ImageContainer)`
   background-position: center;
 `
 
-const CameraIcon = styled(FontAwesomeIcon)`
+const Icon = styled(FontAwesomeIcon)`
   font-size: 40px;
   color: white;
 `
 
-const ServerImage = () => {
-    const [selectedImage, setSelectedImage] = useState(null);
+const NoImage = ({icon}) => {
+    return <Outline>
+        <Icon icon={icon}/>
+    </Outline>
+}
 
-    const handleFileChange = (event) => {
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setSelectedImage(reader.result);
-            };
-            reader.readAsDataURL(selectedFile);
+const ServerImage = ({onChange}) => {
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [isCropModalOpened, setIsCropModalOpened] = useState(false);
+
+    const handleOpenCropModal = () => {
+        setIsCropModalOpened(true);
+    }
+
+    const handleCloseCropModal = () => {
+        setIsCropModalOpened(false);
+    }
+
+    const readAndCropImage = (imageFile) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setSelectedImage(reader.result);
+        };
+        reader.readAsDataURL(imageFile);
+        handleOpenCropModal();
+    }
+
+    const handleImageCrop = (image) => {
+        setSelectedImage(image);
+        onChange(image);
+    }
+
+    const onDrop = (acceptedFiles) => {
+        if (acceptedFiles) {
+            readAndCropImage(acceptedFiles[0]);
         }
-    };
+    }
+
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({
+        onDrop,
+        multiple: false,
+        maxFiles: 1,
+        accept: {
+            "image/*": [],
+        }
+    });
 
     return (
         <div>
-            <label htmlFor={"fileInput"}>
+            <label {...getRootProps()}
+                   htmlFor={"fileInput"}>
                 {selectedImage ?
                     <AvatarImage style={{backgroundImage: `url(${selectedImage})`}}/> :
-                    <Outline>
-                        <CameraIcon icon={faCamera}/>
-                    </Outline>}
+                    <NoImage icon={isDragActive ? faCloudArrowUp : faCamera}/>}
             </label>
-            <input id={"fileInput"} type={"file"} accept={"image/*"} onChange={handleFileChange}
-                   style={{display: 'none'}}/>
+            <input {...getInputProps()}/>
+            <CropImageModal isOpen={isCropModalOpened} src={selectedImage} onRequestClose={handleCloseCropModal}
+                            onImageCrop={handleImageCrop}/>
         </div>
     )
 }
 
-const CutButton = styled.button`
-  height: 50px;
-  width: 190px;
-
-  background-color: #5F3170;
-  border: 0;
-
-  color: white;
-  font-family: Furore, serif;
-  font-size: 24px;
-
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
-
-  transition-duration: 200ms;
-
-  &:hover {
-    background-color: #4d245d;
-  }
-
-  &:active {
-    background-color: #3c194d;
-  }
-`
-
-const ButtonEobaniyBlur = styled.div`
-  display: flex;
-  justify-content: center;
-  filter: drop-shadow(#BC2CC9 0 0 16px);
-`
 
 const CreateServerModal = ({isOpen, onRequestClose}) => {
+    const dispatch = useDispatch();
+    const {loading: createLoading, error: createError} = useSelector(state => state.guilds);
+    const [isTryingToCreate, setIsTryingToCreate] = useState(false);
+    const [formData, setFormData] = useState({
+        guildName: '',
+        avatar: null,
+    })
+
+    const handleChange = e => {
+        setFormData(prev => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const handleAvatarChange = (image) => {
+        setFormData(prev => ({
+            ...prev,
+            avatar: image
+        }))
+    }
+
+    const notification = {
+        title: "Error!",
+        type: "danger",
+        insert: "top",
+        container: "bottom-right",
+        animationIn: ["animate__animated", "animate__fadeInDown"],
+        dismiss: {
+            duration: 5000,
+            pauseOnHover: true,
+        }
+    }
+
+    const handleServerCreate = () => {
+        if (createLoading) return;
+        setIsTryingToCreate(false);
+        if (formData.guildName.length < 2) {
+            return Store.addNotification({
+                ...notification,
+                message: "Guild name is too short"
+            })
+        }
+
+        if (formData.guildName.length > 25) {
+            return Store.addNotification({
+                ...notification,
+                message: "Guild name is too long"
+            })
+        }
+
+        dispatch(createGuild(formData));
+        setIsTryingToCreate(true);
+    }
+
+    useEffect(() => {
+        const handleCreate = () => {
+            if (!isTryingToCreate) return;
+
+            if (!createLoading) {
+                return onRequestClose();
+            }
+
+            if (createError) {
+                return Store.addNotification({
+                    ...notification,
+                    message: `Guild creation failed: ${createError}`
+                });
+            }
+
+        }
+
+        handleCreate();
+    }, [isTryingToCreate, createLoading, createError])
+
     return (
         <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose} width={525} height={440}>
             <ContentContainer>
                 <Content>
                     <ModalName>Create server</ModalName>
-                    <ModalSubname>Create server</ModalSubname>
+                    <ModalSubName style={{marginTop: "10px"}}>Create server</ModalSubName>
                     <SectionName>Server name</SectionName>
-                    <Input style={{marginBottom: "10px"}}/>
+                    <Input style={{marginBottom: "10px"}} name={'guildName'} onChange={handleChange}/>
                     <SectionName>Upload image</SectionName>
-                    <ServerImage/>
-                    <ButtonEobaniyBlur>
-                        <CutButton>Create</CutButton>
-                    </ButtonEobaniyBlur>
+                    <ServerImage onChange={handleAvatarChange}/>
+                    <CutButton onClick={handleServerCreate}>{createLoading ? <DXSpinner/> : 'Create'}</CutButton>
                 </Content>
             </ContentContainer>
         </ModalComponent>

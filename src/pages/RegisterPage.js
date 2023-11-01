@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {AppBackground, AppContent} from "../components/styled-parts/AppBackground";
 import ElectronHeader from "../components/ElectronHeader";
-import {ButtonEobaniyBlur, CutButton, LRInput, LRNameDX, LTGS, OrLine} from "./LoginPage";
+import {LRInput, LRNameDX, LTGS, OrLine} from "./LoginPage";
 import styled from "styled-components";
 import ContentContainer from "../components/ContentContainer";
 import {useNavigate} from "react-router-dom";
@@ -9,6 +9,7 @@ import {Store} from "react-notifications-component";
 import {useDispatch, useSelector} from "react-redux";
 import {registerUser} from "../store/authSlice";
 import DXSpinner from "../components/DXSpinner";
+import CutButton from "../components/UIElements/CutButton";
 
 const validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 const validUsername = /^[A-Za-z0-9_]{4,20}$/;
@@ -22,6 +23,10 @@ const StyledAppContent = styled(AppContent)`
 const Container = styled(ContentContainer)`
   width: 525px;
   height: 675px;
+`
+
+const Button = styled(CutButton)`
+  justify-content: center;
 `
 
 const RegisterPage = () => {
@@ -137,17 +142,13 @@ const RegisterPage = () => {
                             <LRInput placeholder={"Repeat password"} name={'rpassword'} onChange={handleChange}
                                      type={'password'}/>
 
-                            <ButtonEobaniyBlur>
-                                <CutButton onClick={handleRegister}>{loading ? <DXSpinner/> : 'Register'}</CutButton>
-                            </ButtonEobaniyBlur>
+                            <Button onClick={handleRegister}>{loading ? <DXSpinner/> : 'Register'}</Button>
 
                             <OrLine/>
 
                             <LTGS>Already have an account?</LTGS>
 
-                            <ButtonEobaniyBlur>
-                                <CutButton onClick={goToLogin}>Login</CutButton>
-                            </ButtonEobaniyBlur>
+                            <Button onClick={goToLogin}>Login</Button>
 
                         </div>
                     </Container>

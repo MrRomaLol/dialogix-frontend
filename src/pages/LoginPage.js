@@ -6,10 +6,10 @@ import {AppBackground, AppContent} from "../components/styled-parts/AppBackgroun
 import ElectronHeader from "../components/ElectronHeader";
 import {useNavigate} from "react-router-dom";
 import {Store} from "react-notifications-component";
-import {postData} from "../axios";
 import {useDispatch, useSelector} from "react-redux";
 import {loginUser} from "../store/authSlice";
 import DXSpinner from "../components/DXSpinner";
+import CutButton from "../components/UIElements/CutButton";
 
 const StyledAppContent = styled(AppContent)`
   position: relative;
@@ -75,36 +75,6 @@ const RemMeForgotPassword = () => {
     );
 }
 
-export const CutButton = styled.button`
-  height: 50px;
-  width: 190px;
-
-  background-color: #5F3170;
-  border: 0;
-
-  color: white;
-  font-family: Furore, serif;
-  font-size: 24px;
-
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
-
-  transition-duration: 200ms;
-
-  &:hover {
-    background-color: #4d245d;
-  }
-
-  &:active {
-    background-color: #3c194d;
-  }
-`
-
-export const ButtonEobaniyBlur = styled.div`
-  display: flex;
-  justify-content: center;
-  filter: drop-shadow(#BC2CC9 0 0 16px);
-`
-
 const OrText = styled.p`
   color: white;
   font-family: Furore, serif;
@@ -133,6 +103,10 @@ export const OrLine = () => (
         <Line/>
     </div>
 )
+
+const Button = styled(CutButton)`
+  justify-content: center;
+`
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -221,17 +195,13 @@ const LoginPage = () => {
 
                             <RemMeForgotPassword/>
 
-                            <ButtonEobaniyBlur>
-                                <CutButton onClick={handleLogin}>{loading ? <DXSpinner/> : 'Login'}</CutButton>
-                            </ButtonEobaniyBlur>
+                            <Button onClick={handleLogin}>{loading ? <DXSpinner/> : 'Login'}</Button>
 
                             <OrLine/>
 
                             <LTGS>Don't have account yet?</LTGS>
 
-                            <ButtonEobaniyBlur>
-                                <CutButton onClick={goToRegister}>Register</CutButton>
-                            </ButtonEobaniyBlur>
+                            <Button onClick={goToRegister}>Register</Button>
 
                         </div>
                     </Container>
