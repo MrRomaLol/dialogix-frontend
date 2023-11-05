@@ -3,7 +3,7 @@ const path = require('path');
 const electronLocalShortcut = require('electron-localshortcut');
 const Store = require('electron-store');
 
-const {app, BrowserWindow, session, ipcMain, Tray, Menu} = require('electron');
+const {app, BrowserWindow, session, ipcMain, Tray, Menu, dialog} = require('electron');
 const isDev = require('electron-is-dev');
 
 const iconPath = path.join(__dirname, 'icons', 'DialogiX256.ico');
@@ -16,7 +16,11 @@ let mainWindow;
 let trayIcon;
 
 function createWindow() {
-    const mainWindow = new BrowserWindow({
+    if (process.platform === 'win32') {
+        app.setAppUserModelId('DialogiX');
+    }
+
+    mainWindow = new BrowserWindow({
         width: 1000,
         height: 900,
         minWidth: 920,
@@ -101,23 +105,38 @@ function createWindow() {
         mainWindow?.reload();
     });
 
-    //ipc
-    ipcMain.on("minimizeApp", () => {
-        mainWindow?.minimize();
+    mainWindow.on('minimize', () => {
+        mainWindow.webContents.send('app-minimized', true);
     });
 
-    ipcMain.on("maximizeApp", () => {
-        if (mainWindow?.isMaximized()) {
-            mainWindow?.unmaximize();
-        } else {
-            mainWindow?.maximize();
-        }
-    });
-
-    ipcMain.on("closeApp", () => {
-        mainWindow?.hide();
+    mainWindow.on('restore', () => {
+        mainWindow.webContents.send('app-minimized', false);
     });
 }
+
+//ipc
+ipcMain.on("minimizeApp", () => {
+    mainWindow?.minimize();
+});
+
+ipcMain.on("maximizeApp", () => {
+    if (mainWindow?.isMaximized()) {
+        mainWindow?.unmaximize();
+    } else {
+        mainWindow?.maximize();
+    }
+});
+
+ipcMain.on("closeApp", () => {
+    mainWindow?.hide();
+});
+
+ipcMain.handle('get-app-minimized-status', (event, args) => {
+    dialog.showMessageBox({
+        type: "info",
+    })
+    return mainWindow.isMinimized();
+});
 
 function update() {
     const updaterWindow = new BrowserWindow({

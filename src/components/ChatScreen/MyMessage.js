@@ -1,29 +1,55 @@
 import React from 'react';
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import TextWithLineBreaks from "./TextWithLineBreaks";
 import {Avatar, MessageBack, MessageContainer, MessageDate, MessageNick, MessageStampContainer} from "./MessagesParts";
+import {useSelector} from "react-redux";
+import formatDate from "../../utils/dateFormat";
 
-const MyMessageContainer = styled(MessageContainer)`
+export const MyMessageContainer = styled(MessageContainer)`
   justify-content: flex-end;
   padding-left: 200px;
 `
 
-const MyMessageBack = styled(MessageBack)`
+export const MyMessageBack = styled(MessageBack)`
   padding-right: 30px;
   margin-right: 20px;
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+
+  ${({status}) => {
+    if (status === 'sending') {
+      return css`
+        color: #5e5e5e;
+      `;
+    } else if (status === 'error') {
+      return css`
+        color: #B13470;
+      `;
+    }
+  }}
 `
 
-const MyMessage = ({content, nick, date}) => {
+const MyMessage = ({content, timestamp, status}) => {
+    const {userInfo} = useSelector(state => state.auth)
+
+    let statusOrTimestamp;
+
+    if (status === "sending") {
+        statusOrTimestamp = "Sending...";
+    } else if (status === "error") {
+        statusOrTimestamp = "Error";
+    } else {
+        statusOrTimestamp = timestamp;
+    }
+
     return (
         <MyMessageContainer>
             <div style={{display: "flex", flexDirection: "column"}}>
-                <MyMessageBack>
+                <MyMessageBack status={status}>
                     <TextWithLineBreaks text={content}/>
                 </MyMessageBack>
-                <MessageStampContainer>
-                    <MessageDate>{date}</MessageDate>
-                    <MessageNick>{nick}</MessageNick>
+                <MessageStampContainer style={{justifyContent: "end"}}>
+                    <MessageDate>{statusOrTimestamp}</MessageDate>
+                    <MessageNick>{userInfo.nickname}</MessageNick>
                 </MessageStampContainer>
             </div>
             <Avatar/>

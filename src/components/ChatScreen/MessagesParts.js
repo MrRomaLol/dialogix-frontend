@@ -37,6 +37,8 @@ export const MessageBack = styled.div`
   padding: 10px 20px;
 
   word-wrap: anywhere;
+  
+  font-family: "JetBrains Mono", serif;
 `
 
 export const Avatar = styled.div`

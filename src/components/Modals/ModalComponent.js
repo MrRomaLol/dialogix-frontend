@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 
-function ModalComponent({isOpen, onRequestClose, children, width, height}) {
+function ModalComponent({isOpen, onRequestClose, children, overlayStyle, contentStyle}) {
     const style = {
         overlay: {
             position: 'fixed',
@@ -14,22 +14,22 @@ function ModalComponent({isOpen, onRequestClose, children, width, height}) {
             backgroundColor: 'rgba(0,0,0,0.6)',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            ...overlayStyle
         },
         content: {
             position: 'static',
-            width: width,
-            height: height,
             border: 0,
             background: 'transparent',
             overflow: 'auto',
             WebkitOverflowScrolling: 'touch',
-            borderRadius: '4px',
+            borderRadius: '0',
             outline: 'none',
             padding: 0,
             display: 'flex',
             justifyContent: 'center',
             alignItems: "center",
+            ...contentStyle
         }
     }
 

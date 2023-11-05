@@ -8,6 +8,11 @@ import {APP_OPENED_STATE, setAppState} from "../store/appStateSlice";
 import {useDispatch} from "react-redux";
 import MyAccount from "../components/SettingsTabs/MyAccount";
 
+const FullScreenContainer = styled(ContentContainer)`
+  width: 100%;
+  height: 100%;
+`
+
 const Container = styled.div`
   height: 100%;
   width: 100%;
@@ -188,7 +193,7 @@ const SettingsScreen = () => {
     return (
         <ScreenContainer>
             <Container>
-                <ContentContainer>
+                <FullScreenContainer>
                     <CloseIcon icon={faCircleXmark} onClick={goToAppState}/>
                     <Cont>
                         <SettingsMenu>
@@ -205,7 +210,7 @@ const SettingsScreen = () => {
                             <SettingTabsSeparator/>
                         </SettingsMenu>
                     </Cont>
-                </ContentContainer>
+                </FullScreenContainer>
             </Container>
         </ScreenContainer>
     );

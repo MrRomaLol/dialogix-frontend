@@ -18,9 +18,9 @@ const FriendsIconBackground = styled(IconBackground)`
   background-color: #4E1867;
 `
 
-const BarButton = ({icon, onClick, isSelected, children}) => {
+const BarButton = ({icon, onClick, isSelected, children, dataTooltipId}) => {
     return (
-        <Container>
+        <Container data-tooltip-id={dataTooltipId}>
             <FriendsIconBackground isSelected={isSelected} onClick={() => onClick?.()}>
                 <StyledIcon icon={icon}/>
                 {children}

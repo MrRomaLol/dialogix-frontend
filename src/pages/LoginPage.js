@@ -17,11 +17,6 @@ const StyledAppContent = styled(AppContent)`
   align-items: center;
 `
 
-const Container = styled(ContentContainer)`
-  width: 525px;
-  height: 635px;
-`
-
 export const LRNameDX = styled.p`
   font-family: Furore, serif;
   font-size: 38px;
@@ -185,8 +180,8 @@ const LoginPage = () => {
             <AppContent>
                 {window.IS_USING_DIALOGIX_APP && <ElectronHeader/>}
                 <StyledAppContent>
-                    <Container>
-                        <div style={{padding: "30px 60px 30px 60px"}}>
+                    <ContentContainer>
+                        <div style={{padding: "30px 60px 30px 60px", display: "flex", flexDirection: "column"}}>
                             <LRNameDX>DIALOGIX</LRNameDX>
                             <LTGS>Login to get started!</LTGS>
 
@@ -204,7 +199,7 @@ const LoginPage = () => {
                             <Button onClick={goToRegister}>Register</Button>
 
                         </div>
-                    </Container>
+                    </ContentContainer>
                 </StyledAppContent>
             </AppContent>
         </React.Fragment>

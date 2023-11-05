@@ -5,6 +5,8 @@ export const FRIENDS_SCREEN = "friendsScreen";
 export const FRIENDS_SCREEN_FRIENDS_TAB = "friendsList";
 export const FRIENDS_SCREEN_PENDING_TAB = "friendsPending";
 export const FRIENDS_SCREEN_ADD_FRIENDS_TAB = "friendsAdd";
+export const DIRECT_MESSAGES_SCREEN = "directMessagesScreen";
+export const SERVER_SCREEN = "serverScreen";
 
 const screenState = createSlice({
     name: "screenState",

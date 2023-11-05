@@ -1,6 +1,6 @@
 import React from 'react';
 import {HeaderBack, HeaderBorders, LeftRightBars} from "./styled-parts/HeaderBar";
-import styled, {keyframes} from "styled-components";
+import styled from "styled-components";
 import Logotype from "./Logotype";
 import {MAIN_SCREEN, setScreen} from "../store/screenStateSlice";
 import {useDispatch, useSelector} from "react-redux";

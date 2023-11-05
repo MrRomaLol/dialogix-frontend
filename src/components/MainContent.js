@@ -4,7 +4,8 @@ import {useSelector} from "react-redux";
 
 import FriendsScreen from "./FriendsScreen";
 import MainScreen from "./MainScreen";
-import {FRIENDS_SCREEN, MAIN_SCREEN} from "../store/screenStateSlice";
+import {DIRECT_MESSAGES_SCREEN, FRIENDS_SCREEN, MAIN_SCREEN} from "../store/screenStateSlice";
+import ChatScreen from "./ChatScreen";
 
 const Content = styled.div`
   width: 100%;
@@ -26,6 +27,9 @@ const MainContent = () => {
             break;
         case FRIENDS_SCREEN:
             screen = <FriendsScreen/>
+            break;
+        case DIRECT_MESSAGES_SCREEN:
+            screen = <ChatScreen/>
             break;
     }
 

@@ -7,5 +7,8 @@ contextBridge.exposeInMainWorld("electron", {
         sendMessage(channel, args) {
             ipcRenderer.send(channel, args);
         },
+        receiveMessage(channel, listener) {
+            ipcRenderer.on(channel, (event, ...args) => listener(...args));
+        }
     },
 });

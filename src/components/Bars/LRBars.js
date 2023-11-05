@@ -14,7 +14,8 @@ export const BarsBorder = styled.div`
   height: 100%;
   width: 22px;
   background-color: rgba(188, 44, 201, 1);
-  z-index: 15;
+  z-index: 15; 
+  transition-duration: 200ms;
 `
 
 export const ScrollerBarBox = styled.div`

@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {APP_OPENED_STATE, setAppState} from "../store/appStateSlice";
 import {ScreenContainer} from "./ScreenContainer";
 import {getFriends} from "../store/friendsSlice";
+import {fetchAllData} from "../store/fetchSlice";
 
 const Container = styled.div`
   height: 100%;
@@ -71,17 +72,19 @@ const PSecondary = styled(P)`
 const LoadingScreen = () => {
     const dispatch = useDispatch()
 
-    const {loading: loadingFriends} = useSelector((state) => state.friends)
+    const {loading} = useSelector(state => state.fetchRoot)
 
     useEffect(() => {
-        dispatch(getFriends());
+        dispatch(fetchAllData());
     }, [])
 
     useEffect(() => {
-        if (!loadingFriends) {
-            dispatch(setAppState({stateName: APP_OPENED_STATE}));
+        if (!loading) {
+            setTimeout(() => {
+                dispatch(setAppState({stateName: APP_OPENED_STATE}));
+            }, 100)
         }
-    }, [dispatch, loadingFriends]);
+    }, [dispatch, loading]);
 
     return (
         <ScreenContainer>

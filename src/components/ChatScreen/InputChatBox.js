@@ -2,6 +2,9 @@ import React, {useLayoutEffect, useRef, useState} from 'react';
 import IconButton from "../IconButton";
 import {faPaperclip, faPaperPlane} from "@fortawesome/free-solid-svg-icons";
 import styled, {css} from "styled-components";
+import {useDispatch, useSelector} from "react-redux";
+import {addMessage, sendMessage} from "../../store/chatSlice";
+import {getRandomName} from "../../utils/random";
 
 const Container = styled.div`
   margin: 0 15px 15px;
@@ -69,7 +72,7 @@ const StyledSendButton = styled(StyledIconButton)`
   margin-right: 35px;
 
   color: gray;
-  
+
   ${({hasInput}) => hasInput && css`
     color: #949cf7;
 
@@ -82,8 +85,25 @@ const StyledSendButton = styled(StyledIconButton)`
 `
 
 const InputChatBox = ({name, id, onTextChange}) => {
+    const dispatch = useDispatch();
+    const {userInfo} = useSelector(state => state.auth);
+    const {currentChatId} = useSelector(state => state.chat);
     const inputRef = useRef(null);
     const [input, setInput] = useState('');
+
+    const handleSendMessage = () => {
+        const tempId = getRandomName(6);
+        const message = {
+            id: tempId,
+            sender_id: userInfo.id,
+            receiver_id: currentChatId,
+            content: input,
+            status: "sending",
+        }
+        dispatch(addMessage({message}));
+        dispatch(sendMessage({tempId, messageText: input}));
+        setInput('');
+    }
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' && event.shiftKey) {
@@ -91,6 +111,7 @@ const InputChatBox = ({name, id, onTextChange}) => {
             setInput(input + '\n');
         } else if (event.key === 'Enter') {
             event.preventDefault();
+            handleSendMessage();
         }
     };
 
@@ -121,7 +142,7 @@ const InputChatBox = ({name, id, onTextChange}) => {
                     id={id}
                     ref={inputRef}
                 />
-                <StyledSendButton icon={faPaperPlane} hasInput={getInput()}/>
+                <StyledSendButton icon={faPaperPlane} hasInput={getInput()} onClick={handleSendMessage}/>
             </InputBack>
             <InputBorder/>
         </Container>

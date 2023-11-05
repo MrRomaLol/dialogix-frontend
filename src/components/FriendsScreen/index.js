@@ -1,4 +1,4 @@
-import React, {useMemo, useRef, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import ContentContainer from "../ContentContainer";
 import styled, {css} from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -15,6 +15,11 @@ import FriendListTab from "./FriendListTab";
 import FriendSentPendingTab from "./FriendSentPendingTab";
 import FriendAddTab from "./FriendAddTab";
 import {FriendsInputField} from "./StyledParts";
+
+const FullScreenContainer = styled(ContentContainer)`
+  width: 100%;
+  height: 100%;
+`
 
 const Tabs = styled.div`
   height: 50px;
@@ -158,7 +163,7 @@ const FriendsScreen = () => {
     }
 
     return (
-        <ContentContainer>
+        <FullScreenContainer>
             <Tabs>
                 <Tab name={"Friends"} isSelected={subScreenName === FRIENDS_SCREEN_FRIENDS_TAB} icon={faUser}
                      onClick={() => setTab(FRIENDS_SCREEN_FRIENDS_TAB)}/>
@@ -170,7 +175,7 @@ const FriendsScreen = () => {
                     <SearchField searchInput={searchQuery} onInputChange={handleInputChange}/>}
             </Tabs>
             {subScreenComponent}
-        </ContentContainer>
+        </FullScreenContainer>
     );
 };
 

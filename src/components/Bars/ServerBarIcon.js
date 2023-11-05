@@ -1,5 +1,8 @@
 import React, {useState} from 'react';
 import styled from "styled-components";
+import {Tooltip} from "react-tooltip";
+import {useDispatch} from "react-redux";
+import {DIRECT_MESSAGES_SCREEN, SERVER_SCREEN, setScreen} from "../../store/screenStateSlice";
 
 const Container = styled.div`
   display: flex;
@@ -13,6 +16,7 @@ const Container = styled.div`
 `
 
 const Icon = styled.div`
+  margin-left: 15px;
   height: 70px;
   width: 70px;
   border-radius: 50%;
@@ -31,6 +35,7 @@ const NotificationArea = styled.div`
   width: 15px;
   display: flex;
   align-items: center;
+  justify-content: end;
 `
 
 const Notification = styled.div`
@@ -39,30 +44,37 @@ const Notification = styled.div`
   transition-duration: 200ms;
   background-color: white;
   opacity: ${({height}) => height ? 1 : 0};
-  border-radius: 0 5px 5px 0;
+  border-radius: 5px 0 0 5px;
 `
 
 const ServerBarIcon = ({id, avatarUrl}) => {
+    const dispatch = useDispatch();
     const [isHovered, setIsHovered] = useState(false);
 
     let notificationHeight;
 
     if (isHovered) {
-        notificationHeight = '40px';
+        notificationHeight = '20px';
     }
 
     const handleHover = (isHovered) => {
         setIsHovered(isHovered);
     }
 
+    const handleClick = () => {
+        dispatch(setScreen({screenName: SERVER_SCREEN}));
+    }
+
     return (
         <Container>
+            <Icon data-tooltip-id={`server-tooltip-${id}`}
+                  onClick={handleClick}
+                  onMouseEnter={() => handleHover(true)} onMouseLeave={() => handleHover(false)}
+                  style={{backgroundImage: `url(api/v1/cdn/guilds/${id}/${avatarUrl})`}}
+            />
             <NotificationArea>
                 <Notification height={notificationHeight}/>
             </NotificationArea>
-            <Icon onMouseEnter={() => handleHover(true)} onMouseLeave={() => handleHover(false)}
-                  style={{backgroundImage: `url(api/v1/cdn/guilds/${id}/${avatarUrl})`}}
-            />
         </Container>
     );
 };

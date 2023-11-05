@@ -1,5 +1,8 @@
 import React, {useState} from 'react';
 import styled from "styled-components";
+import {useDispatch} from "react-redux";
+import {DIRECT_MESSAGES_SCREEN, setScreen} from "../../store/screenStateSlice";
+import {setChat} from "../../store/chatSlice";
 
 const Container = styled.div`
   display: flex;
@@ -40,17 +43,23 @@ const Notification = styled.div`
   border-radius: 0 5px 5px 0;
 `
 
-const BarIcon = () => {
+const FriendBarIcon = ({id}) => {
+    const dispatch = useDispatch();
     const [isHovered, setIsHovered] = useState(false);
 
     let notificationHeight;
 
     if (isHovered) {
-        notificationHeight = '40px';
+        notificationHeight = '20px';
     }
 
     const handleHover = (isHovered) => {
         setIsHovered(isHovered);
+    }
+
+    const handleClick = () => {
+        dispatch(setChat({chatId: id}));
+        dispatch(setScreen({screenName: DIRECT_MESSAGES_SCREEN}));
     }
 
     return (
@@ -58,9 +67,12 @@ const BarIcon = () => {
             <NotificationArea>
                 <Notification height={notificationHeight}/>
             </NotificationArea>
-            <Icon onMouseEnter={() => handleHover(true)} onMouseLeave={() => handleHover(false)}/>
+            <Icon data-tooltip-id={`friend-tooltip-${id}`}
+                  onClick={handleClick}
+                  onMouseEnter={() => handleHover(true)}
+                  onMouseLeave={() => handleHover(false)}/>
         </Container>
     );
 };
 
-export default BarIcon;
+export default FriendBarIcon;

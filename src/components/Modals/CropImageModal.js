@@ -10,8 +10,8 @@ import {createCroppedImage} from "../../utils/imageCrop";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
+  width: 500px;
+  height: 600px;
   padding: 25px;
   box-sizing: border-box;
 `
@@ -79,7 +79,7 @@ const CropImageModal = ({isOpen, onRequestClose, src, onImageCrop}) => {
     }, [isOpen])
 
     return (
-        <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose} width={500} height={620}>
+        <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose}>
             <ContentContainer>
                 <Container>
                     <ModalName style={{marginBottom: "15px"}}>Crop image</ModalName>

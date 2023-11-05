@@ -1,21 +1,27 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {AppBackground, AppContent} from "../components/styled-parts/AppBackground";
 import SmallScreen from "../components/SmallScreen";
 import useWindowSize from "../hooks/useWindowSize";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import ElectronHeader from "../components/ElectronHeader";
-import {APP_LOADING_STATE, APP_OPENED_STATE, APP_SETTINGS_STATE} from "../store/appStateSlice";
+import {
+    APP_LOADING_STATE,
+    APP_OPENED_STATE,
+    APP_SETTINGS_STATE
+} from "../store/appStateSlice";
 import LoadingScreen from "../appScreens/LoadingScreen";
 import AppScreen from "../appScreens/AppScreen";
 import SettingsScreen from "../appScreens/SettingsScreen";
 import {useTransition, animated} from 'react-spring';
 import {easings} from '@react-spring/web'
 import {socket} from "../socket";
-import {getFriends} from "../store/friendsSlice";
+import ConnectedFromAnotherPlaceModal from "../components/Modals/ConnectedFromAnotherPlaceModal";
+import AudioPlayer from "../components/AudioPlayer";
+import {notificationPM} from "../utils/notifications";
 
 const AppPage = () => {
     const size = useWindowSize();
-    const dispatch = useDispatch();
+    const [isAnotherPlace, setIsAnotherPlace] = useState(false);
     const {userInfo} = useSelector(state => state.auth);
     const appStateName = useSelector(state => state.appState.state);
 
@@ -41,6 +47,7 @@ const AppPage = () => {
 
     useEffect(() => {
         if (userInfo) {
+            notificationPM();
             socket.connect();
 
             socket.on('connect', () => {
@@ -50,11 +57,12 @@ const AppPage = () => {
             socket.on('reconnect', () => {
                 socket.emit('my-id', userInfo.id);
             })
-
-            socket.on('update-friend-list-request', () => {
-                dispatch(getFriends());
-            })
         }
+
+        socket.on('connect-from-another-place', () => {
+            setIsAnotherPlace(true);
+            socket.disconnect();
+        })
 
         return () => {
             socket.disconnect();
@@ -84,8 +92,10 @@ const AppPage = () => {
                                 ) : null
                             )}
                         </div>
+                        <AudioPlayer/>
                     </AppContent>
                 </React.Fragment>)}
+            <ConnectedFromAnotherPlaceModal isOpen={isAnotherPlace}/>
         </React.Fragment>
     );
 };

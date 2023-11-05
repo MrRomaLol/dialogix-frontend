@@ -37,7 +37,7 @@ const Input = styled.input`
   background-color: rgba(29, 5, 52, 0.3);
   border: solid rgba(188, 44, 201, 0.62) 2px;
   color: white;
-  width: 100%;
+  width: 400px;
   font-size: 20px;
   font-family: "JetBrains Mono", serif;
 
@@ -140,7 +140,7 @@ const ServerImage = ({onChange}) => {
 }
 
 
-const CreateServerModal = ({isOpen, onRequestClose}) => {
+const CreateGuildModal = ({isOpen, onRequestClose}) => {
     const dispatch = useDispatch();
     const {loading: createLoading, error: createError} = useSelector(state => state.guilds);
     const [isTryingToCreate, setIsTryingToCreate] = useState(false);
@@ -217,12 +217,12 @@ const CreateServerModal = ({isOpen, onRequestClose}) => {
     }, [isTryingToCreate, createLoading, createError])
 
     return (
-        <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose} width={525} height={440}>
+        <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose}>
             <ContentContainer>
                 <Content>
-                    <ModalName>Create server</ModalName>
-                    <ModalSubName style={{marginTop: "10px"}}>Create server</ModalSubName>
-                    <SectionName>Server name</SectionName>
+                    <ModalName>Create guild</ModalName>
+                    <ModalSubName style={{marginTop: "10px"}}>Create guild</ModalSubName>
+                    <SectionName>Guild name</SectionName>
                     <Input style={{marginBottom: "10px"}} name={'guildName'} onChange={handleChange}/>
                     <SectionName>Upload image</SectionName>
                     <ServerImage onChange={handleAvatarChange}/>
@@ -233,4 +233,4 @@ const CreateServerModal = ({isOpen, onRequestClose}) => {
     );
 };
 
-export default CreateServerModal;
+export default CreateGuildModal;
