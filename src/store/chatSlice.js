@@ -65,6 +65,10 @@ const chatSlice = createSlice({
             } else {
                 state.chats[payload.message.sender_id].messages.push(payload.message);
             }
+        },
+        setChatTyping(state, {payload}) {
+            if (!state.chats[payload.userId]) return;
+            state.chats[payload.userId].isUserTyping = payload.isUserTyping;
         }
     },
     extraReducers: (builder) => {
@@ -75,7 +79,11 @@ const chatSlice = createSlice({
         builder.addCase(fetchMessages.fulfilled, (state, {payload}) => {
             state.loading = false;
             if (!state.chats[payload.chatId]) {
-                state.chats[payload.chatId] = {isFetched: payload.messages.length < 20, messages: payload.messages, onceFetched: true};
+                state.chats[payload.chatId] = {
+                    isFetched: payload.messages.length < 20,
+                    messages: payload.messages,
+                    onceFetched: true
+                };
             } else {
                 state.chats[payload.chatId].messages.unshift(...payload.messages)
                 state.chats[payload.chatId].isFetched = payload.messages.length < 20;
@@ -111,6 +119,6 @@ const chatSlice = createSlice({
     }
 })
 
-export const {setChat, addMessage} = chatSlice.actions;
+export const {setChat, addMessage, setChatTyping} = chatSlice.actions;
 
 export default chatSlice.reducer;

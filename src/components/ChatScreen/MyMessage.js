@@ -3,7 +3,7 @@ import styled, {css} from "styled-components";
 import TextWithLineBreaks from "./TextWithLineBreaks";
 import {Avatar, MessageBack, MessageContainer, MessageDate, MessageNick, MessageStampContainer} from "./MessagesParts";
 import {useSelector} from "react-redux";
-import formatDate from "../../utils/dateFormat";
+import FileMessage from "./FileMessage";
 
 export const MyMessageContainer = styled(MessageContainer)`
   justify-content: flex-end;
@@ -28,7 +28,7 @@ export const MyMessageBack = styled(MessageBack)`
   }}
 `
 
-const MyMessage = ({content, timestamp, status}) => {
+const MyMessage = ({content, timestamp, status, type}) => {
     const {userInfo} = useSelector(state => state.auth)
 
     let statusOrTimestamp;
@@ -46,6 +46,7 @@ const MyMessage = ({content, timestamp, status}) => {
             <div style={{display: "flex", flexDirection: "column"}}>
                 <MyMessageBack status={status}>
                     <TextWithLineBreaks text={content}/>
+                    {type && <FileMessage/>}
                 </MyMessageBack>
                 <MessageStampContainer style={{justifyContent: "end"}}>
                     <MessageDate>{statusOrTimestamp}</MessageDate>

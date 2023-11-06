@@ -47,7 +47,6 @@ const AppPage = () => {
 
     useEffect(() => {
         if (userInfo) {
-            notificationPM();
             socket.connect();
 
             socket.on('connect', () => {

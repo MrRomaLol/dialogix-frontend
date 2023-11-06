@@ -5,9 +5,10 @@ import styled, {css} from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import {addMessage, sendMessage} from "../../store/chatSlice";
 import {getRandomName} from "../../utils/random";
+import {socket} from "../../socket";
 
 const Container = styled.div`
-  margin: 0 15px 15px;
+  margin: 0 15px;
   position: relative;
 `
 const InputBack = styled.div`
@@ -90,6 +91,7 @@ const InputChatBox = ({name, id, onTextChange}) => {
     const {currentChatId} = useSelector(state => state.chat);
     const inputRef = useRef(null);
     const [input, setInput] = useState('');
+    const lastTypingTime = useRef(0);
 
     const handleSendMessage = () => {
         const tempId = getRandomName(6);
@@ -119,6 +121,13 @@ const InputChatBox = ({name, id, onTextChange}) => {
         const text = event.target.value;
         setInput(text);
         onTextChange?.(text);
+
+        const currentTime = Date.now();
+
+        if (currentTime - lastTypingTime.current > 1000) {
+            socket.emit('private-message-typing-ping', currentChatId, );
+            lastTypingTime.current = currentTime;
+        }
     }
 
     const getInput = () => input.trim();

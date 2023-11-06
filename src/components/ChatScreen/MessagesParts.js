@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const MessageContainer = styled.div`
-  width: 100%;
   display: flex;
+  width: 100%;
 
   flex-direction: row;
 
@@ -31,6 +31,8 @@ export const MessageDate = styled.p`
 `
 
 export const MessageBack = styled.div`
+  display: flex;
+  flex-direction: column;
   color: white;
 
   background-color: rgba(121, 65, 142, 0.48);

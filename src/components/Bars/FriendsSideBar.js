@@ -62,6 +62,7 @@ const FriendsSideBar = () => {
     const [isRolled, setIsRolled] = useState(false);
     const screenName = useSelector(state => state.screenState.screen);
     const {friends, pending} = useSelector(state => state.friends);
+    const {currentChatId} = useSelector(state => state.chat);
 
     const goToFriendsScreen = () => {
         dispatch(setScreen({screenName: FRIENDS_SCREEN}));
@@ -103,7 +104,9 @@ const FriendsSideBar = () => {
                             <IconSeparator/>
                             <ScrollerBarBox>
                                 <ScrollerBar>
-                                    {friends.map((friend) => (<FriendBarIcon key={friend.id} id={friend.id}/>))}
+                                    {friends.map((friend) => (<FriendBarIcon key={friend.id} id={friend.id}
+                                                                             isSelected={currentChatId === friend.id}
+                                                                             hasNotification={friend.hasNotification}/>))}
                                 </ScrollerBar>
                             </ScrollerBarBox>
                         </>}

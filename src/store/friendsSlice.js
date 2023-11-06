@@ -140,7 +140,17 @@ export const deleteFriend = createAsyncThunk(
 const friendsSlice = createSlice({
     name: "friends",
     initialState,
-    reducers: {},
+    reducers: {
+        setNotification(state, {payload}) {
+            const friendIndex = state.friends.findIndex(friend => friend.id === payload.id);
+            const friend = state.friends[friendIndex]
+            friend.hasNotification = payload.state;
+            if (payload.state === true) {
+                state.friends.splice(friendIndex, 1);
+                state.friends.unshift(friend);
+            }
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(getFriends.pending, (state) => {
             state.loading = true
@@ -149,9 +159,9 @@ const friendsSlice = createSlice({
         })
         builder.addCase(getFriends.fulfilled, (state, {payload}) => {
             if (payload) {
-                state.friends.length = 0;
-                state.pending.length = 0;
-                state.sent.length = 0;
+                state.friends = [];
+                state.pending = [];
+                state.sent = [];
                 payload.forEach((el) => {
                     switch (el.friendsStatus) {
                         case 'friends':
@@ -247,5 +257,7 @@ const friendsSlice = createSlice({
         })
     }
 })
+
+export const {setNotification} = friendsSlice.actions;
 
 export default friendsSlice.reducer;

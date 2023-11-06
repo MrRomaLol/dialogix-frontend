@@ -5,11 +5,13 @@ import MyMessage from "./MyMessage";
 import MemberMessage from "./MemberMessage";
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
-import Skeleton, {SkeletonTheme} from 'react-loading-skeleton'
+import {SkeletonTheme} from 'react-loading-skeleton'
 import MyMessagePlaceholder from "./MyMessagePlaceholder";
 import MemberMessagePlaceholder from "./MemberMessagePlaceholder";
 import {getRandomInt} from "../../utils/random";
-import {fetchMessages} from "../../store/chatSlice";
+import {fetchMessages, setChat} from "../../store/chatSlice";
+import typingAnimation from "../../animations/typing.json"
+import Lottie from "react-lottie-player";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;
@@ -22,6 +24,17 @@ const MessageContainer = styled.div`
 
   flex: 1;
   overflow-y: auto;
+`
+
+const TypingContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: 24px;
+  padding-left: 20px;
+  box-sizing: border-box;
+  color: white;
+  font-family: "JetBrains Mono", serif;
 `
 
 const ChatRandomPlaceholder = () => {
@@ -87,6 +100,12 @@ const ChatScreen = () => {
         }
     }, [dispatch, currentChat, currentChatId]);
 
+    useEffect(() => {
+        return () => {
+            dispatch(setChat({chatId: null}))
+        }
+    }, [])
+
     return (
         <FullScreenContainer>
 
@@ -96,17 +115,32 @@ const ChatScreen = () => {
                         {!currentChat.isFetched && <ChatPlaceholder/>}
                         {currentChat.messages.map((message, idx) => (message.sender_id === userInfo.id ?
                                 <MyMessage key={idx} status={message.status} content={message.content}
-                                           nick={message.nick}
                                            timestamp={message.time_stamp}/> :
                                 <MemberMessage key={idx} content={message.content} nick={friend.nickname}
                                                timestamp={message.time_stamp}/>
                         ))}
+                        <MyMessage status={"sended"} content={"ulala"}
+                                   timestamp={"sogodni"} type={"file"}/>
                     </div> : <ChatRandomPlaceholder/>
                 }
 
             </MessageContainer>
 
+
             <InputChatBox/>
+
+            <TypingContainer>
+                {currentChat?.isUserTyping && <>
+                    {friend.nickname} typing
+                    <Lottie
+                        loop
+                        animationData={typingAnimation}
+                        play
+                        style={{height: 20, marginLeft: 10}}
+                    />
+                </>}
+            </TypingContainer>
+
 
         </FullScreenContainer>
     );
