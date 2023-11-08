@@ -43,6 +43,35 @@ export const patchData = async (url, data) => {
     }
 };
 
+export const uploadFiles = async (url, files, progressCB) => {
+    const formData = new FormData();
+
+    files.forEach((file) => {
+        formData.append('files', file);
+    });
+    try {
+        const response = await axios.post(url, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress: progress => {
+                const { total, loaded } = progress;
+                const totalSizeInMB = total / 1000000;
+                const loadedSizeInMB = loaded / 1000000;
+                const uploadPercentage = (loadedSizeInMB / totalSizeInMB) * 100;
+                progressCB?.({
+                    totalSizeInMB,
+                    loadedSizeInMB,
+                    uploadPercentage: uploadPercentage.toFixed(2),
+                });
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const deleteData = async (url, data) => {
     try {
         const response = await axiosInstance.delete(url, data);

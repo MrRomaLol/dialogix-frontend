@@ -2,7 +2,7 @@ import React from 'react';
 import TextWithLineBreaks from "./TextWithLineBreaks";
 import {Avatar, MessageBack, MessageContainer, MessageDate, MessageNick, MessageStampContainer} from "./MessagesParts";
 import styled from "styled-components";
-import formatDate from "../../utils/dateFormat";
+import FileMessage from "./FileMessage";
 
 export const MemberMessageContainer = styled(MessageContainer)`
   padding-right: 200px;
@@ -15,16 +15,18 @@ export const MemberMessageBack = styled(MessageBack)`
 `
 
 
-const MemberMessage = ({content, nick, timestamp}) => {
+const MemberMessage = ({content, sender, timestamp, files}) => {
     return (
         <MemberMessageContainer>
             <Avatar/>
             <div style={{display: "flex", flexDirection: "column"}}>
-                <MemberMessageBack >
+                <MemberMessageBack>
                     <TextWithLineBreaks text={content}/>
+                    {files && files.files.map((file, idx) => (
+                        <FileMessage key={idx} sender={sender.id} folder={files.folder} file={file}/>))}
                 </MemberMessageBack>
                 <MessageStampContainer>
-                    <MessageNick>{nick}</MessageNick>
+                    <MessageNick>{sender.nick}</MessageNick>
                     <MessageDate>{timestamp}</MessageDate>
                 </MessageStampContainer>
             </div>

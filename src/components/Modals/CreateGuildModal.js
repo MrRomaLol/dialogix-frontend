@@ -126,8 +126,7 @@ const ServerImage = ({onChange}) => {
 
     return (
         <div>
-            <label {...getRootProps()}
-                   htmlFor={"fileInput"}>
+            <label {...getRootProps()}>
                 {selectedImage ?
                     <AvatarImage style={{backgroundImage: `url(${selectedImage})`}}/> :
                     <NoImage icon={isDragActive ? faCloudArrowUp : faCamera}/>}

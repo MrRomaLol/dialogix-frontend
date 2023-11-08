@@ -4,6 +4,7 @@ import TextWithLineBreaks from "./TextWithLineBreaks";
 import {Avatar, MessageBack, MessageContainer, MessageDate, MessageNick, MessageStampContainer} from "./MessagesParts";
 import {useSelector} from "react-redux";
 import FileMessage from "./FileMessage";
+import FileMessagePlaceholder from "./FileMessagePlaceholder";
 
 export const MyMessageContainer = styled(MessageContainer)`
   justify-content: flex-end;
@@ -28,7 +29,7 @@ export const MyMessageBack = styled(MessageBack)`
   }}
 `
 
-const MyMessage = ({content, timestamp, status, type}) => {
+const MyMessage = ({content, timestamp, status, files}) => {
     const {userInfo} = useSelector(state => state.auth)
 
     let statusOrTimestamp;
@@ -46,7 +47,14 @@ const MyMessage = ({content, timestamp, status, type}) => {
             <div style={{display: "flex", flexDirection: "column"}}>
                 <MyMessageBack status={status}>
                     <TextWithLineBreaks text={content}/>
-                    {type && <FileMessage/>}
+
+                    {status === "sending" ? (
+                        files && <FileMessagePlaceholder files={files.files} progress={files.progress}/>
+                    ) : (
+                        files && files.files.map((file, idx) => (
+                            <FileMessage key={idx} sender={userInfo.id} folder={files.folder} file={file}/>))
+                    )}
+
                 </MyMessageBack>
                 <MessageStampContainer style={{justifyContent: "end"}}>
                     <MessageDate>{statusOrTimestamp}</MessageDate>

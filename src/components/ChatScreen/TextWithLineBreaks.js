@@ -11,7 +11,7 @@ const TextWithLineBreaks = ({text}) => {
         return (
             <React.Fragment key={index}>
                 {extraSpace}
-                <div>{line}</div>
+                <div style={{cursor: "text"}}>{line}</div>
             </React.Fragment>
         );
     });

@@ -12,6 +12,10 @@ import {getRandomInt} from "../../utils/random";
 import {fetchMessages, setChat} from "../../store/chatSlice";
 import typingAnimation from "../../animations/typing.json"
 import Lottie from "react-lottie-player";
+import {useDropzone} from "react-dropzone";
+import DnDModal from "../Modals/DnDModal";
+import FileMessagePlaceholder from "./FileMessagePlaceholder";
+import getusermedia from "getusermedia";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;
@@ -19,9 +23,16 @@ const FullScreenContainer = styled(ContentContainer)`
 `
 
 const MessageContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column-reverse;
 
+  flex: 1;
+  overflow-y: auto;
+`
+
+const StyledLabel = styled.label`
+  display: flex;
   flex: 1;
   overflow-y: auto;
 `
@@ -57,8 +68,8 @@ const ChatRandomPlaceholder = () => {
 const ChatPlaceholder = () => {
     return (
         <SkeletonTheme baseColor="#79418E" highlightColor="#9c61b2">
-            <MyMessagePlaceholder width={300} height={20}/>
-            <MemberMessagePlaceholder width={300} height={20}/>
+            <MyMessagePlaceholder width={100} height={20}/>
+            <MemberMessagePlaceholder width={100} height={20}/>
         </SkeletonTheme>
     )
 }
@@ -67,6 +78,7 @@ const ChatScreen = () => {
     const dispatch = useDispatch();
     const messagesContainerRef = useRef(null);
     const prevScrollHeight = useRef(0);
+    const inputRef = useRef(null);
     const {chats, currentChatId, loading} = useSelector(state => state.chat);
     const {friends} = useSelector(state => state.friends);
     const {userInfo} = useSelector(state => state.auth);
@@ -90,6 +102,17 @@ const ChatScreen = () => {
         if (atTop) loadMoreMessages();
     }
 
+    const onDrop = (acceptedFiles) => {
+        if (acceptedFiles) {
+            inputRef.current.addFiles(acceptedFiles);
+        }
+    }
+
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({
+        onDrop,
+        multiple: true,
+    });
+
     useEffect(() => {
         messagesContainerRef.current.scrollTop = prevScrollHeight.current;
     }, [currentChat]);
@@ -109,25 +132,29 @@ const ChatScreen = () => {
     return (
         <FullScreenContainer>
 
-            <MessageContainer className={"scroll-bar"} onScroll={handleScroll} ref={messagesContainerRef}>
-                {currentChat ?
-                    <div>
-                        {!currentChat.isFetched && <ChatPlaceholder/>}
-                        {currentChat.messages.map((message, idx) => (message.sender_id === userInfo.id ?
-                                <MyMessage key={idx} status={message.status} content={message.content}
-                                           timestamp={message.time_stamp}/> :
-                                <MemberMessage key={idx} content={message.content} nick={friend.nickname}
-                                               timestamp={message.time_stamp}/>
-                        ))}
-                        <MyMessage status={"sended"} content={"ulala"}
-                                   timestamp={"sogodni"} type={"file"}/>
-                    </div> : <ChatRandomPlaceholder/>
-                }
+            <StyledLabel {...getRootProps()} onClick={e => e.preventDefault()}>
+                <MessageContainer className={"scroll-bar"}
+                                  onScroll={handleScroll}
+                                  ref={messagesContainerRef}>
+                    {currentChat ?
+                        <div>
+                            {!currentChat.isFetched && <ChatPlaceholder/>}
+                            {currentChat.messages.map((message) => (message.sender_id === userInfo.id ?
+                                    <MyMessage key={message.id} status={message.status} content={message.content}
+                                               timestamp={message.time_stamp} files={message.files}/> :
+                                    <MemberMessage key={message.id} content={message.content}
+                                                   sender={{id: friend.id, nickname: friend.nickname}}
+                                                   timestamp={message.time_stamp} files={message.files}/>
+                            ))}
+                        </div> : <ChatRandomPlaceholder/>
+                    }
 
-            </MessageContainer>
+                    {isDragActive && <DnDModal/>}
+                </MessageContainer>
+            </StyledLabel>
+            <input {...getInputProps()}/>
 
-
-            <InputChatBox/>
+            <InputChatBox ref={inputRef}/>
 
             <TypingContainer>
                 {currentChat?.isUserTyping && <>
@@ -143,6 +170,8 @@ const ChatScreen = () => {
 
 
         </FullScreenContainer>
+
+
     );
 };
 

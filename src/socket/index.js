@@ -14,7 +14,7 @@ socket.on('update-friend-list-request', () => {
 })
 
 socket.on('new-private-message', (message) => {
-    store.dispatch(addMessage({message}))
+    store.dispatch(addMessage({message, chatId: message.sender_id}))
     notificationPM(message);
 })
 

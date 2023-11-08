@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {getData, postData} from "../axios";
+import {getData, postData, uploadFiles} from "../axios";
 
 const initialState = {
     chats: {},
@@ -29,23 +29,51 @@ export const fetchMessages = createAsyncThunk(
 
 export const sendMessage = createAsyncThunk(
     'chat/send',
-    async ({tempId, messageText}, {rejectWithValue, getState}) => {
+    async ({tempId, messageText, messageFiles}, {rejectWithValue, getState, dispatch}) => {
+        const receiverId = getState().chat.currentChatId;
         try {
-            const receiverId = getState().chat.currentChatId;
+            if (messageFiles) {
+                const uploadProgress = ({uploadPercentage}) => {
+                    dispatch(updateFileUploadProgress({tempId, uploadPercentage, chatId: receiverId}));
+                }
 
-            const data = {
-                content: messageText,
-                receiverId,
+                const res = await uploadFiles('/api/v1/upload', messageFiles, uploadProgress);
+
+                if (!res.ok) {
+                    return rejectWithValue(res.message);
+                }
+
+                const folderTime = res.folderTime;
+                const files = res.newFiles;
+
+                const data = {
+                    content: messageText,
+                    folderTime,
+                    receiverId,
+                    files,
+                }
+
+                const res2 = await postData(`/api/v1/chats/send`, data);
+
+                if (!res2.ok) {
+                    return rejectWithValue(res2.message);
+                }
+
+                return {tempId, message: res2.message};
+            } else {
+                const data = {
+                    content: messageText,
+                    receiverId,
+                }
+
+                const res2 = await postData(`/api/v1/chats/send`, data);
+
+                if (!res2.ok) {
+                    return rejectWithValue(res2.message);
+                }
+
+                return {tempId, message: res2.message};
             }
-
-            const res = await postData(`/api/v1/chats/send`, data);
-
-            if (!res.ok) {
-                return rejectWithValue(res.message);
-            }
-
-            return {tempId, message: res.message};
-
         } catch (err) {
             return rejectWithValue(err.message);
         }
@@ -60,10 +88,22 @@ const chatSlice = createSlice({
             state.currentChatId = action.payload.chatId;
         },
         addMessage(state, {payload}) {
-            if (!state.chats[payload.message.sender_id]) {
-                state.chats[payload.message.sender_id] = {messages: [payload.message]};
+            if (!state.chats[payload.chatId]) {
+                state.chats[payload.chatId] = {messages: [payload.message]};
             } else {
-                state.chats[payload.message.sender_id].messages.push(payload.message);
+                state.chats[payload.chatId].messages.push(payload.message);
+            }
+        },
+        updateFileUploadProgress(state, {payload}) {
+            if (!state.chats[payload.chatId]) return;
+            const messages = state.chats[payload.chatId].messages;
+
+            for (let i = messages.length - 1; i >= 0; i--) {
+                const message = messages[i];
+                if (message.id === payload.tempId) {
+                    message.files.progress = payload.uploadPercentage;
+                    break;
+                }
             }
         },
         setChatTyping(state, {payload}) {
@@ -78,14 +118,25 @@ const chatSlice = createSlice({
         })
         builder.addCase(fetchMessages.fulfilled, (state, {payload}) => {
             state.loading = false;
+
+            const messages = payload.messages;
+
+            const reversedMessages = messages.reverse();
+            const parsedArr = reversedMessages.map(item => {
+                return {
+                    ...item,
+                    files: JSON.parse(item.files),
+                };
+            });
+
             if (!state.chats[payload.chatId]) {
                 state.chats[payload.chatId] = {
                     isFetched: payload.messages.length < 20,
-                    messages: payload.messages,
+                    messages: parsedArr,
                     onceFetched: true
                 };
             } else {
-                state.chats[payload.chatId].messages.unshift(...payload.messages)
+                state.chats[payload.chatId].messages.unshift(parsedArr)
                 state.chats[payload.chatId].isFetched = payload.messages.length < 20;
                 state.chats[payload.chatId].onceFetched = true;
             }
@@ -100,6 +151,7 @@ const chatSlice = createSlice({
         })
         builder.addCase(sendMessage.fulfilled, (state, {payload}) => {
             state.loading = false;
+            console.log(payload.message);
             const message = payload.message;
             const messages = state.chats[message.receiver_id].messages;
 
@@ -119,6 +171,6 @@ const chatSlice = createSlice({
     }
 })
 
-export const {setChat, addMessage, setChatTyping} = chatSlice.actions;
+export const {setChat, addMessage, setChatTyping, updateFileUploadProgress} = chatSlice.actions;
 
 export default chatSlice.reducer;

@@ -1,9 +1,19 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import styled from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faDownload, faFile} from "@fortawesome/free-solid-svg-icons";
+import {
+    faDownload,
+    faFile, faFileExcel,
+    faFileLines,
+    faFilePdf, faFilePowerpoint,
+    faFileWord, faFileZipper, faFilm,
+    faImage,
+    faMusic
+} from "@fortawesome/free-solid-svg-icons";
+import getFileTypeByExtension from "../../utils/fileTypes";
+import fileSizeConverter from "../../utils/fileSizeConverter";
 
-const FileMessageBack = styled.div`
+export const FileMessageBack = styled.div`
   background-color: rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: row;
@@ -16,8 +26,9 @@ const FileMessageBack = styled.div`
   user-select: none;
 `
 
-const FileIcon = styled(FontAwesomeIcon)`
+export const FileIcon = styled(FontAwesomeIcon)`
   height: 100%;
+  width: 36px;
   color: #BC2CC9;
 `
 
@@ -25,50 +36,74 @@ const DownloadIcon = styled(FileIcon)`
   transition-duration: 200ms;
   cursor: pointer;
   margin-left: 20px;
-  
+
   &:hover {
     color: #f380ff;
   }
 `
 
-const FileDesc = styled.div`
+export const FileDesc = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   margin-left: 20px;
-
 `
 
-const FileName = styled.p`
+
+export const FileName = styled.p`
   color: #ff00ea;
   font-weight: bold;
   cursor: pointer;
-  
+
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  min-width: 10px;
   max-width: 300px;
-  
+  width: calc(70vw - 575px);
+
   &:hover {
     text-decoration: underline;
   }
 `
 
-const FileSize = styled.p`
+
+export const FileSize = styled.p`
   color: gray;
   font-size: 12px;
 `
 
-const FileMessage = () => {
+
+const FileMessage = ({sender, folder, file}) => {
+    const fileTypeIcon = useMemo(() => {
+        const type = getFileTypeByExtension(file.name);
+        return {
+            "image": faImage,
+            "pdf": faFilePdf,
+            "word": faFileWord,
+            "text": faFileLines,
+            "audio": faMusic,
+            "video": faFilm,
+            "archive": faFileZipper,
+            "excel": faFileExcel,
+            "presentation": faFilePowerpoint,
+            "unknown": faFile
+        }[type];
+    }, [file]);
+
+    const handleDownloadFile = () => {
+        window.location.href = `/api/v1/cdn/${sender}/${folder}/${file.name}`
+    }
+
     return (
         <FileMessageBack>
-            <FileIcon icon={faFile}/>
+            <FileIcon icon={fileTypeIcon}/>
             <FileDesc>
-                <FileName>FileNameskjgbrdkjgnrdkjgnrdkjgndjkgrfnjkgndrkj</FileName>
-                <FileSize>12.1k</FileSize>
+                <FileName onClick={handleDownloadFile}>{file.name}</FileName>
+                <FileSize>{fileSizeConverter(file.size)}</FileSize>
             </FileDesc>
-            <DownloadIcon icon={faDownload}/>
+            <DownloadIcon icon={faDownload} onClick={handleDownloadFile}/>
         </FileMessageBack>
     );
 };
