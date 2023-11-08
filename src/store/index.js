@@ -8,6 +8,7 @@ import authReducer from "./authSlice";
 import friendsReducer from './friendsSlice'
 import guildsReducer from './guildsSlice'
 import chatReducer from './chatSlice'
+import diallerReducer from './diallerSlice'
 
 export default configureStore({
     reducer: {
@@ -18,6 +19,7 @@ export default configureStore({
         friends: friendsReducer,
         guilds: guildsReducer,
         chat: chatReducer,
+        dialler: diallerReducer,
         theme: themeReducer,
     },
 })

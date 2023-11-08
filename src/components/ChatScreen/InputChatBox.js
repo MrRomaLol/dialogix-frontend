@@ -12,7 +12,7 @@ import {
     faImage,
     faMusic,
     faPaperclip,
-    faPaperPlane,
+    faPaperPlane, faPhone,
     faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import styled, {css} from "styled-components";
@@ -78,7 +78,9 @@ const Separator = styled.div`
 
 const StyledIconButton = styled(IconButton)`
   height: 26px;
-  width: 50px;
+  width: 26px;
+  margin-right: 10px;
+  margin-left: 10px;
   transition-duration: 200ms;
 `
 
@@ -92,7 +94,7 @@ const StyledAddButton = styled(StyledIconButton)`
 `
 
 const StyledSendButton = styled(StyledIconButton)`
-  margin-right: 35px;
+  margin-right: 15px;
 
   color: gray;
 
@@ -105,6 +107,17 @@ const StyledSendButton = styled(StyledIconButton)`
 
     cursor: pointer;
   `}
+`
+
+const StyledCallButton = styled(StyledSendButton)`
+  margin-right: 30px; 
+  color: #cecece;
+  cursor: pointer;
+  transform: scaleX(-1);
+
+  &:hover {
+    color: white;
+  }
 `
 
 const FileContainer = styled.div`
@@ -324,6 +337,8 @@ const InputChatBox = forwardRef(({name, id, onTextChange}, ref) => {
                         ref={inputRef}
                     />
                     <StyledSendButton icon={faPaperPlane} hasInput={getInput()} onClick={handleSendMessage}/>
+                    <Separator/>
+                    <StyledCallButton icon={faPhone}/>
                 </InputContainer>
             </InputBack>
             <InputBorder/>

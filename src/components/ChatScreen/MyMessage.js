@@ -5,6 +5,7 @@ import {Avatar, MessageBack, MessageContainer, MessageDate, MessageNick, Message
 import {useSelector} from "react-redux";
 import FileMessage from "./FileMessage";
 import FileMessagePlaceholder from "./FileMessagePlaceholder";
+import formatDate from "../../utils/dateFormat";
 
 export const MyMessageContainer = styled(MessageContainer)`
   justify-content: flex-end;
@@ -39,7 +40,7 @@ const MyMessage = ({content, timestamp, status, files}) => {
     } else if (status === "error") {
         statusOrTimestamp = "Error";
     } else {
-        statusOrTimestamp = timestamp;
+        statusOrTimestamp = formatDate(timestamp);
     }
 
     return (

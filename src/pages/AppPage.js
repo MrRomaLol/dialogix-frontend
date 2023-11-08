@@ -18,6 +18,7 @@ import {socket} from "../socket";
 import ConnectedFromAnotherPlaceModal from "../components/Modals/ConnectedFromAnotherPlaceModal";
 import AudioPlayer from "../components/AudioPlayer";
 import {notificationPM} from "../utils/notifications";
+import CallModal from "../components/Modals/CallModal";
 
 const AppPage = () => {
     const size = useWindowSize();
@@ -95,6 +96,7 @@ const AppPage = () => {
                     </AppContent>
                 </React.Fragment>)}
             <ConnectedFromAnotherPlaceModal isOpen={isAnotherPlace}/>
+            {/*<CallModal/>*/}
         </React.Fragment>
     );
 };
