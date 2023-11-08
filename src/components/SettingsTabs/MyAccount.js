@@ -18,7 +18,6 @@ const SettingsBox = styled.div`
 const ChangeSettingsBox = styled.div`
   display: flex;
   flex-direction: column;
-  
   flex: 1;
 `
 
@@ -30,7 +29,6 @@ const SettingName = styled.p`
   font-size: 25px;
   font-family: Furore, serif;
   text-indent: 15px;
-  
   margin-bottom: 10px;
   color: white;
 `
@@ -40,10 +38,8 @@ const SettingInput = styled.input`
   font-family: "JetBrains Mono", serif;
   padding: 10px;
   max-width: 400px;
-
+  background-color: rgba(0, 0, 0, 0.5);
   color: white;
-  background: transparent;
-
   border: 2px solid #BC2CC9;
 
   &:hover {
@@ -80,15 +76,25 @@ const MyAccount = () => {
             <SettingsBox>
 
                 <ChangeSettingsBox>
-                    <Setting Name={'Nicnname'}/>
+                    <Setting Name={'Nickname'}/>
                     <Setting Name={'Username'}/>
                     <Setting Name={'Email'}/>
                     <PasswordChange/>
                 </ChangeSettingsBox>
 
                 <UserTagBox>
-                    <ContentContainer>
-
+                    <ContentContainer backgroundColor={"rgba(0, 0, 0, 0.5)"}>
+                        <div style={{display: "flex", justifyContent: "center", padding: "30px"}}>
+                            <div style={{height: "100px", width: "100px", borderRadius: "50%", backgroundColor: "#CA71D2", marginRight: "50px"}}/>
+                            <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around",fontFamily: "JetBrains Mono, serif", fontSize: "17px", color: "#A684DF",marginRight:"50px"}}>
+                                <div>
+                                    Nickname
+                                </div>
+                                <div>
+                                    Username
+                                </div>
+                            </div>
+                        </div>
                     </ContentContainer>
                 </UserTagBox>
 
