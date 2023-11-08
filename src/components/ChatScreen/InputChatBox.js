@@ -137,8 +137,9 @@ const XMark = styled(FontAwesomeIcon)`
 
 const FilePreviewBack = styled.div`
   position: relative;
+  width: 175px;
   min-width: 175px;
-  min-height: 175px;
+  height: 175px;
   background-color: rgba(0, 0, 0, 0.2);
   border: solid 2px #BC2CC9;
   margin-bottom: 15px;
@@ -267,7 +268,7 @@ const InputChatBox = forwardRef(({name, id, onTextChange}, ref) => {
 
     const handleAddFiles = (selectedFiles) => {
         selectedFiles.forEach((file) => {
-            const idx = files.findIndex(f => f.fileObject.path === file.fileObject.path);
+            const idx = files.findIndex(f => f.fileObject.path === file.path);
             if (idx === -1) {
                 const fileObj = {
                     id: getRandomName(8),

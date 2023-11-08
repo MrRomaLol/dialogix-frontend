@@ -151,7 +151,6 @@ const chatSlice = createSlice({
         })
         builder.addCase(sendMessage.fulfilled, (state, {payload}) => {
             state.loading = false;
-            console.log(payload.message);
             const message = payload.message;
             const messages = state.chats[message.receiver_id].messages;
 

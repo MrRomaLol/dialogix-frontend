@@ -14,8 +14,6 @@ import typingAnimation from "../../animations/typing.json"
 import Lottie from "react-lottie-player";
 import {useDropzone} from "react-dropzone";
 import DnDModal from "../Modals/DnDModal";
-import FileMessagePlaceholder from "./FileMessagePlaceholder";
-import getusermedia from "getusermedia";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;

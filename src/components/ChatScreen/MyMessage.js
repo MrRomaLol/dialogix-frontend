@@ -49,7 +49,7 @@ const MyMessage = ({content, timestamp, status, files}) => {
                     <TextWithLineBreaks text={content}/>
 
                     {status === "sending" ? (
-                        files && <FileMessagePlaceholder files={files.files} progress={files.progress}/>
+                        !!files.files.length && <FileMessagePlaceholder files={files.files} progress={files.progress}/>
                     ) : (
                         files && files.files.map((file, idx) => (
                             <FileMessage key={idx} sender={userInfo.id} folder={files.folder} file={file}/>))
