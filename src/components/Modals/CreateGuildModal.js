@@ -3,15 +3,13 @@ import ModalComponent from "./ModalComponent";
 import ContentContainer from "../ContentContainer";
 import styled from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCamera, faCloudArrowUp} from "@fortawesome/free-solid-svg-icons";
-import CropImageModal from "./CropImageModal";
 import {ModalName, ModalSubName} from "./ModalsElements";
 import CutButton from "../UIElements/CutButton";
-import {useDropzone} from "react-dropzone";
 import {Store} from "react-notifications-component";
 import {useDispatch, useSelector} from "react-redux";
 import {createGuild} from "../../store/guildsSlice";
 import DXSpinner from "../DXSpinner";
+import SelectImage from "../styled-parts/SelectImage";
 
 const Content = styled.div`
   width: 100%;
@@ -67,77 +65,10 @@ const Outline = styled(ImageContainer)`
   justify-content: center;
 `
 
-const AvatarImage = styled(ImageContainer)`
-  background-size: cover;
-  background-position: center;
-`
-
 const Icon = styled(FontAwesomeIcon)`
   font-size: 40px;
   color: white;
 `
-
-const NoImage = ({icon}) => {
-    return <Outline>
-        <Icon icon={icon}/>
-    </Outline>
-}
-
-const ServerImage = ({onChange}) => {
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [isCropModalOpened, setIsCropModalOpened] = useState(false);
-
-    const handleOpenCropModal = () => {
-        setIsCropModalOpened(true);
-    }
-
-    const handleCloseCropModal = () => {
-        setIsCropModalOpened(false);
-    }
-
-    const readAndCropImage = (imageFile) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setSelectedImage(reader.result);
-        };
-        reader.readAsDataURL(imageFile);
-        handleOpenCropModal();
-    }
-
-    const handleImageCrop = (image) => {
-        setSelectedImage(image);
-        onChange(image);
-    }
-
-    const onDrop = (acceptedFiles) => {
-        if (acceptedFiles) {
-            readAndCropImage(acceptedFiles[0]);
-        }
-    }
-
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({
-        onDrop,
-        multiple: false,
-        maxFiles: 1,
-        accept: {
-            "image/*": [],
-        }
-    });
-
-    return (
-        <div>
-            <label {...getRootProps()}>
-                {selectedImage ?
-                    <AvatarImage style={{backgroundImage: `url(${selectedImage})`}}/> :
-                    <NoImage icon={isDragActive ? faCloudArrowUp : faCamera}/>}
-            </label>
-            <input {...getInputProps()}/>
-            <CropImageModal isOpen={isCropModalOpened} src={selectedImage} onRequestClose={handleCloseCropModal}
-                            onImageCrop={handleImageCrop}/>
-        </div>
-    )
-}
-
 
 const CreateGuildModal = ({isOpen, onRequestClose}) => {
     const dispatch = useDispatch();
@@ -224,7 +155,7 @@ const CreateGuildModal = ({isOpen, onRequestClose}) => {
                     <SectionName>Guild name</SectionName>
                     <Input style={{marginBottom: "10px"}} name={'guildName'} onChange={handleChange}/>
                     <SectionName>Upload image</SectionName>
-                    <ServerImage onChange={handleAvatarChange}/>
+                    <SelectImage onChange={handleAvatarChange}/>
                     <CutButton onClick={handleServerCreate}>{createLoading ? <DXSpinner/> : 'Create'}</CutButton>
                 </Content>
             </ContentContainer>

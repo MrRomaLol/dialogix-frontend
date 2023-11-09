@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SettingTabName} from "./SettingsParts";
 import styled from "styled-components";
 import CutButton from "../UIElements/CutButton";
 import ContentContainer from "../ContentContainer";
+import SelectImage from "../styled-parts/SelectImage";
 
-const SettingsBox = styled.div`
+const SettingsBox = styled.div` 
   width: 100%;
   
   display: flex;
@@ -22,7 +23,13 @@ const ChangeSettingsBox = styled.div`
 `
 
 const UserTagBox = styled.div`
+  margin: 50px;
   
+  display: flex;
+  flex-direction: row;
+  
+  justify-content: space-between;
+  align-self: center;
 `
 
 const SettingName = styled.p`
@@ -68,7 +75,54 @@ const PasswordChange = () => {
     </div>
 }
 
+// const AvatarImage = styled.div`
+//   width: 100px;
+//   height: 100px;
+//   border-radius: 50%;
+//   cursor: pointer;
+//   margin-bottom: 40px;
+//   transition: filter 200ms;
+//   box-sizing: border-box;
+//   background-size: cover;
+//   background-position: center;
+//
+//   &:hover {
+//     filter: brightness(60%);
+//   }
+// `
+
+const UserImage = ({image}) => {
+
+}
+
+const UserNickName = styled.p`
+  font-family: JetBrains Mono, serif;
+  font-size: 17px; 
+  color: #A684DF;
+`
+
+const UsernameNickname = ({nickname, username}) => {
+    return <div style={{display:"flex", flexDirection:"column", alignSelf:"center"}}>
+        <UserNickName>{nickname}</UserNickName>
+        <br/>
+        <UserNickName>{username}</UserNickName>
+    </div>;
+}
+
+
 const MyAccount = () => {
+    const [formData, setFormData] = useState({
+        userName: '',
+        avatar: null,
+    })
+
+    const handleAvatarChange = (image) => {
+        setFormData(prev => ({
+            ...prev,
+            avatar: image
+        }))
+    }
+
     return (
         <React.Fragment>
             <SettingTabName>My Account</SettingTabName>
@@ -84,17 +138,23 @@ const MyAccount = () => {
 
                 <UserTagBox>
                     <ContentContainer backgroundColor={"rgba(0, 0, 0, 0.5)"}>
-                        <div style={{display: "flex", justifyContent: "center", padding: "30px"}}>
-                            <div style={{height: "100px", width: "100px", borderRadius: "50%", backgroundColor: "#CA71D2", marginRight: "50px"}}/>
-                            <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around",fontFamily: "JetBrains Mono, serif", fontSize: "17px", color: "#A684DF",marginRight:"50px"}}>
-                                <div>
-                                    Nickname
-                                </div>
-                                <div>
-                                    Username
-                                </div>
-                            </div>
-                        </div>
+                        <UserTagBox>
+                            <SelectImage onChange={handleAvatarChange}/>
+                            <UsernameNickname username={'Username'} nickname={'Nickname'}/>
+                        </UserTagBox>
+
+
+                        {/*<div style={{display: "flex", justifyContent: "center", padding: "30px"}}>*/}
+                        {/*    <div style={{height: "100px", width: "100px", borderRadius: "50%", backgroundColor: "#CA71D2", marginRight: "50px"}}/>*/}
+                        {/*    <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around",fontFamily: "JetBrains Mono, serif", fontSize: "17px", color: "#A684DF",marginRight:"50px"}}>*/}
+                        {/*        <div>*/}
+                        {/*            Nickname*/}
+                        {/*        </div>*/}
+                        {/*        <div>*/}
+                        {/*            Username*/}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
                     </ContentContainer>
                 </UserTagBox>
 
