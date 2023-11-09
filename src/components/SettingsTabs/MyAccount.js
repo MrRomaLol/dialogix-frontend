@@ -3,124 +3,108 @@ import {SettingTabName} from "./SettingsParts";
 import styled from "styled-components";
 import CutButton from "../UIElements/CutButton";
 import ContentContainer from "../ContentContainer";
-import SelectImage from "../styled-parts/SelectImage";
+import ImageSelector from "../UIElements/ImageSelector";
+import InputBox from "../UIElements/InputBox";
+import ChangePasswordModal from "../Modals/ChangePasswordModal";
 
-const SettingsBox = styled.div` 
+const SettingsBox = styled.div`
   width: 100%;
-  
+
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: end;
+  align-items: flex-start;
   padding: 50px;
-  
+
   box-sizing: border-box;
+
+  @media (max-width: 1350px) {
+    flex-direction: column-reverse;
+    align-items: center;
+    padding: 10px;
+  }
 `
 
 const ChangeSettingsBox = styled.div`
   display: flex;
   flex-direction: column;
+
   flex: 1;
 `
 
 const UserTagBox = styled.div`
-  margin: 50px;
-  
+  padding: 20px 50px;
+
   display: flex;
   flex-direction: row;
-  
-  justify-content: space-between;
-  align-self: center;
 `
 
 const SettingName = styled.p`
   font-size: 25px;
   font-family: Furore, serif;
   text-indent: 15px;
+
   margin-bottom: 10px;
   color: white;
 `
 
-const SettingInput = styled.input`
+const StyledInputBox = styled(InputBox)`
+  margin-bottom: 10px;
   font-size: 25px;
-  font-family: "JetBrains Mono", serif;
+  width: 350px;
   padding: 10px;
-  max-width: 400px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: 2px solid #BC2CC9;
-
-  &:hover {
-    outline: none;
-  }
-
-  &:active {
-    outline: none;
-  }
-
 `
 
-const Setting = ({Name}) => {
+
+const Setting = ({name}) => {
     return <div style={{marginBottom: '40px'}}>
-        <SettingName>{Name}</SettingName>
-        <SettingInput placeholder={Name}></SettingInput>
+        <SettingName>{name}</SettingName>
+        <StyledInputBox placeholder={name}/>
     </div>
 }
 
 
-const PasswordChange = () => {
-    return <div style={{}}>
-        <SettingName> Password </SettingName>
-        <br/>
-        <CutButton children={'Change Password'} width={300}/>
-    </div>
-}
-
-// const AvatarImage = styled.div`
-//   width: 100px;
-//   height: 100px;
-//   border-radius: 50%;
-//   cursor: pointer;
-//   margin-bottom: 40px;
-//   transition: filter 200ms;
-//   box-sizing: border-box;
-//   background-size: cover;
-//   background-position: center;
-//
-//   &:hover {
-//     filter: brightness(60%);
-//   }
-// `
-
-const UserImage = ({image}) => {
-
+const PasswordChange = ({onClick}) => {
+    return (
+        <>
+            <SettingName> Password </SettingName>
+            <CutButton style={{marginTop: "25px"}} width={300} onClick={onClick}>Change Password</CutButton>
+        </>
+    )
 }
 
 const UserNickName = styled.p`
   font-family: JetBrains Mono, serif;
-  font-size: 17px; 
+  font-size: 18px;
   color: #A684DF;
+  margin-top: 5px;
+  margin-bottom: 5px;
 `
 
 const UsernameNickname = ({nickname, username}) => {
-    return <div style={{display:"flex", flexDirection:"column", alignSelf:"center"}}>
+    return <div style={{display: "flex", flexDirection: "column", alignSelf: "center"}}>
         <UserNickName>{nickname}</UserNickName>
-        <br/>
         <UserNickName>{username}</UserNickName>
     </div>;
 }
 
+const AvatarImageSelector = styled(ImageSelector)`
+  margin-right: 40px;
+`
 
 const MyAccount = () => {
-    const [formData, setFormData] = useState({
-        userName: '',
-        avatar: null,
-    })
+    const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
     const handleAvatarChange = (image) => {
-        setFormData(prev => ({
-            ...prev,
-            avatar: image
-        }))
+
+    }
+
+    const openChangePasswordModal = () => {
+        setIsChangePasswordOpen(true);
+    }
+
+    const closeChangePasswordModal = () => {
+        setIsChangePasswordOpen(false);
     }
 
     return (
@@ -130,35 +114,24 @@ const MyAccount = () => {
             <SettingsBox>
 
                 <ChangeSettingsBox>
-                    <Setting Name={'Nickname'}/>
-                    <Setting Name={'Username'}/>
-                    <Setting Name={'Email'}/>
-                    <PasswordChange/>
+                    <Setting name={'Nickname'}/>
+                    <Setting name={'Username'}/>
+                    <Setting name={'Email'}/>
+                    <PasswordChange onClick={openChangePasswordModal}/>
                 </ChangeSettingsBox>
 
                 <UserTagBox>
                     <ContentContainer backgroundColor={"rgba(0, 0, 0, 0.5)"}>
                         <UserTagBox>
-                            <SelectImage onChange={handleAvatarChange}/>
+                            <AvatarImageSelector onChange={handleAvatarChange}/>
                             <UsernameNickname username={'Username'} nickname={'Nickname'}/>
                         </UserTagBox>
-
-
-                        {/*<div style={{display: "flex", justifyContent: "center", padding: "30px"}}>*/}
-                        {/*    <div style={{height: "100px", width: "100px", borderRadius: "50%", backgroundColor: "#CA71D2", marginRight: "50px"}}/>*/}
-                        {/*    <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around",fontFamily: "JetBrains Mono, serif", fontSize: "17px", color: "#A684DF",marginRight:"50px"}}>*/}
-                        {/*        <div>*/}
-                        {/*            Nickname*/}
-                        {/*        </div>*/}
-                        {/*        <div>*/}
-                        {/*            Username*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
                     </ContentContainer>
                 </UserTagBox>
 
             </SettingsBox>
+
+            <ChangePasswordModal isOpen={isChangePasswordOpen} onRequestClose={closeChangePasswordModal}/>
 
         </React.Fragment>
     );
