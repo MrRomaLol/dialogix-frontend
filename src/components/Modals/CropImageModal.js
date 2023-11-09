@@ -3,9 +3,9 @@ import ModalComponent from "./ModalComponent";
 import ContentContainer from "../ContentContainer";
 import Cropper from "react-easy-crop";
 import styled from "styled-components";
-import {ModalName} from "./ModalsElements";
 import CutButton from "../UIElements/CutButton";
 import {createCroppedImage} from "../../utils/imageCrop";
+import {ModalName} from "./ModalParts";
 
 const Container = styled.div`
   display: flex;

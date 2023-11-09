@@ -3,7 +3,7 @@ const path = require('path');
 const electronLocalShortcut = require('electron-localshortcut');
 const Store = require('electron-store');
 
-const {app, BrowserWindow, session, ipcMain, Tray, Menu, dialog} = require('electron');
+const {app, BrowserWindow, session, ipcMain, Tray, Menu} = require('electron');
 const isDev = require('electron-is-dev');
 
 const iconPath = path.join(__dirname, 'icons', 'DialogiX256.ico');
@@ -131,11 +131,10 @@ ipcMain.on("closeApp", () => {
     mainWindow?.hide();
 });
 
-ipcMain.handle('get-app-minimized-status', (event, args) => {
-    dialog.showMessageBox({
-        type: "info",
-    })
-    return mainWindow.isMinimized();
+ipcMain.on("saveCookies", () => {
+    session.defaultSession.cookies.get({url: DIALOGIX_APP_URL}).then((cookies) => {
+        store.set('App-Cookies', cookies);
+    });
 });
 
 function update() {

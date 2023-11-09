@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {getData, postData} from "../axios";
+import {revertAll} from "./index";
 
 const initialState = {
     guilds: [],
@@ -53,6 +54,7 @@ const guildsSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
+        builder.addCase(revertAll, () => initialState)
         builder.addCase(createGuild.pending, (state) => {
             state.loading = true;
             state.error = null;

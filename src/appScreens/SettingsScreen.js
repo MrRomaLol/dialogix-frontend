@@ -7,6 +7,9 @@ import {faCircleXmark} from "@fortawesome/free-regular-svg-icons";
 import {APP_OPENED_STATE, setAppState} from "../store/appStateSlice";
 import {useDispatch} from "react-redux";
 import MyAccount from "../components/SettingsTabs/MyAccount";
+import YesNoModal from "../components/Modals/YesNoModal";
+import {logoutUser} from "../store/authSlice";
+import {revertAll} from "../store";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;
@@ -117,11 +120,9 @@ const SettingsStyle = styled.div`
   padding-right: 50px;
 
   background-color: rgba(255, 255, 255, 0.1);
-  
+
   overflow: auto;
 `
-
-const SettingsContext = createContext();
 
 const SettingTab = ({children, onClick, isActive, content}) => (
     <SettingTabStyle onClick={onClick} isActive={isActive}>
@@ -129,9 +130,7 @@ const SettingTab = ({children, onClick, isActive, content}) => (
     </SettingTabStyle>
 );
 
-const Settings = () => {
-    const {tabContent} = useContext(SettingsContext);
-
+const Settings = ({tabContent}) => {
     return (
         <SettingsStyle className={'scroll-bar'}>
             {tabContent !== null && (
@@ -153,10 +152,13 @@ const SettingsMenu = ({children}) => {
     };
 
     return (
-        <SettingsContext.Provider value={{tabContent}}>
+        <>
             <SettingsMenuStyle className={'scroll-bar'}>
                 {React.Children.map(children, (child, index) => {
                     if (child.type === SettingTab) {
+                        if (child.props.onClick) {
+                            return child;
+                        }
                         const isActive = index === activeTab;
                         return React.cloneElement(child, {
                             onClick: () => handleTabClick(index, child.props.content),
@@ -166,14 +168,31 @@ const SettingsMenu = ({children}) => {
                     return child;
                 })}
             </SettingsMenuStyle>
-            <Settings/>
-        </SettingsContext.Provider>
+            <Settings tabContent={tabContent}/>
+        </>
     );
 };
 
 
 const SettingsScreen = () => {
     const dispatch = useDispatch();
+
+    const [isLogoutModal, setIsLogoutModal] = useState(false);
+
+    const handleOpenLogoutModal = () => {
+        setIsLogoutModal(true);
+    }
+
+    const handleCloseLogoutModal = () => {
+        setIsLogoutModal(false);
+    }
+
+    const handleLogout = () => {
+        handleCloseLogoutModal();
+        dispatch(logoutUser()).then(() => {
+            dispatch(revertAll());
+        })
+    }
 
     const goToAppState = () => {
         dispatch(setAppState({stateName: APP_OPENED_STATE}));
@@ -208,10 +227,14 @@ const SettingsScreen = () => {
                             <SettingTab>Tab1</SettingTab>
                             <SettingTab>Tab2</SettingTab>
                             <SettingTabsSeparator/>
+                            <SettingTab onClick={handleOpenLogoutModal}>Logout</SettingTab>
                         </SettingsMenu>
                     </Cont>
                 </FullScreenContainer>
             </Container>
+            <YesNoModal isOpen={isLogoutModal} modalName={"Logout"} modalSubName={"Are you sure want to logout?"}
+                        firstName={"No"} secondName={"Yes"} onRequestClose={handleCloseLogoutModal}
+                        onFirst={handleCloseLogoutModal} onSecond={handleLogout}/>
         </ScreenContainer>
     );
 };

@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice, unwrapResult} from "@reduxjs/toolkit";
 import {getFriends} from "./friendsSlice";
 import {getGuilds} from "./guildsSlice";
+import {revertAll} from "./index";
 
 const initialState = {
     loading: true,
@@ -25,6 +26,7 @@ const fetchSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
+        builder.addCase(revertAll, () => initialState)
         builder.addCase(fetchAllData.pending, (state) => {
             state.loading = true;
             state.error = null;

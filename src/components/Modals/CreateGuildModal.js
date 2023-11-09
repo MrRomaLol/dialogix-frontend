@@ -2,142 +2,25 @@ import React, {useEffect, useState} from 'react';
 import ModalComponent from "./ModalComponent";
 import ContentContainer from "../ContentContainer";
 import styled from "styled-components";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCamera, faCloudArrowUp} from "@fortawesome/free-solid-svg-icons";
-import CropImageModal from "./CropImageModal";
-import {ModalName, ModalSubName} from "./ModalsElements";
 import CutButton from "../UIElements/CutButton";
-import {useDropzone} from "react-dropzone";
 import {Store} from "react-notifications-component";
 import {useDispatch, useSelector} from "react-redux";
 import {createGuild} from "../../store/guildsSlice";
 import DXSpinner from "../DXSpinner";
+import ImageSelector from "../UIElements/ImageSelector";
+import {ModalContent, ModalName, ModalSubName, SectionName} from "./ModalParts";
+import InputBox from "../UIElements/InputBox";
 
-const Content = styled.div`
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 30px 60px 30px 60px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgba(61, 38, 84, 0.3);
-`
-
-const SectionName = styled.div`
+const StyledInputBox = styled(InputBox)`
+  margin-bottom: 10px;
   font-size: 20px;
-  color: white;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  font-family: "JetBrains Mono", serif;
-  align-self: stretch;
+  width: 350px;
+  padding: 2px;
 `
 
-const Input = styled.input`
-  background-color: rgba(29, 5, 52, 0.3);
-  border: solid rgba(188, 44, 201, 0.62) 2px;
-  color: white;
-  width: 400px;
-  font-size: 20px;
-  font-family: "JetBrains Mono", serif;
-
-  &:focus, &:focus {
-    outline: none;
-  }
+const GuildImageSelector = styled(ImageSelector)`
+    padding-bottom: 40px;
 `
-
-const ImageContainer = styled.div`
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  cursor: pointer;
-  margin-bottom: 40px;
-  transition: filter 200ms;
-  box-sizing: border-box;
-
-  &:hover {
-    filter: brightness(60%);
-  }
-`
-
-const Outline = styled(ImageContainer)`
-  border: dashed white 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
-
-const AvatarImage = styled(ImageContainer)`
-  background-size: cover;
-  background-position: center;
-`
-
-const Icon = styled(FontAwesomeIcon)`
-  font-size: 40px;
-  color: white;
-`
-
-const NoImage = ({icon}) => {
-    return <Outline>
-        <Icon icon={icon}/>
-    </Outline>
-}
-
-const ServerImage = ({onChange}) => {
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [isCropModalOpened, setIsCropModalOpened] = useState(false);
-
-    const handleOpenCropModal = () => {
-        setIsCropModalOpened(true);
-    }
-
-    const handleCloseCropModal = () => {
-        setIsCropModalOpened(false);
-    }
-
-    const readAndCropImage = (imageFile) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setSelectedImage(reader.result);
-        };
-        reader.readAsDataURL(imageFile);
-        handleOpenCropModal();
-    }
-
-    const handleImageCrop = (image) => {
-        setSelectedImage(image);
-        onChange(image);
-    }
-
-    const onDrop = (acceptedFiles) => {
-        if (acceptedFiles) {
-            readAndCropImage(acceptedFiles[0]);
-        }
-    }
-
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({
-        onDrop,
-        multiple: false,
-        maxFiles: 1,
-        accept: {
-            "image/*": [],
-        }
-    });
-
-    return (
-        <div>
-            <label {...getRootProps()}>
-                {selectedImage ?
-                    <AvatarImage style={{backgroundImage: `url(${selectedImage})`}}/> :
-                    <NoImage icon={isDragActive ? faCloudArrowUp : faCamera}/>}
-            </label>
-            <input {...getInputProps()}/>
-            <CropImageModal isOpen={isCropModalOpened} src={selectedImage} onRequestClose={handleCloseCropModal}
-                            onImageCrop={handleImageCrop}/>
-        </div>
-    )
-}
-
 
 const CreateGuildModal = ({isOpen, onRequestClose}) => {
     const dispatch = useDispatch();
@@ -218,15 +101,15 @@ const CreateGuildModal = ({isOpen, onRequestClose}) => {
     return (
         <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose}>
             <ContentContainer>
-                <Content>
+                <ModalContent>
                     <ModalName>Create guild</ModalName>
                     <ModalSubName style={{marginTop: "10px"}}>Create guild</ModalSubName>
                     <SectionName>Guild name</SectionName>
-                    <Input style={{marginBottom: "10px"}} name={'guildName'} onChange={handleChange}/>
+                    <StyledInputBox name={'guildName'} onChange={handleChange}/>
                     <SectionName>Upload image</SectionName>
-                    <ServerImage onChange={handleAvatarChange}/>
+                    <GuildImageSelector onChange={handleAvatarChange}/>
                     <CutButton onClick={handleServerCreate}>{createLoading ? <DXSpinner/> : 'Create'}</CutButton>
-                </Content>
+                </ModalContent>
             </ContentContainer>
         </ModalComponent>
     );

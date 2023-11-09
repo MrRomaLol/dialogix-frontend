@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {getData, patchData, postData} from "../axios";
+import {revertAll} from "./index";
 
 const initialState = {
     friends: [],
@@ -152,6 +153,7 @@ const friendsSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
+        builder.addCase(revertAll, () => initialState)
         builder.addCase(getFriends.pending, (state) => {
             state.loading = true
             state.error = null
