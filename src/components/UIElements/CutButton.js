@@ -30,9 +30,9 @@ const ButtonEobaniyBlur = styled.div`
   filter: drop-shadow(#BC2CC9 0 0 16px);
 `
 
-const CutButton = ({children, width, className, onClick}) => {
+const CutButton = ({children, width, className, style, onClick}) => {
     return (
-        <ButtonEobaniyBlur className={className}>
+        <ButtonEobaniyBlur className={className} style={style}>
             <CutButtonStyle onClick={onClick} width={width}>{children}</CutButtonStyle>
         </ButtonEobaniyBlur>
     );

@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {getData, postData, uploadFiles} from "../axios";
+import {revertAll} from "./index";
 
 const initialState = {
     chats: {},
@@ -112,6 +113,7 @@ const chatSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
+        builder.addCase(revertAll, () => initialState)
         builder.addCase(fetchMessages.pending, (state) => {
             state.loading = true;
             state.error = null;

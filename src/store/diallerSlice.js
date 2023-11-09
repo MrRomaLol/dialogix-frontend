@@ -1,4 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
+import {revertAll} from "./index";
 
 const initialState = {
 
@@ -10,6 +11,9 @@ const diallerSlice = createSlice({
     reducers: {
 
     },
+    extraReducers: (builder) => {
+        builder.addCase(revertAll, () => initialState)
+    }
 })
 
 export const {} = diallerSlice.actions;

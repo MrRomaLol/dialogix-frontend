@@ -1,5 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {getData, postData} from "../axios";
+import {socket} from "../socket";
+import {revertAll} from "./index";
 
 const initialState = {
     loading: false,
@@ -50,6 +52,17 @@ export const loginUser = createAsyncThunk(
     }
 )
 
+export const logoutUser = createAsyncThunk(
+    'auth/logout',
+    async (_, {rejectWithValue}) => {
+        const res = await postData('/api/v1/logout');
+
+        if (!res.ok) {
+            return rejectWithValue(res.message);
+        }
+    }
+)
+
 export const checkAuthentication = createAsyncThunk(
     'auth/check',
     async (_, {rejectWithValue}) => {
@@ -66,6 +79,7 @@ const authSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
+        builder.addCase(revertAll, () => initialState)
         builder.addCase(registerUser.pending, (state) => {
             state.loading = true
             state.success = null
@@ -76,6 +90,9 @@ const authSlice = createSlice({
             state.success = true
             state.isAuthenticated = true
             state.userInfo = payload
+            if (window.IS_USING_DIALOGIX_APP) {
+                window.electron.ipcRenderer.sendMessage('saveCookies', ['saveCookies']);
+            }
         })
         builder.addCase(registerUser.rejected, (state, {payload}) => {
             state.loading = false
@@ -92,8 +109,30 @@ const authSlice = createSlice({
             state.success = true
             state.isAuthenticated = true
             state.userInfo = payload
+            if (window.IS_USING_DIALOGIX_APP) {
+                window.electron.ipcRenderer.sendMessage('saveCookies', ['saveCookies']);
+            }
         })
         builder.addCase(loginUser.rejected, (state, {payload}) => {
+            state.loading = false
+            state.success = false
+            state.error = payload
+        })
+        builder.addCase(logoutUser.pending, (state) => {
+            state.loading = true
+            state.success = null
+            state.error = null
+        })
+        builder.addCase(logoutUser.fulfilled, (state, {payload}) => {
+            state.loading = false
+            state.success = true
+            state.isAuthenticated = false
+            state.userInfo = {}
+            if (window.IS_USING_DIALOGIX_APP) {
+                window.electron.ipcRenderer.sendMessage('saveCookies', ['saveCookies']);
+            }
+        })
+        builder.addCase(logoutUser.rejected, (state, {payload}) => {
             state.loading = false
             state.success = false
             state.error = payload

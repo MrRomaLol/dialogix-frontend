@@ -26,7 +26,12 @@ socket.on('private-message-typing', (userId) => {
     }
 
     typingTimeouts[userId] = setTimeout(() => {
-        store.dispatch(setChatTyping({ userId, isUserTyping: false }));
+        store.dispatch(setChatTyping({userId, isUserTyping: false}));
         delete typingTimeouts[userId];
     }, 1500);
 })
+
+export const DisconnectSocket = () => {
+    socket.disconnect();
+    socket.close();
+}

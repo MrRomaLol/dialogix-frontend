@@ -14,11 +14,9 @@ import AppScreen from "../appScreens/AppScreen";
 import SettingsScreen from "../appScreens/SettingsScreen";
 import {useTransition, animated} from 'react-spring';
 import {easings} from '@react-spring/web'
-import {socket} from "../socket";
+import {DisconnectSocket, socket} from "../socket";
 import ConnectedFromAnotherPlaceModal from "../components/Modals/ConnectedFromAnotherPlaceModal";
 import AudioPlayer from "../components/AudioPlayer";
-import {notificationPM} from "../utils/notifications";
-import CallModal from "../components/Modals/CallModal";
 
 const AppPage = () => {
     const size = useWindowSize();
@@ -61,11 +59,11 @@ const AppPage = () => {
 
         socket.on('connect-from-another-place', () => {
             setIsAnotherPlace(true);
-            socket.disconnect();
+            DisconnectSocket();
         })
 
         return () => {
-            socket.disconnect();
+            DisconnectSocket();
         }
     }, [userInfo])
 

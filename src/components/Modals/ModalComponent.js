@@ -2,7 +2,6 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-
 function ModalComponent({isOpen, onRequestClose, children, overlayStyle, contentStyle}) {
     const style = {
         overlay: {
