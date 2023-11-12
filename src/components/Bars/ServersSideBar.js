@@ -6,7 +6,6 @@ import {faPlus, faUsers} from "@fortawesome/free-solid-svg-icons";
 import {IconSeparator} from "./SideIconParts";
 import CreateGuildModal from "../Modals/CreateGuildModal";
 import {useSelector} from "react-redux";
-import FriendBarIcon from "./FriendBarIcon";
 import ServerBarIcon from "./ServerBarIcon";
 import {Tooltip} from "react-tooltip";
 
@@ -49,7 +48,7 @@ const ServersSideBar = () => {
                     <ScrollerBarBox>
                         <ScrollerBar>
                             {guilds.map((guild) => (
-                                <ServerBarIcon key={guild.id} id={guild.id} avatarUrl={guild.avatarUrl}/>))}
+                                <ServerBarIcon key={guild.id} id={guild.id} avatarUrl={guild.avatarUrl} name={guild.name}/>))}
                         </ScrollerBar>
                     </ScrollerBarBox>
                 </Bar>

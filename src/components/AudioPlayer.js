@@ -11,7 +11,11 @@ export const playNotificationSound = () => {
     const audioRef = document.getElementById('dx-audio-player');
     if (audioRef) {
         audioRef.src = notificationSound;
-        audioRef.play();
+        try {
+            audioRef.play();
+        } catch {
+            //ignore
+        }
     }
 };
 

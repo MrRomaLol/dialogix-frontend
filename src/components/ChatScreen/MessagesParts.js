@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import React from "react";
+import {IconFriendGuild} from "../Bars/SideIconParts";
 
 export const MessageContainer = styled.div`
   display: flex;
@@ -43,11 +45,16 @@ export const MessageBack = styled.div`
   font-family: "JetBrains Mono", serif;
 `
 
-export const Avatar = styled.div`
+const StyledAvatar = styled(IconFriendGuild)`
   width: 50px;
   min-width: 50px;  
   height: 50px;
-  
-  border-radius: 50%;
-  background-color: #bbbbbe;
 `
+
+export const Avatar = (props) => {
+    return (
+        props.url ?
+            <StyledAvatar style={{backgroundImage: `url(api/v1/cdn/users/${props.id}/${props.url})`}}/> :
+            <StyledAvatar>{props.nick.substring(0, 1)}</StyledAvatar>
+    )
+}

@@ -26,8 +26,7 @@ const Button = styled(CutButton)`
 
 const RegisterPage = () => {
     const navigate = useNavigate();
-    const [tryingToRegister, setTryingToRegister] = useState(false);
-    const {loading, error, success} = useSelector((state) => state.auth);
+    const {loading} = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
     const [formData, setFormData] = useState({
@@ -58,7 +57,6 @@ const RegisterPage = () => {
 
     const handleRegister = () => {
         if (loading) return;
-        setTryingToRegister(false);
 
         if (!formData.username.match(validUsername)) {
             return Store.addNotification({
@@ -88,36 +86,21 @@ const RegisterPage = () => {
             })
         }
 
-        dispatch(registerUser(formData));
-        setTryingToRegister(true);
+        dispatch(registerUser(formData)).unwrap()
+            .then(() => {
+                navigate('/app');
+            })
+            .catch((error) => {
+                Store.addNotification({
+                    ...notification,
+                    message: `Something went wrong: ${error}`
+                })
+            })
     }
 
     const goToLogin = () => {
         navigate('/login');
     }
-
-    useEffect(() => {
-        const showNotification = () => {
-            if (!tryingToRegister) return;
-            if (error) {
-                Store.addNotification({
-                    ...notification,
-                    message: `Something went wrong: ${error}`
-                })
-            }
-
-            if (success) {
-                Store.addNotification({
-                    ...notification,
-                    title: "Success!",
-                    type: "success",
-                    message: "Registration completed"
-                })
-                navigate('/app');
-            }
-        }
-        showNotification();
-    }, [navigate, success, error, tryingToRegister])
 
     return (
         <React.Fragment>

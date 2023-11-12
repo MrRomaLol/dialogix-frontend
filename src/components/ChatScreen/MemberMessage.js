@@ -15,14 +15,13 @@ export const MemberMessageBack = styled(MessageBack)`
   clip-path: polygon(0 0, 100% 0, 100% 100%, 20px 100%, 0 calc(100% - 20px));
 `
 
-
 const MemberMessage = ({content, sender, timestamp, files}) => {
     return (
         <MemberMessageContainer>
-            <Avatar/>
+            <Avatar id={sender.id} url={sender.avatarUrl} nick={sender.nickname}/>
             <div style={{display: "flex", flexDirection: "column"}}>
                 <MemberMessageBack>
-                    <TextWithLineBreaks text={content}/>
+                    {content && <TextWithLineBreaks text={content}/>}
                     {files && files.files.map((file, idx) => (
                         <FileMessage key={idx} sender={sender.id} folder={files.folder} file={file}/>))}
                 </MemberMessageBack>

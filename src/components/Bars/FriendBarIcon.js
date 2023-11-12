@@ -5,6 +5,7 @@ import {DIRECT_MESSAGES_SCREEN, setScreen} from "../../store/screenStateSlice";
 import {setChat} from "../../store/chatSlice";
 import AlertIcon from "../AlertIcon";
 import {setNotification} from "../../store/friendsSlice";
+import {BarsIconFriendGuild} from "./SideIconParts";
 
 const Container = styled.div`
   display: flex;
@@ -15,23 +16,6 @@ const Container = styled.div`
 
   width: 100px;
   height: 70px;
-`
-
-const Icon = styled.div`
-  position: relative;
-  height: 70px;
-  width: 70px;
-  border-radius: 50%;
-  transition-duration: 200ms;
-  background-color: white;
-
-  &:hover {
-    border-radius: 30%;
-  }
-
-  ${({isSelected}) => isSelected && css`
-    border-radius: 30%;
-  `}
 `
 
 const NotificationArea = styled.div`
@@ -56,7 +40,21 @@ const NewMessages = styled(AlertIcon)`
   right: 0;
 `
 
-const FriendBarIcon = ({id, isSelected, hasNotification}) => {
+const FriendIcon = (props) => {
+    return (
+        props.url ?
+            <BarsIconFriendGuild {...props}
+                                 style={{backgroundImage: `url(api/v1/cdn/users/${props.id}/${props.url})`}}>
+                {props.hasNotification && <NewMessages/>}
+            </BarsIconFriendGuild> :
+            <BarsIconFriendGuild {...props}>
+                {props.nickname.substring(0, 1)}
+                {props.hasNotification && <NewMessages/>}
+            </BarsIconFriendGuild>
+    )
+}
+
+const FriendBarIcon = ({id, isSelected, hasNotification, avatarUrl, nickname}) => {
     const dispatch = useDispatch();
     const [isHovered, setIsHovered] = useState(false);
 
@@ -87,13 +85,13 @@ const FriendBarIcon = ({id, isSelected, hasNotification}) => {
             <NotificationArea>
                 <Notification height={notificationHeight}/>
             </NotificationArea>
-            <Icon data-tooltip-id={`friend-tooltip-${id}`}
-                  isSelected={isSelected}
-                  onClick={handleClick}
-                  onMouseEnter={() => handleHover(true)}
-                  onMouseLeave={() => handleHover(false)}>
-                {hasNotification && <NewMessages/>}
-            </Icon>
+            <FriendIcon data-tooltip-id={`friend-tooltip-${id}`}
+                        isSelected={isSelected}
+                        onClick={handleClick}
+                        onMouseEnter={() => handleHover(true)}
+                        onMouseLeave={() => handleHover(false)}
+                        id={id} url={avatarUrl} nickname={nickname}
+                        hasNotification={hasNotification}/>
         </Container>
     );
 };

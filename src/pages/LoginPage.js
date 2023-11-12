@@ -106,9 +106,8 @@ const Button = styled(CutButton)`
 const LoginPage = () => {
     const navigate = useNavigate();
 
-    const {loading, error, success} = useSelector((state) => state.auth);
+    const {loading} = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-    const [tryingToLogin, setTryingToLogin] = useState(false)
     const [formData, setFormData] = useState({
         username: "",
         password: "",
@@ -135,7 +134,6 @@ const LoginPage = () => {
 
     const handleLogin = () => {
         if (loading) return;
-        setTryingToLogin(false);
         if (formData.username.length < 4 || formData.password.length < 6) {
             return Store.addNotification({
                 ...notification,
@@ -143,36 +141,23 @@ const LoginPage = () => {
             })
         }
 
-        dispatch(loginUser(formData));
-        setTryingToLogin(true);
+        dispatch(loginUser(formData)).unwrap()
+            .then(() => {
+                navigate('/app');
+            })
+            .catch((error) => {
+                if (error === 'notauser') {
+                    Store.addNotification({
+                        ...notification,
+                        message: `Invalid username or password`
+                    })
+                }
+            });
     }
 
     const goToRegister = () => {
         navigate('/register');
     }
-
-    useEffect(() => {
-        const showNotification = () => {
-            if (!tryingToLogin) return;
-            if (error === 'notauser') {
-                Store.addNotification({
-                    ...notification,
-                    message: `Invalid username or password`
-                })
-            }
-            if (success) {
-                Store.addNotification({
-                    ...notification,
-                    title: "Success!",
-                    type: "success",
-                    message: "Login completed"
-                })
-                navigate('/app');
-            }
-        }
-
-        showNotification()
-    }, [navigate, error, success])
 
     return (
         <React.Fragment>

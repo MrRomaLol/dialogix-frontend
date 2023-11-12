@@ -141,7 +141,7 @@ const ChatScreen = () => {
                                     <MyMessage key={message.id} status={message.status} content={message.content}
                                                timestamp={message.time_stamp} files={message.files}/> :
                                     <MemberMessage key={message.id} content={message.content}
-                                                   sender={{id: friend.id, nickname: friend.nickname}}
+                                                   sender={{id: friend.id, nickname: friend.nickname, avatarUrl: friend.avatar_url}}
                                                    timestamp={message.time_stamp} files={message.files}/>
                             ))}
                         </div> : <ChatRandomPlaceholder/>

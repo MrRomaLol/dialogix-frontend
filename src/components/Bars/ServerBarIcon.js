@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {Tooltip} from "react-tooltip";
 import {useDispatch} from "react-redux";
 import {DIRECT_MESSAGES_SCREEN, SERVER_SCREEN, setScreen} from "../../store/screenStateSlice";
+import {BarsIconFriendGuild, IconFriendGuild} from "./SideIconParts";
 
 const Container = styled.div`
   display: flex;
@@ -13,21 +14,6 @@ const Container = styled.div`
 
   width: 100px;
   height: 70px;
-`
-
-const Icon = styled.div`
-  margin-left: 15px;
-  height: 70px;
-  width: 70px;
-  border-radius: 50%;
-  transition-duration: 200ms;
-
-  background-size: cover;
-  background-position: center;
-
-  &:hover {
-    border-radius: 30%;
-  }
 `
 
 const NotificationArea = styled.div`
@@ -47,7 +33,19 @@ const Notification = styled.div`
   border-radius: 5px 0 0 5px;
 `
 
-const ServerBarIcon = ({id, avatarUrl}) => {
+const Icon = styled(BarsIconFriendGuild)`
+  margin-left: 15px;
+`
+
+const ServerIcon = (props) => {
+    return (
+        props.url ?
+            <Icon {...props} style={{backgroundImage: `url(api/v1/cdn/guilds/${props.id}/${props.url})`}}/> :
+            <Icon {...props}>{props.name.substring(0, 1)}</Icon>
+    )
+}
+
+const ServerBarIcon = ({id, avatarUrl, name}) => {
     const dispatch = useDispatch();
     const [isHovered, setIsHovered] = useState(false);
 
@@ -67,11 +65,10 @@ const ServerBarIcon = ({id, avatarUrl}) => {
 
     return (
         <Container>
-            <Icon data-tooltip-id={`server-tooltip-${id}`}
-                  onClick={handleClick}
-                  onMouseEnter={() => handleHover(true)} onMouseLeave={() => handleHover(false)}
-                  style={{backgroundImage: `url(api/v1/cdn/guilds/${id}/${avatarUrl})`}}
-            />
+            <ServerIcon data-tooltip-id={`server-tooltip-${id}`}
+                        onClick={handleClick}
+                        onMouseEnter={() => handleHover(true)} onMouseLeave={() => handleHover(false)}
+                        id={id} url={avatarUrl} name={name}/>
             <NotificationArea>
                 <Notification height={notificationHeight}/>
             </NotificationArea>

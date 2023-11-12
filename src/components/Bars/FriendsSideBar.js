@@ -105,6 +105,8 @@ const FriendsSideBar = () => {
                             <ScrollerBarBox>
                                 <ScrollerBar>
                                     {friends.map((friend) => (<FriendBarIcon key={friend.id} id={friend.id}
+                                                                             avatarUrl={friend.avatar_url}
+                                                                             nickname={friend.nickname}
                                                                              isSelected={currentChatId === friend.id}
                                                                              hasNotification={friend.hasNotification}/>))}
                                 </ScrollerBar>

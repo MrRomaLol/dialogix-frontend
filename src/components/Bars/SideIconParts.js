@@ -70,3 +70,30 @@ export const IconSeparator = () => {
         </SeparatorContainer>
     )
 }
+
+export const IconFriendGuild = styled.div`
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: "JetBrains Mono", serif;
+  font-size: 20px;
+  user-select: none;
+`
+
+export const BarsIconFriendGuild = styled(IconFriendGuild)`
+  position: relative;
+  height: 70px;
+  width: 70px;
+  transition-duration: 200ms;
+
+  &:hover {
+    border-radius: 30%;
+  }
+`

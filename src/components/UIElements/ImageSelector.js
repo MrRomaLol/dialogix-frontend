@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDropzone} from "react-dropzone";
 import {faCamera, faCloudArrowUp} from "@fortawesome/free-solid-svg-icons";
 import CropImageModal from "../Modals/CropImageModal";

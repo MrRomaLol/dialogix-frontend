@@ -47,7 +47,7 @@ const MyMessage = ({content, timestamp, status, files}) => {
         <MyMessageContainer>
             <div style={{display: "flex", flexDirection: "column"}}>
                 <MyMessageBack status={status}>
-                    <TextWithLineBreaks text={content}/>
+                    {content && <TextWithLineBreaks text={content}/>}
 
                     {status === "sending" ? (
                         !!files.files.length && <FileMessagePlaceholder files={files.files} progress={files.progress}/>
@@ -62,7 +62,7 @@ const MyMessage = ({content, timestamp, status, files}) => {
                     <MessageNick>{userInfo.nickname}</MessageNick>
                 </MessageStampContainer>
             </div>
-            <Avatar/>
+            <Avatar id={userInfo.id} url={userInfo.avatar_url} nick={userInfo.nickname}/>
         </MyMessageContainer>
     );
 };

@@ -63,7 +63,7 @@ const CreateGuildModal = ({isOpen, onRequestClose}) => {
         if (formData.guildName.length < 2) {
             return Store.addNotification({
                 ...notification,
-                message: "Guild name is too short"
+
             })
         }
 

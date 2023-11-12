@@ -6,7 +6,7 @@ const SettingInput = styled.input`
   font-family: "JetBrains Mono", serif;
   max-width: 400px;
 
-  color: white;
+  color: ${({disabled}) => disabled ? 'gray' : 'white'};
   background: rgba(0, 0, 0, 0.5);
 
   border: 2px solid #BC2CC9;

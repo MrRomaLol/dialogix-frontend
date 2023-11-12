@@ -1,20 +1,28 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ContentContainer from "../ContentContainer";
 import styled from "styled-components";
 import ModalComponent from "./ModalComponent";
 import InputBox from "../UIElements/InputBox";
 import {ModalContent, ModalName, ModalSubName, SectionName} from "./ModalParts";
 import CutButton from "../UIElements/CutButton";
+import {Store} from "react-notifications-component";
+import {useDispatch, useSelector} from "react-redux";
+import {changePassword} from "../../store/authSlice";
+import DXSpinner from "../DXSpinner";
 
 
 const StyledInputBox = styled(InputBox)`
   margin-bottom: 10px;
   font-size: 20px;
-  width: 350px;
   padding: 2px;
+  width: 100%;
 `
 
 const ChangePasswordModal = ({isOpen, onRequestClose}) => {
+    const dispatch = useDispatch();
+    const {loading, error, success} = useSelector(store => store.auth);
+    const [tryingToChange, setTryingToChange] = useState(false);
+
     const [formData, setFormData] = useState({
         currentPassword: '',
         newPassword: '',
@@ -27,6 +35,69 @@ const ChangePasswordModal = ({isOpen, onRequestClose}) => {
             [e.target.name]: e.target.value
         }))
     }
+
+    const notification = {
+        title: "Error!",
+        type: "danger",
+        insert: "top",
+        container: "bottom-right",
+        animationIn: ["animate__animated", "animate__fadeInDown"],
+        dismiss: {
+            duration: 5000,
+            pauseOnHover: true,
+        }
+    }
+
+    const handleChangePassword = () => {
+        if (loading) return;
+        setTryingToChange(false);
+        if (!formData.currentPassword) {
+            return Store.addNotification({
+                ...notification,
+                message: "Enter your current password"
+            });
+        }
+
+        if (formData.newPassword !== formData.repeat) {
+            return Store.addNotification({
+                ...notification,
+                message: "Passwords doesn't match"
+            });
+        }
+
+        if (formData.newPassword.length < 6) {
+            return Store.addNotification({
+                ...notification,
+                message: "Password is too short"
+            })
+        }
+
+        dispatch(changePassword({currentPassword: formData.currentPassword, newPassword: formData.newPassword}))
+        setTryingToChange(true);
+    }
+
+    useEffect(() => {
+        const showNotification = () => {
+            if (!tryingToChange) return;
+            if (error) {
+                Store.addNotification({
+                    ...notification,
+                    message: error === 'wrong_password' ? 'Current password you entered is incorrect' : `Something went wrong: ${error}`
+                })
+            }
+
+            if (success) {
+                Store.addNotification({
+                    ...notification,
+                    title: "Success!",
+                    type: "success",
+                    message: "Password changed successfully"
+                })
+                onRequestClose();
+            }
+        }
+        showNotification();
+    }, [success, error, tryingToChange])
 
     return (
         <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose}>
@@ -41,7 +112,8 @@ const ChangePasswordModal = ({isOpen, onRequestClose}) => {
                     <StyledInputBox type={'password'} name={'newPassword'} onChange={handleChange}/>
                     <SectionName>Repeat new password</SectionName>
                     <StyledInputBox type={'password'} name={'repeat'} onChange={handleChange}/>
-                    <CutButton style={{marginTop: "20px"}}>Done</CutButton>
+                    <CutButton style={{marginTop: "20px"}} onClick={handleChangePassword}>{loading ?
+                        <DXSpinner/> : 'Done'}</CutButton>
                 </ModalContent>
             </ContentContainer>
         </ModalComponent>

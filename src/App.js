@@ -17,9 +17,6 @@ import "./styles/styles.css"
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import {checkAuthentication} from "./store/authSlice";
-import Modal from "react-modal";
-
-Modal.setAppElement('#root')
 
 const GlobalStyle = createGlobalStyle`
   * {

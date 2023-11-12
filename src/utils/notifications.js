@@ -13,14 +13,15 @@ export const notificationPM = (message) => {
     }
     if (document.hasFocus()) return;
 
+    const friends = state.friends.friends;
+    const senderIndex = friends.findIndex(friend => friend.id === message.sender_id);
+    const sender = friends[senderIndex];
+
     const send = () => {
-        const friends = state.friends.friends;
-        const senderIndex = friends.findIndex(friend => friend.id === message.sender_id);
-        const sender = friends[senderIndex];
         new Notification(sender.nickname, {
             body: message.content,
             silent: true,
-            icon: "https://cdn.discordapp.com/avatars/481447602425036800/eed0ad6c8e29168190b2d036609cd625.webp" //TODO check api
+            icon: `api/v1/cdn/users/${sender.id}/${sender.avatar_url}` //TODO check api
         })
     }
 
@@ -34,7 +35,16 @@ export const notificationPM = (message) => {
         })
     } else {
         Store.addNotification({
-
+            title: sender.nickname,
+            type: "info",
+            insert: "top",
+            container: "bottom-right",
+            animationIn: ["animate__animated", "animate__fadeInDown"],
+            dismiss: {
+                duration: 5000,
+                pauseOnHover: true,
+            },
+            message: message.content //TODO make custom notifications
         });
     }
 }

@@ -138,7 +138,7 @@ const chatSlice = createSlice({
                     onceFetched: true
                 };
             } else {
-                state.chats[payload.chatId].messages.unshift(parsedArr)
+                state.chats[payload.chatId].messages.unshift(...parsedArr)
                 state.chats[payload.chatId].isFetched = payload.messages.length < 20;
                 state.chats[payload.chatId].onceFetched = true;
             }

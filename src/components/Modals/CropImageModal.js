@@ -79,7 +79,7 @@ const CropImageModal = ({isOpen, onRequestClose, src, onImageCrop}) => {
     }, [isOpen])
 
     return (
-        <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose}>
+        <ModalComponent isOpen={isOpen}>
             <ContentContainer>
                 <Container>
                     <ModalName style={{marginBottom: "15px"}}>Crop image</ModalName>
