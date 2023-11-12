@@ -1,7 +1,7 @@
 import {io} from 'socket.io-client';
 
 import store from "../store";
-import {getFriends} from "../store/friendsSlice";
+import {getFriends, updateFriendProfile} from "../store/friendsSlice";
 import {addMessage, setChatTyping} from "../store/chatSlice";
 import {notificationPM} from "../utils/notifications";
 
@@ -16,6 +16,10 @@ socket.on('update-friend-list-request', () => {
 socket.on('new-private-message', (message) => {
     store.dispatch(addMessage({message, chatId: message.sender_id}))
     notificationPM(message);
+})
+
+socket.on('profile-update', (data) => {
+    store.dispatch(updateFriendProfile(data));
 })
 
 let typingTimeouts = {};

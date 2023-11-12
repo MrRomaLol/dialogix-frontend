@@ -150,6 +150,28 @@ const friendsSlice = createSlice({
                 state.friends.splice(friendIndex, 1);
                 state.friends.unshift(friend);
             }
+        },
+        updateFriendProfile(state, {payload}) {
+            const friendIndex = state.friends.findIndex(friend => friend.id === payload.id);
+            if (friendIndex >= 0) {
+                const friend = state.friends[friendIndex];
+                friend.nickname = payload.profileInfo.nickname;
+                friend.avatar_url = payload.profileInfo.avatar_url;
+                return;
+            }
+            const sentIndex = state.sent.findIndex(friend => friend.id === payload.id);
+            if (sentIndex >= 0) {
+                const friend = state.sent[sentIndex];
+                friend.nickname = payload.profileInfo.nickname;
+                friend.avatar_url = payload.profileInfo.avatar_url;
+                return;
+            }
+            const pendingIndex = state.pending.findIndex(friend => friend.id === payload.id);
+            if (pendingIndex >= 0) {
+                const friend = state.pending[pendingIndex];
+                friend.nickname = payload.profileInfo.nickname;
+                friend.avatar_url = payload.profileInfo.avatar_url;
+            }
         }
     },
     extraReducers: (builder) => {
@@ -260,6 +282,6 @@ const friendsSlice = createSlice({
     }
 })
 
-export const {setNotification} = friendsSlice.actions;
+export const {setNotification, updateFriendProfile} = friendsSlice.actions;
 
 export default friendsSlice.reducer;

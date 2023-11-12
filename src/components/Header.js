@@ -8,6 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGear} from "@fortawesome/free-solid-svg-icons";
 import {APP_SETTINGS_STATE, setAppState} from "../store/appStateSlice";
 import {IconFriendGuild} from "./Bars/SideIconParts";
+import StatusIndicator from "./StatusIndicator";
 
 const EobaniyBlyr = styled.span`
   position: fixed;
@@ -87,17 +88,25 @@ const LogoContainer = styled.div`
 `
 
 const IconsContainer = styled.div`
-  width: 100px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 110px;
   height: 100px;
 
   box-sizing: border-box;
 
-  padding: 14px;
+  padding: 14px 4px 14px 14px;
+`
+
+const SettingsContainer = styled(IconsContainer)`
+  justify-content: flex-end;
+  padding-right: 14px;
 `
 
 const SettingIcon = styled(FontAwesomeIcon)`
-  width: 100%;
   height: 100%;
+  aspect-ratio: 1;
 
   color: #9C63C8;
 
@@ -114,13 +123,24 @@ const Nickname = styled.p`
   font-size: 20px;
 `
 
+const MyAvatarIcon = styled(IconFriendGuild)`
+  height: 100%;
+  width: auto;
+  aspect-ratio: 1;
+`
+
 const Avatar = ({id, url, nick}) => {
     return (
         url ?
-            <IconFriendGuild style={{backgroundImage: `url(api/v1/cdn/users/${id}/${url})`}}/> :
-            <IconFriendGuild>{nick.substring(0, 1)}</IconFriendGuild>
+            <MyAvatarIcon style={{backgroundImage: `url(api/v1/cdn/users/${id}/${url})`}}/> :
+            <MyAvatarIcon>{nick.substring(0, 1)}</MyAvatarIcon>
     )
 }
+
+const HeaderStatusIndicator = styled(StatusIndicator)`
+  width: 20px;
+  height: 20px;
+`
 
 const Header = () => {
     const {userInfo} = useSelector((state) => state.auth);
@@ -144,11 +164,12 @@ const Header = () => {
 
                 <Container>
                     <Center>
-                        <IconsContainer>
+                        <SettingsContainer>
                             <SettingIcon icon={faGear} onClick={goToSettingsState}/>
-                        </IconsContainer>
+                        </SettingsContainer>
                         <IconsContainer>
                             <Avatar id={userInfo.id} url={userInfo.avatar_url} nick={userInfo.nickname}/>
+                            <HeaderStatusIndicator/>
                         </IconsContainer>
                     </Center>
                     <CenterBorder/>
