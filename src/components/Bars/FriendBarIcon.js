@@ -6,6 +6,7 @@ import {setChat} from "../../store/chatSlice";
 import AlertIcon from "../AlertIcon";
 import {setNotification} from "../../store/friendsSlice";
 import {BarsIconFriendGuild} from "./SideIconParts";
+import StatusIndicator from "../StatusIndicator";
 
 const Container = styled.div`
   display: flex;
@@ -40,21 +41,29 @@ const NewMessages = styled(AlertIcon)`
   right: 0;
 `
 
+const Status = styled(StatusIndicator)`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+`
+
 const FriendIcon = (props) => {
     return (
         props.url ?
             <BarsIconFriendGuild {...props}
                                  style={{backgroundImage: `url(api/v1/cdn/users/${props.id}/${props.url})`}}>
-                {props.hasNotification && <NewMessages/>}
+                {props.hasNotification ? <NewMessages/> : <Status status={props.status}/>}
             </BarsIconFriendGuild> :
             <BarsIconFriendGuild {...props}>
                 {props.nickname.substring(0, 1)}
-                {props.hasNotification && <NewMessages/>}
+                {props.hasNotification ? <NewMessages/> : <Status status={props.status}/>}
             </BarsIconFriendGuild>
     )
 }
 
-const FriendBarIcon = ({id, isSelected, hasNotification, avatarUrl, nickname}) => {
+const FriendBarIcon = ({id, isSelected, hasNotification, status, avatarUrl, nickname}) => {
     const dispatch = useDispatch();
     const [isHovered, setIsHovered] = useState(false);
 
@@ -91,7 +100,8 @@ const FriendBarIcon = ({id, isSelected, hasNotification, avatarUrl, nickname}) =
                         onMouseEnter={() => handleHover(true)}
                         onMouseLeave={() => handleHover(false)}
                         id={id} url={avatarUrl} nickname={nickname}
-                        hasNotification={hasNotification}/>
+                        hasNotification={hasNotification}
+                        status={status}/>
         </Container>
     );
 };

@@ -22,6 +22,7 @@ import {getRandomName} from "../../utils/random";
 import {socket} from "../../socket";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import getFileTypeByExtension from "../../utils/fileTypes";
+import {makePrivateCall} from "../../store/diallerSlice";
 
 const Container = styled.div`
   margin: 0 15px;
@@ -252,6 +253,10 @@ const InputChatBox = forwardRef(({name, id, onTextChange}, ref) => {
         setFiles([]);
     }
 
+    const handleMakePrivateCall = () => {
+        dispatch(makePrivateCall({userToCall: currentChatId}));
+    }
+
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' && event.shiftKey) {
             event.preventDefault();
@@ -338,7 +343,7 @@ const InputChatBox = forwardRef(({name, id, onTextChange}, ref) => {
                     />
                     <StyledSendButton icon={faPaperPlane} hasInput={getInput()} onClick={handleSendMessage}/>
                     <Separator/>
-                    <StyledCallButton icon={faPhone}/>
+                    <StyledCallButton icon={faPhone} onClick={handleMakePrivateCall}/>
                 </InputContainer>
             </InputBack>
             <InputBorder/>

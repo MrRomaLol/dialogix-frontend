@@ -7,14 +7,18 @@ export const APP_SETTINGS_STATE = 'appSettings';
 
 const initialState = {
     state: APP_LOADING_STATE,
+    isConnectedFromAnotherPlace: false,
 }
 
 const appState = createSlice({
     name: "appState",
     initialState,
     reducers: {
-        setAppState(state, action) {
-            state.state = action.payload.stateName
+        setAppState(state, {payload}) {
+            state.state = payload.stateName
+        },
+        setIsConnectedFromAnotherPlace(state, {payload}) {
+            state.isConnectedFromAnotherPlace = true;
         }
     },
     extraReducers: (builder) => {
@@ -23,7 +27,7 @@ const appState = createSlice({
 })
 
 
-export const {setAppState} = appState.actions;
+export const {setAppState, setIsConnectedFromAnotherPlace} = appState.actions;
 
 export default appState.reducer;
 

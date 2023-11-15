@@ -1,9 +1,11 @@
-import {createAsyncThunk, createSlice, unwrapResult} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {getFriends} from "./friendsSlice";
 import {getGuilds} from "./guildsSlice";
 import {revertAll} from "./index";
+import {getData, postData} from "../axios";
 
 const initialState = {
+    settings: {},
     loading: true,
     error: null,
 }
@@ -11,13 +13,42 @@ const initialState = {
 export const fetchAllData = createAsyncThunk(
     'fetch/all',
     async (_, {dispatch}) => {
+        const fetchSettings = new Promise(async resolve => {
+            const res = await getData('/api/v1/profile/settings');
+
+            if (res.ok) {
+                resolve(res.settings);
+            }
+        })
+
         const promises = [
+            fetchSettings,
             dispatch(getFriends()),
-            dispatch(getGuilds())
+            dispatch(getGuilds()),
         ]
 
-        const actions = await Promise.all(promises);
-        return actions.map(unwrapResult);
+        const results = await Promise.all(promises);
+        return results[0];
+    }
+)
+
+export const updateUserSetting = createAsyncThunk(
+    'fetch/updateUserSetting',
+    async ({id, settingName, settingValue}, {rejectedWithValue}) => {
+        try {
+            const data = {
+                settingId: id,
+                settingName,
+                settingValue
+            }
+
+            const res = await postData('/api/v1/profile/settings', data);
+
+            return res.setting;
+
+        } catch (err) {
+            rejectedWithValue(err.message);
+        }
     }
 )
 
@@ -33,8 +64,24 @@ const fetchSlice = createSlice({
         })
         builder.addCase(fetchAllData.fulfilled, (state, {payload}) => {
             state.loading = false;
+            state.settings = payload;
         })
         builder.addCase(fetchAllData.rejected, (state, {payload}) => {
+            state.loading = false;
+            state.error = payload;
+        })
+        builder.addCase(updateUserSetting.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        builder.addCase(updateUserSetting.fulfilled, (state, {payload}) => {
+            state.loading = false;
+            state.settings[payload.settingName] = {
+                id: payload.id,
+                settingValue: payload.settingValue,
+            }
+        })
+        builder.addCase(updateUserSetting.rejected, (state, {payload}) => {
             state.loading = false;
             state.error = payload;
         })

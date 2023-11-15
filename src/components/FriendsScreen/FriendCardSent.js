@@ -11,6 +11,7 @@ import {
 } from "./FriendCardStyledParts";
 import {useDispatch} from "react-redux";
 import {unSendFriendRequest} from "../../store/friendsSlice";
+import {FriendCardAvatar} from "./FriendCard";
 
 const FriendSentCardIconsContainer = styled(FriendCardIconsContainer)`
   justify-content: center;
@@ -24,7 +25,7 @@ const XIcon = styled(FriendCardIcon)`
   }
 `
 
-const FriendCardSent = ({nick, id}) => {
+const FriendCardSent = ({nick, id, avatarUrl}) => {
     const dispatch = useDispatch();
 
     const handleUnset = () => {
@@ -38,15 +39,7 @@ const FriendCardSent = ({nick, id}) => {
                     <XIcon icon={faXmark} onClick={handleUnset}/>
                 </FriendSentCardIconsContainer>
                 <FriendCardContainer>
-                    <div style={{
-                        width: "72px",
-                        height: "72px",
-                        borderRadius: "50%",
-                        backgroundColor: "gray",
-                        marginRight: "10px",
-                        marginLeft: "10px"
-                    }}>
-                    </div>
+                    <FriendCardAvatar id={id} nick={nick} url={avatarUrl}/>
                     {nick}
                 </FriendCardContainer>
             </FriendCardBack>

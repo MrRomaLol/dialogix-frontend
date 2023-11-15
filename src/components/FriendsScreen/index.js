@@ -6,9 +6,9 @@ import {faMagnifyingGlass, faUser, faUserClock, faUserPlus} from "@fortawesome/f
 import useWindowSize from "../../hooks/useWindowSize";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    FRIENDS_SCREEN_ADD_FRIENDS_TAB,
-    FRIENDS_SCREEN_FRIENDS_TAB,
-    FRIENDS_SCREEN_PENDING_TAB,
+    FRIENDS_SUBSCREEN_ADD_FRIENDS_TAB,
+    FRIENDS_SUBSCREEN_FRIENDS_TAB,
+    FRIENDS_SUBSCREEN_PENDING_TAB,
     setSubScreen
 } from "../../store/screenStateSlice";
 import FriendListTab from "./FriendListTab";
@@ -147,11 +147,11 @@ const FriendsScreen = () => {
 
     const subScreenComponent = useMemo(() => {
         switch (subScreenName) {
-            case FRIENDS_SCREEN_FRIENDS_TAB:
+            case FRIENDS_SUBSCREEN_FRIENDS_TAB:
                 return <FriendListTab searchQuery={searchQuery}/>;
-            case FRIENDS_SCREEN_PENDING_TAB:
+            case FRIENDS_SUBSCREEN_PENDING_TAB:
                 return <FriendSentPendingTab searchQuery={searchQuery}/>;
-            case FRIENDS_SCREEN_ADD_FRIENDS_TAB:
+            case FRIENDS_SUBSCREEN_ADD_FRIENDS_TAB:
                 return <FriendAddTab/>;
             default:
                 return null;
@@ -165,13 +165,13 @@ const FriendsScreen = () => {
     return (
         <FullScreenContainer>
             <Tabs>
-                <Tab name={"Friends"} isSelected={subScreenName === FRIENDS_SCREEN_FRIENDS_TAB} icon={faUser}
-                     onClick={() => setTab(FRIENDS_SCREEN_FRIENDS_TAB)}/>
-                <Tab name={"Pending"} isSelected={subScreenName === FRIENDS_SCREEN_PENDING_TAB} icon={faUserClock}
-                     onClick={() => setTab(FRIENDS_SCREEN_PENDING_TAB)}/>
-                <Tab name={"Add friend"} isSelected={subScreenName === FRIENDS_SCREEN_ADD_FRIENDS_TAB} icon={faUserPlus}
-                     onClick={() => setTab(FRIENDS_SCREEN_ADD_FRIENDS_TAB)}/>
-                {subScreenName !== FRIENDS_SCREEN_ADD_FRIENDS_TAB &&
+                <Tab name={"Friends"} isSelected={subScreenName === FRIENDS_SUBSCREEN_FRIENDS_TAB} icon={faUser}
+                     onClick={() => setTab(FRIENDS_SUBSCREEN_FRIENDS_TAB)}/>
+                <Tab name={"Pending"} isSelected={subScreenName === FRIENDS_SUBSCREEN_PENDING_TAB} icon={faUserClock}
+                     onClick={() => setTab(FRIENDS_SUBSCREEN_PENDING_TAB)}/>
+                <Tab name={"Add friend"} isSelected={subScreenName === FRIENDS_SUBSCREEN_ADD_FRIENDS_TAB} icon={faUserPlus}
+                     onClick={() => setTab(FRIENDS_SUBSCREEN_ADD_FRIENDS_TAB)}/>
+                {subScreenName !== FRIENDS_SUBSCREEN_ADD_FRIENDS_TAB &&
                     <SearchField searchInput={searchQuery} onInputChange={handleInputChange}/>}
             </Tabs>
             {subScreenComponent}

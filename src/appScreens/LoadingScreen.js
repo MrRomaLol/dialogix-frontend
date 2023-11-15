@@ -5,6 +5,8 @@ import {APP_OPENED_STATE, setAppState} from "../store/appStateSlice";
 import {ScreenContainer} from "./ScreenContainer";
 import {getFriends} from "../store/friendsSlice";
 import {fetchAllData} from "../store/fetchSlice";
+import {setUserStatus} from "../store/authSlice";
+import {socket} from "../socket";
 
 const Container = styled.div`
   height: 100%;
@@ -70,21 +72,33 @@ const PSecondary = styled(P)`
 `
 
 const LoadingScreen = () => {
-    const dispatch = useDispatch()
-
-    const {loading} = useSelector(state => state.fetchRoot)
-
-    useEffect(() => {
-        dispatch(fetchAllData());
-    }, [])
+    const dispatch = useDispatch();
+    const {userInfo} = useSelector(state => state.auth);
 
     useEffect(() => {
-        if (!loading) {
-            setTimeout(() => {
-                dispatch(setAppState({stateName: APP_OPENED_STATE}));
-            }, 100)
+        if (userInfo) {
+            socket.connect();
+
+            socket.on('connect', () => {
+                socket.emit('my-id', userInfo.id, () => {
+                    dispatch(fetchAllData()).unwrap()
+                        .then((payload) => {
+                            setTimeout(() => {
+                                dispatch(setAppState({stateName: APP_OPENED_STATE}));
+                            }, 100);
+                            const status = payload.user_status.value;
+
+                            dispatch(setUserStatus({status}))
+                        });
+                });
+            })
+
+            socket.on('reconnect', () => {
+                socket.emit('my-id', userInfo.id);
+            })
         }
-    }, [dispatch, loading]);
+    }, [userInfo])
+
 
     return (
         <ScreenContainer>

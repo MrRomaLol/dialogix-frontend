@@ -13,48 +13,46 @@ const IndicatorBack = styled.div`
   align-items: center;
 `
 
-const Online = () => {
-    return(
+export const OnlineStatus = () => {
+    return (
         <IndicatorBack style={{backgroundColor: "rgb(64,200,0)"}}/>
     )
 }
 
-const Away = () => {
-    return(
+export const AwayStatus = () => {
+    return (
         <IndicatorBack>
             <FontAwesomeIcon icon={faMoon} color={'yellow'} style={{width: '100%', height: '100%'}}/>
         </IndicatorBack>
     )
 }
 
-const DND = () => {
-    return(
+export const DNDStatus = () => {
+    return (
         <IndicatorBack style={{backgroundColor: "red"}}>
-            <div style={{width: '80%', aspectRatio:"3 / 1", backgroundColor: "rgba(0,0,0,0.5)"}}></div>
+            <div style={{width: '80%', aspectRatio: "3 / 1", backgroundColor: "rgba(0,0,0,0.5)"}}></div>
         </IndicatorBack>
     )
 }
 
-const Offline = () => {
-    return(
+export const OfflineStatus = () => {
+    return (
         <IndicatorBack style={{backgroundColor: "rgba(0,0,0,0.6)"}}></IndicatorBack>
     )
 }
 
-const StatusIndicator = ({className}) => {
-    const status = 'dnd';
-
+const StatusIndicator = (props) => {
     const indicator = useMemo(() => {
         return {
-            online: <Online/>,
-            away: <Away/>,
-            dnd: <DND/>,
-            offline: <Offline/>,
-        }[status];
-    }, [status])
+            online: <OnlineStatus/>,
+            away: <AwayStatus/>,
+            dnd: <DNDStatus/>,
+            offline: <OfflineStatus/>,
+        }[props.status];
+    }, [props.status])
 
     return (
-        <div className={className}>
+        <div {...props}>
             {indicator}
         </div>
     );

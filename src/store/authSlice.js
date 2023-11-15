@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {getData, postData} from "../axios";
-import {socket} from "../socket";
 import {revertAll} from "./index";
+import {socket} from "../socket";
 
 const initialState = {
     loading: false,
@@ -96,8 +96,6 @@ export const changePassword = createAsyncThunk(
 
             const res = await postData('/api/v1/changepassword', data);
 
-            console.log(res);
-
             if (!res.ok) {
                 if (res.status === 'unauthorized' || res.status === 'wrong_password') {
                     return rejectWithValue(res.status);
@@ -133,6 +131,21 @@ export const updateProfile = createAsyncThunk(
 
         } catch (err) {
             return rejectWithValue(err.message);
+        }
+    }
+)
+
+export const setUserStatus = createAsyncThunk(
+    'auth/setStatus',
+    async ({status}, {rejectWithValue}) => {
+        const promise = await new Promise((resolve) => {
+            socket.emit('change-status', status, (newStatus) => {
+                resolve(newStatus);
+            });
+        });
+
+        return {
+            status: promise,
         }
     }
 )
@@ -230,6 +243,17 @@ const authSlice = createSlice({
         builder.addCase(updateProfile.rejected, (state, {payload}) => {
             state.loading = false
             state.error = payload
+        })
+        builder.addCase(setUserStatus.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
+        builder.addCase(setUserStatus.fulfilled, (state, {payload}) => {
+            state.loading = false
+            state.userInfo.status = payload.status;
+        })
+        builder.addCase(setUserStatus.rejected, (state, {payload}) => {
+            state.loading = false
         })
     }
 })

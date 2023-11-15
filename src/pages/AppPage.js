@@ -14,18 +14,19 @@ import AppScreen from "../appScreens/AppScreen";
 import SettingsScreen from "../appScreens/SettingsScreen";
 import {useTransition, animated} from 'react-spring';
 import {easings} from '@react-spring/web'
-import {DisconnectSocket, socket} from "../socket";
+import {DisconnectSocket} from "../socket";
 import ConnectedFromAnotherPlaceModal from "../components/Modals/ConnectedFromAnotherPlaceModal";
 import AudioPlayer from "../components/AudioPlayer";
+import CallModal from "../components/Modals/CallModal";
+import StreamPlayer from "../components/StreamPlayer";
 
 const AppPage = () => {
     const size = useWindowSize();
-    const [isAnotherPlace, setIsAnotherPlace] = useState(false);
-    const {userInfo} = useSelector(state => state.auth);
-    const appStateName = useSelector(state => state.appState.state);
+    const {state, isConnectedFromAnotherPlace} = useSelector(state => state.appState);
+    const {isCalling} = useSelector(state => state.dialler);
 
     const stateComponent = useMemo(() => {
-        switch (appStateName) {
+        switch (state) {
             case APP_LOADING_STATE:
                 return <LoadingScreen/>;
             case APP_OPENED_STATE:
@@ -35,7 +36,7 @@ const AppPage = () => {
             default:
                 return null;
         }
-    }, [appStateName]);
+    }, [state]);
 
     const transitions = useTransition(stateComponent, {
         from: {opacity: 0, transform: 'scale(1.3)'},
@@ -45,33 +46,16 @@ const AppPage = () => {
     });
 
     useEffect(() => {
-        if (userInfo) {
-            socket.connect();
-
-            socket.on('connect', () => {
-                socket.emit('my-id', userInfo.id);
-            })
-
-            socket.on('reconnect', () => {
-                socket.emit('my-id', userInfo.id);
-            })
-        }
-
-        socket.on('connect-from-another-place', () => {
-            setIsAnotherPlace(true);
-            DisconnectSocket();
-        })
-
         return () => {
             DisconnectSocket();
         }
-    }, [userInfo])
+    }, [])
 
     return (
-        <React.Fragment>
+        <>
             {size.width < 675 ?
                 (<SmallScreen/>) :
-                (<React.Fragment>
+                (<>
                     <AppBackground/>
                     <AppContent>
                         {window.IS_USING_DIALOGIX_APP && <ElectronHeader/>}
@@ -90,12 +74,13 @@ const AppPage = () => {
                                 ) : null
                             )}
                         </div>
-                        <AudioPlayer/>
                     </AppContent>
-                </React.Fragment>)}
-            <ConnectedFromAnotherPlaceModal isOpen={isAnotherPlace}/>
-            {/*<CallModal/>*/}
-        </React.Fragment>
+                </>)}
+            <AudioPlayer/>
+            <StreamPlayer/>
+            <ConnectedFromAnotherPlaceModal isOpen={isConnectedFromAnotherPlace}/>
+            {isCalling && <CallModal/>}
+        </>
     );
 };
 

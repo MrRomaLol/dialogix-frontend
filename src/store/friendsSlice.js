@@ -172,6 +172,13 @@ const friendsSlice = createSlice({
                 friend.nickname = payload.profileInfo.nickname;
                 friend.avatar_url = payload.profileInfo.avatar_url;
             }
+        },
+        updateFriendStatus(state, {payload}) {
+            const friendIndex = state.friends.findIndex(friend => friend.id === payload.id);
+            if (friendIndex >= 0) {
+                const friend = state.friends[friendIndex];
+                friend.status = payload.status;
+            }
         }
     },
     extraReducers: (builder) => {
@@ -282,6 +289,6 @@ const friendsSlice = createSlice({
     }
 })
 
-export const {setNotification, updateFriendProfile} = friendsSlice.actions;
+export const {setNotification, updateFriendProfile, updateFriendStatus} = friendsSlice.actions;
 
 export default friendsSlice.reducer;

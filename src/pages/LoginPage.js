@@ -57,14 +57,9 @@ const RMFPText = styled.p`
   color: #F0CDFC;
 `
 
-const RemMeForgotPassword = () => {
-
+const ForgotPassword = () => {
     return (
-        <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: "50px"}}>
-            <div style={{display: "flex", flexDirection: "row",}}>
-                <input type={"checkbox"} style={{marginRight: "10px"}}/>
-                <RMFPText>Remember me?</RMFPText>
-            </div>
+        <div style={{display: "flex", marginBottom: "50px", justifyContent: "flex-end"}}>
             <RMFPText>Forgot password?</RMFPText>
         </div>
     );
@@ -155,6 +150,12 @@ const LoginPage = () => {
             });
     }
 
+    const handleSubmit = e => {
+        if(e.keyCode === 13) {
+            handleLogin();
+        }
+    }
+
     const goToRegister = () => {
         navigate('/register');
     }
@@ -166,14 +167,14 @@ const LoginPage = () => {
                 {window.IS_USING_DIALOGIX_APP && <ElectronHeader/>}
                 <StyledAppContent>
                     <ContentContainer>
-                        <div style={{padding: "30px 60px 30px 60px", display: "flex", flexDirection: "column"}}>
+                        <div style={{padding: "30px 60px 30px 60px", display: "flex", flexDirection: "column"}} onKeyDown={handleSubmit}>
                             <LRNameDX>DIALOGIX</LRNameDX>
                             <LTGS>Login to get started!</LTGS>
 
                             <LRInput placeholder={"Email / Username"} name={'username'} onChange={handleChange}/>
-                            <LRInput placeholder={"Password"} name={'password'} onChange={handleChange}/>
+                            <LRInput placeholder={"Password"} name={'password'} onChange={handleChange} type={'password'}/>
 
-                            <RemMeForgotPassword/>
+                            <ForgotPassword/>
 
                             <Button onClick={handleLogin}>{loading ? <DXSpinner/> : 'Login'}</Button>
 

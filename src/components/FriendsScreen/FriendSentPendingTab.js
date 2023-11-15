@@ -66,7 +66,7 @@ const FriendSentPendingTab = ({searchQuery}) => {
                     <Name>Pending</Name>
                     <Separator/>
                 </SeparatorContainer>
-                {filteredPending.map((friend) => (<FriendCardPending key={friend.id} nick={friend.nickname} id={friend.id}/>))}
+                {filteredPending.map((friend) => (<FriendCardPending key={friend.id} nick={friend.nickname} id={friend.id} avatarUrl={friend.avatar_url}/>))}
             </>}
 
             {!!filteredSent.length && <>
@@ -74,7 +74,7 @@ const FriendSentPendingTab = ({searchQuery}) => {
                     <Name>Sent</Name>
                     <Separator/>
                 </SeparatorContainer>
-                {filteredSent.map((friend) => (<FriendCardSent key={friend.id} nick={friend.nickname} id={friend.id}/>))}
+                {filteredSent.map((friend) => (<FriendCardSent key={friend.id} nick={friend.nickname} id={friend.id} avatarUrl={friend.avatar_url}/>))}
             </>}
         </Grid>
     );

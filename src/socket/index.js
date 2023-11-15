@@ -1,41 +1,37 @@
 import {io} from 'socket.io-client';
 
 import store from "../store";
-import {getFriends, updateFriendProfile} from "../store/friendsSlice";
-import {addMessage, setChatTyping} from "../store/chatSlice";
-import {notificationPM} from "../utils/notifications";
+import {getFriends, updateFriendProfile, updateFriendStatus} from "../store/friendsSlice";
+import {setIsConnectedFromAnotherPlace} from "../store/appStateSlice";
 
 export const socket = io('/', {
     autoConnect: false,
 });
 
-socket.on('update-friend-list-request', () => {
-    store.dispatch(getFriends());
+socket.on('connect-from-another-place', () => {
+    store.dispatch(setIsConnectedFromAnotherPlace());
+    DisconnectSocket();
 })
 
-socket.on('new-private-message', (message) => {
-    store.dispatch(addMessage({message, chatId: message.sender_id}))
-    notificationPM(message);
+socket.on('update-friend-list-request', () => {
+    store.dispatch(getFriends());
 })
 
 socket.on('profile-update', (data) => {
     store.dispatch(updateFriendProfile(data));
 })
 
-let typingTimeouts = {};
-socket.on('private-message-typing', (userId) => {
-    store.dispatch(setChatTyping({userId, isUserTyping: true}));
-    if (typingTimeouts[userId]) {
-        clearTimeout(typingTimeouts[userId]);
-    }
-
-    typingTimeouts[userId] = setTimeout(() => {
-        store.dispatch(setChatTyping({userId, isUserTyping: false}));
-        delete typingTimeouts[userId];
-    }, 1500);
+socket.on('user-status-update', (data) => {
+    store.dispatch(updateFriendStatus(data));
 })
+
+require('./chat');
+require('./voice');
+
 
 export const DisconnectSocket = () => {
     socket.disconnect();
+    socket.off('connect');
+    socket.off('reconnect');
     socket.close();
 }

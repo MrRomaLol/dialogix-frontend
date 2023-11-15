@@ -24,4 +24,11 @@ export default configureStore({
         dialler: diallerReducer,
         theme: themeReducer,
     },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: ['dialler/setStream'],
+                ignoredPaths: ['dialler.stream'],
+            },
+        }),
 })

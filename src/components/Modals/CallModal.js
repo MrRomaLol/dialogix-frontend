@@ -4,6 +4,9 @@ import ContentContainer from "../ContentContainer";
 import styled, {keyframes} from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPhoneSlash, faPhoneVolume} from "@fortawesome/free-solid-svg-icons";
+import {useDispatch, useSelector} from "react-redux";
+import {IconFriendGuild} from "../Bars/SideIconParts";
+import {acceptPrivateCall} from "../../store/diallerSlice";
 
 const CallContainer = styled(ContentContainer)`
   width: 100%;
@@ -16,10 +19,7 @@ const Inner = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding-top: 30px;
-  padding-right: 40px;
-  padding-left: 40px;
-  padding-bottom: 30px;
+  padding: 30px 40px;
 `
 
 const Ava = styled.div`
@@ -131,7 +131,39 @@ const HangupBack = styled(ButtonBack)`
   }
 `
 
+const MyAvatarIcon = styled(IconFriendGuild)`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: white;
+  margin-bottom: 20px;
+`
+
+const Avatar = ({id, url, nick}) => {
+    return (
+        url ?
+            <MyAvatarIcon style={{backgroundImage: `url(api/v1/cdn/users/${id}/${url})`}}/> :
+            <MyAvatarIcon>{nick.substring(0, 1)}</MyAvatarIcon>
+    )
+}
+
 const CallModal = () => {
+    const dispatch = useDispatch();
+    const {callingId} = useSelector(state => state.dialler);
+    const {friends} = useSelector(state => state.friends);
+
+    const callingUser = useMemo(() => {
+        return friends.find(friend => friend.id === callingId);
+    }, [callingId]);
+
+    const handleAcceptCall = () =>{
+        dispatch(acceptPrivateCall());
+    }
+
+    const handleCancelCall = () => {
+
+    }
+
     const initialPosition = useMemo(() => {
         return {
             x: (window.innerWidth - 350) / 2,
@@ -145,16 +177,16 @@ const CallModal = () => {
                 <CallContainer backgroundColor={'rgba(32,6,57,0.8)'}>
                     <Inner>
                         <Info>
-                            <Ava/>
-                            <Calling style={{marginBottom: "15px", fontSize: "20px"}}>12345678901234567890</Calling>
+                            <Avatar id={callingUser.id} nick={callingUser.nickname} url={callingUser.avatar_url}/>
+                            <Calling style={{marginBottom: "15px", fontSize: "20px"}}>{callingUser.nickname}</Calling>
                             <Calling>calling...</Calling>
                         </Info>
                         <CallButtons>
                             <AnswerBack>
-                                <AnswerIcon icon={faPhoneVolume}/>
+                                <AnswerIcon icon={faPhoneVolume} onClick={handleAcceptCall}/>
                             </AnswerBack>
                             <HangupBack>
-                                <ButtonsIcon icon={faPhoneSlash}/>
+                                <ButtonsIcon icon={faPhoneSlash} onClick={handleCancelCall}/>
                             </HangupBack>
                         </CallButtons>
                     </Inner>

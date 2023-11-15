@@ -6,9 +6,9 @@ import {faPlus, faUser} from "@fortawesome/free-solid-svg-icons";
 import {IconSeparator} from "./SideIconParts";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    FRIENDS_SCREEN, FRIENDS_SCREEN_ADD_FRIENDS_TAB,
-    FRIENDS_SCREEN_FRIENDS_TAB,
-    FRIENDS_SCREEN_PENDING_TAB, SERVER_SCREEN,
+    FRIENDS_SCREEN, FRIENDS_SUBSCREEN_ADD_FRIENDS_TAB,
+    FRIENDS_SUBSCREEN_FRIENDS_TAB,
+    FRIENDS_SUBSCREEN_PENDING_TAB, SERVER_SCREEN,
     setScreen,
     setSubScreen
 } from "../../store/screenStateSlice";
@@ -66,18 +66,18 @@ const FriendsSideBar = () => {
 
     const goToFriendsScreen = () => {
         dispatch(setScreen({screenName: FRIENDS_SCREEN}));
-        dispatch(setSubScreen({subScreenName: FRIENDS_SCREEN_FRIENDS_TAB}));
+        dispatch(setSubScreen({subScreenName: FRIENDS_SUBSCREEN_FRIENDS_TAB}));
     }
 
     const goToPending = e => {
         dispatch(setScreen({screenName: FRIENDS_SCREEN}));
-        dispatch(setSubScreen({subScreenName: FRIENDS_SCREEN_PENDING_TAB}));
+        dispatch(setSubScreen({subScreenName: FRIENDS_SUBSCREEN_PENDING_TAB}));
         e.stopPropagation();
     }
 
     const goToAdd = () => {
         dispatch(setScreen({screenName: FRIENDS_SCREEN}));
-        dispatch(setSubScreen({subScreenName: FRIENDS_SCREEN_ADD_FRIENDS_TAB}));
+        dispatch(setSubScreen({subScreenName: FRIENDS_SUBSCREEN_ADD_FRIENDS_TAB}));
     }
 
     const handleMouseLeft = (state) => {
@@ -107,6 +107,7 @@ const FriendsSideBar = () => {
                                     {friends.map((friend) => (<FriendBarIcon key={friend.id} id={friend.id}
                                                                              avatarUrl={friend.avatar_url}
                                                                              nickname={friend.nickname}
+                                                                             status={friend.status}
                                                                              isSelected={currentChatId === friend.id}
                                                                              hasNotification={friend.hasNotification}/>))}
                                 </ScrollerBar>

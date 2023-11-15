@@ -14,7 +14,9 @@ const FriendListTab = ({searchQuery}) => {
 
     return (
         <Grid className={"scroll-bar"}>
-            {filteredFriends.map((friend) => (<FriendCard key={friend.id} nick={friend.nickname} id={friend.id}/>))}
+            {filteredFriends.map((friend) => (
+                <FriendCard key={friend.id} nick={friend.nickname} id={friend.id} avatarUrl={friend.avatar_url}
+                            status={friend.status}/>))}
         </Grid>
     );
 };

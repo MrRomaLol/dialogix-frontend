@@ -9,6 +9,10 @@ import {faGear} from "@fortawesome/free-solid-svg-icons";
 import {APP_SETTINGS_STATE, setAppState} from "../store/appStateSlice";
 import {IconFriendGuild} from "./Bars/SideIconParts";
 import StatusIndicator from "./StatusIndicator";
+import {Tooltip} from "react-tooltip";
+import StatusSelect from "./StatusSelect";
+import {setUserStatus} from "../store/authSlice";
+import {updateUserSetting} from "../store/fetchSlice";
 
 const EobaniyBlyr = styled.span`
   position: fixed;
@@ -140,11 +144,22 @@ const Avatar = ({id, url, nick}) => {
 const HeaderStatusIndicator = styled(StatusIndicator)`
   width: 20px;
   height: 20px;
+  transition-duration: 200ms;
+
+  &:hover {
+    filter: brightness(75%);
+  }
 `
 
 const Header = () => {
-    const {userInfo} = useSelector((state) => state.auth);
+    const {userInfo, loading} = useSelector((state) => state.auth);
+    const userStatusSetting = useSelector((state) => state.fetchRoot.settings.user_status);
     const dispatch = useDispatch();
+
+    const handleChangeStatus = (status) => {
+        dispatch(setUserStatus({status}));
+        dispatch(updateUserSetting({settingName: "user_status", id: userStatusSetting.id, settingValue: status}))
+    }
 
     const goToMainScreen = () => {
         dispatch(setScreen({screenName: MAIN_SCREEN}))
@@ -155,7 +170,7 @@ const Header = () => {
     }
 
     return (
-        <React.Fragment>
+        <>
             <EobaniyBlyr>
                 <ContainerLR>
                     <Left/>
@@ -169,7 +184,7 @@ const Header = () => {
                         </SettingsContainer>
                         <IconsContainer>
                             <Avatar id={userInfo.id} url={userInfo.avatar_url} nick={userInfo.nickname}/>
-                            <HeaderStatusIndicator/>
+                            <HeaderStatusIndicator data-tooltip-id="change-status-menu" status={userInfo.status}/>
                         </IconsContainer>
                     </Center>
                     <CenterBorder/>
@@ -185,7 +200,10 @@ const Header = () => {
             <LogoContainer>
                 <Logotype onClick={goToMainScreen}/>
             </LogoContainer>
-        </React.Fragment>
+            <Tooltip id="change-status-menu" place={'bottom'} openOnClick clickable>
+                <StatusSelect onChange={handleChangeStatus} currentStatus={userInfo.status} isStatusLoading={loading}/>
+            </Tooltip>
+        </>
     );
 };
 

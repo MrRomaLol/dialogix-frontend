@@ -10,12 +10,14 @@ const iconPath = path.join(__dirname, 'icons', 'DialogiX256.ico');
 
 const store = new Store();
 
-const DIALOGIX_APP_URL = 'http://localhost:3000'
+const DIALOGIX_APP_URL = 'https://localhost:3000'
 
 let mainWindow;
 let trayIcon;
 
 function createWindow() {
+    app.commandLine.appendSwitch('ignore-certificate-errors')
+
     if (process.platform === 'win32') {
         app.setAppUserModelId('DialogiX');
     }
