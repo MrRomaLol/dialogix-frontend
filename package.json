@@ -29,6 +29,7 @@
     "animate.css": "^4.1.1",
     "axios": "^1.5.0",
     "i18next": "^23.5.1",
+    "process": "^0.11.10",
     "react": "^18.2.0",
     "react-awesome-reveal": "^4.2.5",
     "react-dom": "^18.2.0",
@@ -49,6 +50,7 @@
     "simple-peer": "^9.11.1",
     "socket.io-client": "^4.7.2",
     "styled-components": "^5.3.11",
+    "use-sound": "^4.0.1",
     "web-vitals": "^2.1.4"
   },
   "eslintConfig": {

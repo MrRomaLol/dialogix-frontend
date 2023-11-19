@@ -10,8 +10,8 @@ import {
 import styled from "styled-components";
 import {useDispatch} from "react-redux";
 import {deleteFriend} from "../../store/friendsSlice";
-import {IconFriendGuild} from "../Bars/SideIconParts";
 import StatusIndicator from "../StatusIndicator";
+import Avatar from "../FriendAvatar";
 
 const SettingsIcon = styled(FriendCardIcon)`
   color: #C087D4;
@@ -23,28 +23,19 @@ const SettingsIcon = styled(FriendCardIcon)`
   }
 `
 
-const MyAvatarIcon = styled(IconFriendGuild)`
-  position: relative;
-  height: 72px;
-  width: 72px;
-  margin-right: 10px;
-  margin-left: 10px;
-`
-
-export const FriendCardAvatar = ({id, url, nick, children}) => {
-    return (
-        url ?
-            <MyAvatarIcon style={{backgroundImage: `url(api/v1/cdn/users/${id}/${url})`}}>{children}</MyAvatarIcon> :
-            <MyAvatarIcon>{nick.substring(0, 1)}{children}</MyAvatarIcon>
-    )
-}
-
 const Status = styled(StatusIndicator)`
   position: absolute;
   bottom: 0;
   right: 0;
   width: 20px;
   height: 20px;
+`
+
+export const FriendCardAvatar = styled(Avatar)`
+  height: 72px;
+  width: 72px;
+  margin-left: 10px;
+  margin-right: 10px;
 `
 
 const FriendCard = ({nick, id, avatarUrl, status}) => {

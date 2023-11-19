@@ -62,6 +62,7 @@ const FriendsSideBar = () => {
     const [isRolled, setIsRolled] = useState(false);
     const screenName = useSelector(state => state.screenState.screen);
     const {friends, pending} = useSelector(state => state.friends);
+    const {isCurrentlyInCall, callingId} = useSelector(state => state.dialler);
     const {currentChatId} = useSelector(state => state.chat);
 
     const goToFriendsScreen = () => {
@@ -109,7 +110,8 @@ const FriendsSideBar = () => {
                                                                              nickname={friend.nickname}
                                                                              status={friend.status}
                                                                              isSelected={currentChatId === friend.id}
-                                                                             hasNotification={friend.hasNotification}/>))}
+                                                                             hasNotification={friend.hasNotification}
+                                                                             isInVoice={isCurrentlyInCall && callingId === friend.id}/>))}
                                 </ScrollerBar>
                             </ScrollerBarBox>
                         </>}

@@ -5,7 +5,7 @@ const AudioPlayer = () => {
     return (
         <audio id={'dx-audio-player'} autoPlay={false}/>
     );
-};
+}
 
 export const playNotificationSound = () => {
     const audioRef = document.getElementById('dx-audio-player');

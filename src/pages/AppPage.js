@@ -19,11 +19,14 @@ import ConnectedFromAnotherPlaceModal from "../components/Modals/ConnectedFromAn
 import AudioPlayer from "../components/AudioPlayer";
 import CallModal from "../components/Modals/CallModal";
 import StreamPlayer from "../components/StreamPlayer";
+import useSound from "use-sound";
+import beeps from "../sounds/beeps.mp3"
 
 const AppPage = () => {
     const size = useWindowSize();
     const {state, isConnectedFromAnotherPlace} = useSelector(state => state.appState);
-    const {isCalling} = useSelector(state => state.dialler);
+    const {isCalling, isMeTryingToCall} = useSelector(state => state.dialler);
+    const [play, {stop, duration}] = useSound(beeps, {loop: true})
 
     const stateComponent = useMemo(() => {
         switch (state) {
@@ -44,6 +47,17 @@ const AppPage = () => {
         leave: {opacity: 0, transform: 'scale(0.7)'},
         config: {duration: 500, easing: easings.easeInOutBack}
     });
+
+    useEffect(() => {
+        if (duration && isMeTryingToCall) {
+            play();
+        }
+        return() => {
+            if (duration) {
+                stop();
+            }
+        }
+    }, [duration, isMeTryingToCall]);
 
     useEffect(() => {
         return () => {

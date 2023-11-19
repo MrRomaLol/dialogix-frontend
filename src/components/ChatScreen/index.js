@@ -14,6 +14,7 @@ import typingAnimation from "../../animations/typing.json"
 import Lottie from "react-lottie-player";
 import {useDropzone} from "react-dropzone";
 import DnDModal from "../Modals/DnDModal";
+import CallingHeader from "./CallingHeader";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;
@@ -81,11 +82,13 @@ const ChatScreen = () => {
     const {friends} = useSelector(state => state.friends);
     const {userInfo} = useSelector(state => state.auth);
     const currentChat = chats[currentChatId];
+    const {isCurrentlyInCall, isCallAccepted, callingId} = useSelector(state => state.dialler);
 
     const friend = useMemo(() => {
         const friendIndex = friends.findIndex(item => item.id === currentChatId);
         return friends[friendIndex];
     }, [friends, currentChatId])
+
 
     const loadMoreMessages = () => {
         if (loading) return;
@@ -123,13 +126,23 @@ const ChatScreen = () => {
 
     useEffect(() => {
         return () => {
-            dispatch(setChat({chatId: null}))
+            dispatch(setChat({chatId: null})) //TODO Fix when app state changes not null chatId
         }
     }, [])
 
     return (
         <FullScreenContainer>
-
+            {(isCurrentlyInCall && callingId === currentChatId) && <CallingHeader
+                isAnswered={isCallAccepted}
+                me={{
+                id: userInfo.id,
+                nickname: userInfo.nickname,
+                avatarUrl: userInfo.avatar_url
+            }} friend={{
+                id: friend.id,
+                nickname: friend.nickname,
+                avatarUrl: friend.avatar_url
+            }}/>}
             <StyledLabel {...getRootProps()} onClick={e => e.preventDefault()}>
                 <MessageContainer className={"scroll-bar"}
                                   onScroll={handleScroll}
@@ -169,11 +182,7 @@ const ChatScreen = () => {
                     />
                 </>}
             </TypingContainer>
-
-
         </FullScreenContainer>
-
-
     );
 };
 

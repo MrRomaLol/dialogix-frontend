@@ -5,18 +5,19 @@ import {socket} from "../socket";
 import {addStreamToPlayer} from "../components/StreamPlayer";
 
 const initialState = {
+    isCurrentlyInCall: false,
     isMeTryingToCall: false,
     isCalling: false,
     isCallAccepted: false,
     callingId: null,
     callerSignal: null,
-    stream: null,
 }
 
 export const makePrivateCall = createAsyncThunk(
     'dialler/call',
     async ({userToCall}, {rejectWithValue, getState, dispatch}) => {
-        const id = getState().auth.userInfo.id;
+        const state = getState();
+        const id = state.auth.userInfo.id;
 
         navigator.mediaDevices
             .getUserMedia({video: false, audio: true})
@@ -37,6 +38,21 @@ export const makePrivateCall = createAsyncThunk(
 
                 socket.on('private-call-accepted', (signal) => {
                     peer.signal(signal);
+                    dispatch(setCallingState({isMeTryingToCall: false, isCallAccepted: true}));
+                    socket.off('private-call-accepted');
+                })
+
+                socket.on('private-call-ended', () => {
+                    peer.removeAllListeners();
+                    peer.destroy();
+                    dispatch(setCallingState({
+                        isMeTryingToCall: false,
+                        isCallAccepted: false,
+                        isCurrentlyInCall: false
+                    }));
+                    dispatch(setCalling({isCalling: false, callingId: null, callerSignal: null}));
+                    socket.off('private-call-accepted');
+                    socket.off('private-call-ended');
                 })
 
                 peer.on("stream", stream => {
@@ -50,6 +66,8 @@ export const makePrivateCall = createAsyncThunk(
                     rejectWithValue({error: 'filed'});
                 }
             })
+
+        return {calling: userToCall}
     }
 )
 
@@ -59,6 +77,11 @@ export const acceptPrivateCall = createAsyncThunk(
         const diallerState = getState().dialler;
         const caller = diallerState.callingId;
         const callerSignal = diallerState.callerSignal;
+        const isCurrentlyInCall = diallerState.isCurrentlyInCall;
+
+        if (isCurrentlyInCall) {
+            dispatch(endPrivateCall());
+        }
 
         navigator.mediaDevices
             .getUserMedia({video: false, audio: true})
@@ -71,6 +94,7 @@ export const acceptPrivateCall = createAsyncThunk(
 
                 peer.on("signal", data => {
                     socket.emit("accept-private-call", {signal: data, to: caller});
+                    dispatch(setCallingState({isCallAccepted: true, isCurrentlyInCall: true}));
                 });
 
                 peer.on("stream", stream => {
@@ -78,6 +102,18 @@ export const acceptPrivateCall = createAsyncThunk(
                 });
 
                 peer.signal(callerSignal);
+
+                socket.on('private-call-ended', () => {
+                    peer.removeAllListeners();
+                    peer.destroy();
+                    dispatch(setCallingState({
+                        isMeTryingToCall: false,
+                        isCallAccepted: false,
+                        isCurrentlyInCall: false
+                    }));
+                    dispatch(setCalling({isCalling: false, callingId: null, callerSignal: null}));
+                    socket.off('private-call-ended');
+                })
             })
             .catch(err => {
                 if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
@@ -86,6 +122,16 @@ export const acceptPrivateCall = createAsyncThunk(
                     rejectWithValue({error: 'filed'});
                 }
             })
+    }
+)
+
+export const endPrivateCall = createAsyncThunk(
+    'dialler/cancelCall',
+    async (_, {rejectWithValue, getState}) => {
+        const diallerState = getState().dialler;
+        const caller = diallerState.callingId;
+
+        socket.emit("end-private-call", caller);
     }
 )
 
@@ -98,20 +144,27 @@ const diallerSlice = createSlice({
             state.callingId = payload.callingId;
             state.callerSignal = payload.callerSignal;
         },
-        setStream(state, {payload}) {
-            state.stream = payload.stream;
+        setCallingState(state, {payload}) {
+            if (payload.isMeTryingToCall !== undefined)
+                state.isMeTryingToCall = payload.isMeTryingToCall;
+            if (payload.isCallAccepted !== undefined)
+                state.isCallAccepted = payload.isCallAccepted;
+            if (payload.isCurrentlyInCall !== undefined)
+                state.isCurrentlyInCall = payload.isCurrentlyInCall;
         }
     },
     extraReducers: (builder) => {
         builder.addCase(revertAll, () => initialState);
         builder.addCase(makePrivateCall.pending, (state) => {
+            state.isCurrentlyInCall = true;
             state.isMeTryingToCall = true;
         })
         builder.addCase(makePrivateCall.fulfilled, (state, {payload}) => {
-
+            state.callingId = payload.calling;
         })
         builder.addCase(makePrivateCall.rejected, (state, {payload}) => {
             state.isMeTryingToCall = false;
+            state.isCurrentlyInCall = false;
         })
         builder.addCase(acceptPrivateCall.pending, (state) => {
             state.isCalling = false;
@@ -122,9 +175,17 @@ const diallerSlice = createSlice({
         builder.addCase(acceptPrivateCall.rejected, (state, {payload}) => {
 
         })
+        builder.addCase(endPrivateCall.fulfilled, (state, {payload}) => {
+            state.isCurrentlyInCall = false;
+            state.isMeTryingToCall = false;
+            state.isCallAccepted = false;
+            state.isCalling = false;
+            state.callingId = null;
+            state.callerSignal = null;
+        })
     }
 })
 
-export const {setCalling, setStream} = diallerSlice.actions;
+export const {setCalling, setCallingState} = diallerSlice.actions;
 
 export default diallerSlice.reducer;

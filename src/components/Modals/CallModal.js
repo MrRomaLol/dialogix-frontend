@@ -1,12 +1,21 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import Draggable from "react-draggable";
 import ContentContainer from "../ContentContainer";
 import styled, {keyframes} from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPhoneSlash, faPhoneVolume} from "@fortawesome/free-solid-svg-icons";
 import {useDispatch, useSelector} from "react-redux";
-import {IconFriendGuild} from "../Bars/SideIconParts";
-import {acceptPrivateCall} from "../../store/diallerSlice";
+import {
+    acceptPrivateCall,
+    cancelPrivateCall,
+    endPrivateCall,
+    setCalling,
+    setCallingState
+} from "../../store/diallerSlice";
+import useSound from "use-sound";
+import FriendAvatar from "../FriendAvatar";
+import call from "../../sounds/call.mp3"
+import {socket} from "../../socket";
 
 const CallContainer = styled(ContentContainer)`
   width: 100%;
@@ -20,14 +29,6 @@ const Inner = styled.div`
   height: 100%;
   box-sizing: border-box;
   padding: 30px 40px;
-`
-
-const Ava = styled.div`
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background-color: white;
-  margin-bottom: 20px;
 `
 
 const Calling = styled.p`
@@ -117,7 +118,7 @@ const AnswerIcon = styled(ButtonsIcon)`
 
 const AnswerBack = styled(ButtonBack)`
   background-color: #6F2DA8;
-  
+
   &:hover {
     background-color: #561a85;
   }
@@ -131,37 +132,36 @@ const HangupBack = styled(ButtonBack)`
   }
 `
 
-const MyAvatarIcon = styled(IconFriendGuild)`
+const CallingAvatar = styled(FriendAvatar)`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background-color: white;
   margin-bottom: 20px;
 `
 
-const Avatar = ({id, url, nick}) => {
-    return (
-        url ?
-            <MyAvatarIcon style={{backgroundImage: `url(api/v1/cdn/users/${id}/${url})`}}/> :
-            <MyAvatarIcon>{nick.substring(0, 1)}</MyAvatarIcon>
-    )
-}
-
 const CallModal = () => {
     const dispatch = useDispatch();
-    const {callingId} = useSelector(state => state.dialler);
+    const {callingId, isCurrentlyInCall} = useSelector(state => state.dialler);
     const {friends} = useSelector(state => state.friends);
+
+    const [play, {stop, duration}] = useSound(call, {loop: true});
 
     const callingUser = useMemo(() => {
         return friends.find(friend => friend.id === callingId);
     }, [callingId]);
 
-    const handleAcceptCall = () =>{
-        dispatch(acceptPrivateCall());
+    const handleAcceptCall = () => {
+        if (isCurrentlyInCall) {
+            dispatch(endPrivateCall()).then(() => {
+                dispatch(acceptPrivateCall());
+            });
+        } else {
+            dispatch(acceptPrivateCall());
+        }
     }
 
     const handleCancelCall = () => {
-
+        dispatch(endPrivateCall());
     }
 
     const initialPosition = useMemo(() => {
@@ -171,22 +171,45 @@ const CallModal = () => {
         }
     }, [])
 
+    useEffect(() => {
+        if (duration) {
+            play();
+        }
+        return () => {
+            if (duration) {
+                stop();
+            }
+        }
+    }, [duration]);
+
+    useEffect(() => {
+        socket.on('private-call-ended', () => {
+            dispatch(setCallingState({isMeTryingToCall: false, isCallAccepted: false, isCurrentlyInCall: false}));
+            dispatch(setCalling({isCalling: false, callingId: null, callerSignal: null}));
+        })
+
+        return () => {
+            socket.off('private-call-ended')
+        }
+    }, []);
+
     return (
         <Draggable bounds={"parent"} defaultPosition={initialPosition}>
             <div style={{width: "320px", height: "350px"}}>
                 <CallContainer backgroundColor={'rgba(32,6,57,0.8)'}>
                     <Inner>
                         <Info>
-                            <Avatar id={callingUser.id} nick={callingUser.nickname} url={callingUser.avatar_url}/>
+                            <CallingAvatar id={callingUser.id} nick={callingUser.nickname}
+                                           url={callingUser.avatar_url}/>
                             <Calling style={{marginBottom: "15px", fontSize: "20px"}}>{callingUser.nickname}</Calling>
                             <Calling>calling...</Calling>
                         </Info>
                         <CallButtons>
-                            <AnswerBack>
-                                <AnswerIcon icon={faPhoneVolume} onClick={handleAcceptCall}/>
+                            <AnswerBack onClick={handleAcceptCall}>
+                                <AnswerIcon icon={faPhoneVolume}/>
                             </AnswerBack>
-                            <HangupBack>
-                                <ButtonsIcon icon={faPhoneSlash} onClick={handleCancelCall}/>
+                            <HangupBack onClick={handleCancelCall}>
+                                <ButtonsIcon icon={faPhoneSlash}/>
                             </HangupBack>
                         </CallButtons>
                     </Inner>

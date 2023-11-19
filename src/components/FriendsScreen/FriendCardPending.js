@@ -1,5 +1,4 @@
 import React from 'react';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {
     CardContainer,
@@ -9,7 +8,7 @@ import {
     FriendCardIconsContainer
 } from "./FriendCardStyledParts";
 import styled from "styled-components";
-import {acceptFriendRequest, rejectFriendRequest, unSendFriendRequest} from "../../store/friendsSlice";
+import {acceptFriendRequest, rejectFriendRequest} from "../../store/friendsSlice";
 import {useDispatch} from "react-redux";
 import {FriendCardAvatar} from "./FriendCard";
 

@@ -22,7 +22,7 @@ import {getRandomName} from "../../utils/random";
 import {socket} from "../../socket";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import getFileTypeByExtension from "../../utils/fileTypes";
-import {makePrivateCall} from "../../store/diallerSlice";
+import {endPrivateCall, makePrivateCall} from "../../store/diallerSlice";
 
 const Container = styled.div`
   margin: 0 15px;
@@ -111,7 +111,7 @@ const StyledSendButton = styled(StyledIconButton)`
 `
 
 const StyledCallButton = styled(StyledSendButton)`
-  margin-right: 30px; 
+  margin-right: 30px;
   color: #cecece;
   cursor: pointer;
   transform: scaleX(-1);
@@ -217,6 +217,7 @@ const InputChatBox = forwardRef(({name, id, onTextChange}, ref) => {
     const dispatch = useDispatch();
     const {userInfo} = useSelector(state => state.auth);
     const {currentChatId} = useSelector(state => state.chat);
+    const {isCurrentlyInCall} = useSelector(state => state.dialler);
     const [files, setFiles] = useState([]);
     const inputRef = useRef(null);
     const [input, setInput] = useState('');
@@ -254,7 +255,15 @@ const InputChatBox = forwardRef(({name, id, onTextChange}, ref) => {
     }
 
     const handleMakePrivateCall = () => {
-        dispatch(makePrivateCall({userToCall: currentChatId}));
+        if (isCurrentlyInCall) {
+            dispatch(endPrivateCall()).then(() => {
+                setTimeout(() => {
+                    dispatch(makePrivateCall({userToCall: currentChatId}));
+                }, 500);
+            });
+        } else {
+            dispatch(makePrivateCall({userToCall: currentChatId}));
+        }
     }
 
     const handleKeyDown = (event) => {

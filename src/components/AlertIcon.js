@@ -18,7 +18,7 @@ const OnHover = keyframes`
 
 const AlertIconStyle = styled(FontAwesomeIcon)`
   color: white;
-  background-color: red;
+  background-color: #B13470;
   padding: 3px;
   border-radius: 50%;
   aspect-ratio: 1 / 1;
@@ -34,7 +34,7 @@ const AlertIconStyle = styled(FontAwesomeIcon)`
   ${({onClick}) => onClick && css`
     &:hover {
       background-color: white;
-      color: red
+      color: #B13470
     }
   `}
   
