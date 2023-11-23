@@ -4,7 +4,7 @@ export const LRBars = styled.div`
   background-color: rgba(84, 45, 102, 0.32);
   height: 100%;
   width: 100px;
-
+  
   position: relative;
   display: flex;
   flex-direction: column;

@@ -22,10 +22,18 @@ const EobaniyBlyr = styled.span`
   flex-direction: row;
   filter: drop-shadow(rgba(255, 0, 245, 0.8) 20px 0px 40px);
 
+  z-index: 200;
+  
   transition-duration: 200ms;
 
   ${({isRolled}) => isRolled && css`
     height: 95px;
+  `}
+
+  ${({screen}) => screen === SERVER_SCREEN && css`
+    position: absolute;
+    top: 0;
+    left: 0;
   `}
 }
 `
@@ -92,7 +100,7 @@ const FriendsSideBar = () => {
 
     return (
         <>
-            <EobaniyBlyr isRolled={isRolled} onMouseEnter={() => handleMouseLeft(true)}
+            <EobaniyBlyr screen={screenName} isRolled={isRolled} onMouseEnter={() => handleMouseLeft(true)}
                          onMouseLeave={() => handleMouseLeft(false)}>
                 <Bar isRolled={isRolled}>
                     <BarButton dataTooltipId={'friend-tooltip-friends'} icon={faUser} onClick={goToFriendsScreen}

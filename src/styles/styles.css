@@ -54,6 +54,6 @@ div[class^="rnc__notification-container--"]:has(> .rnc__notification) {
 }
 
 .react-tooltip {
-    z-index: 20;
+    z-index: 300;
     font-family: "JetBrains Mono", serif;
 }

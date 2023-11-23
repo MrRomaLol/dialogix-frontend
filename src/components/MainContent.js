@@ -4,8 +4,9 @@ import {useSelector} from "react-redux";
 
 import FriendsScreen from "./FriendsScreen";
 import MainScreen from "./MainScreen";
-import {DIRECT_MESSAGES_SCREEN, FRIENDS_SCREEN, MAIN_SCREEN} from "../store/screenStateSlice";
+import {DIRECT_MESSAGES_SCREEN, FRIENDS_SCREEN, MAIN_SCREEN, SERVER_SCREEN} from "../store/screenStateSlice";
 import ChatScreen from "./ChatScreen";
+import GuildScreen from "./GuildScreen";
 
 const Content = styled.div`
   width: 100%;
@@ -13,7 +14,7 @@ const Content = styled.div`
 
   box-sizing: border-box;
 
-  padding: 130px 70px 20px;
+  padding: 130px ${({screen}) => screen === SERVER_SCREEN ? '20px' : '70px'} 20px;
 `
 
 const MainContent = () => {
@@ -31,10 +32,13 @@ const MainContent = () => {
         case DIRECT_MESSAGES_SCREEN:
             screen = <ChatScreen/>
             break;
+        case SERVER_SCREEN:
+            screen = <GuildScreen/>
+            break;
     }
 
     return (
-        <Content>
+        <Content screen={screenName}>
             {screen}
         </Content>
     );
