@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {HeaderBack, HeaderBorders, LeftRightBars} from "./styled-parts/HeaderBar";
 import styled from "styled-components";
 import Logotype from "./Logotype";
-import {MAIN_SCREEN, setScreen} from "../store/screenStateSlice";
+import {DIRECT_MESSAGES_SCREEN, MAIN_SCREEN, SERVER_SCREEN, setScreen} from "../store/screenStateSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faGear} from "@fortawesome/free-solid-svg-icons";
+import {faGear, faHeadphones, faMicrophone} from "@fortawesome/free-solid-svg-icons";
 import {APP_SETTINGS_STATE, setAppState} from "../store/appStateSlice";
 import {IconFriendGuild} from "./Bars/SideIconParts";
 import StatusIndicator from "./StatusIndicator";
@@ -13,6 +13,7 @@ import {Tooltip} from "react-tooltip";
 import StatusSelect from "./StatusSelect";
 import {setUserStatus} from "../store/authSlice";
 import {updateUserSetting} from "../store/fetchSlice";
+import {setMuteState} from "../store/diallerSlice";
 
 const EobaniyBlyr = styled.span`
   position: fixed;
@@ -56,7 +57,7 @@ const RightBorder = styled(HeaderBorders)`
 `
 
 const Left = styled(LeftRightBars)`
-  display: block;
+  justify-content: flex-end;
   clip-path: polygon(0 0, 0 calc(100% - 18px), 20px 100%, 100% 100%, 100% 0);
 `
 
@@ -78,10 +79,7 @@ const Center = styled(HeaderBack)`
 `
 
 const Right = styled(LeftRightBars)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
+  justify-content: space-between;
   clip-path: polygon(0 0, 0 100%, calc(100% - 20px) 100%, 100% calc(100% - 18px), 100% 0);
 `
 
@@ -151,6 +149,77 @@ const HeaderStatusIndicator = styled(StatusIndicator)`
   }
 `
 
+const CurrentChat = () => {
+    const {screen} = useSelector(state => state.screenState);
+    const {currentChatId} = useSelector(state => state.chat);
+    const {friends} = useSelector(state => state.friends);
+
+    const friend = useMemo(() => {
+        const friendIndex = friends.findIndex(item => item.id === currentChatId);
+        return friends[friendIndex];
+    }, [friends, currentChatId])
+
+    const name = useMemo(() => {
+        switch (screen) {
+            case DIRECT_MESSAGES_SCREEN:
+                return friend.nickname;
+            case SERVER_SCREEN:
+                return "server name";
+            default:
+                return 'DialogiX Inc.';
+        }
+
+
+    }, [screen, currentChatId]);
+
+    return (
+        <Nickname>{name}</Nickname>
+    )
+}
+
+const VoiceControlContainer = styled.div`
+  margin-right: 15px;
+`
+
+const VoiceControlButtons = styled(FontAwesomeIcon)`
+  margin-left: 10px;
+  font-size: 22px;
+  transition-duration: 200ms;
+  cursor: pointer;
+
+  color:${({$isMuted}) => $isMuted ? '#B13470' : 'white'};
+  
+  &:hover {
+    color: ${({$isMuted}) => $isMuted ? '#d2478a' : 'lightgray'};
+  }
+`
+
+const VoiceControl = () => {
+    const dispatch = useDispatch();
+    const {isMicrophoneMuted, isSoundMuted} = useSelector(state => state.dialler);
+
+    const handleMuteMic = () => {
+        dispatch(setMuteState({
+            microphoneState: !isMicrophoneMuted,
+            soundState: false,
+        }))
+    }
+
+    const handleMuteSound = () => {
+        dispatch(setMuteState({
+            microphoneState: true,
+            soundState: !isSoundMuted,
+        }))
+    }
+
+    return (
+        <VoiceControlContainer>
+            <VoiceControlButtons icon={faMicrophone} onClick={handleMuteMic} $isMuted={isMicrophoneMuted}/>
+            <VoiceControlButtons icon={faHeadphones} onClick={handleMuteSound} $isMuted={isSoundMuted}/>
+        </VoiceControlContainer>
+    )
+}
+
 const Header = () => {
     const {userInfo, loading} = useSelector((state) => state.auth);
     const userStatusSetting = useSelector((state) => state.fetchRoot.settings.user_status);
@@ -173,7 +242,9 @@ const Header = () => {
         <>
             <EobaniyBlyr>
                 <ContainerLR>
-                    <Left/>
+                    <Left>
+                        <CurrentChat/>
+                    </Left>
                     <LeftBorder/>
                 </ContainerLR>
 
@@ -193,6 +264,7 @@ const Header = () => {
                 <ContainerLR>
                     <Right>
                         <Nickname>{userInfo.nickname}</Nickname>
+                        <VoiceControl/>
                     </Right>
                     <RightBorder/>
                 </ContainerLR>

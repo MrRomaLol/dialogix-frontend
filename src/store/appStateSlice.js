@@ -8,6 +8,7 @@ export const APP_SETTINGS_STATE = 'appSettings';
 const initialState = {
     state: APP_LOADING_STATE,
     isConnectedFromAnotherPlace: false,
+    isConnectionLost: false,
 }
 
 const appState = createSlice({
@@ -19,6 +20,9 @@ const appState = createSlice({
         },
         setIsConnectedFromAnotherPlace(state, {payload}) {
             state.isConnectedFromAnotherPlace = true;
+        },
+        setConnectionLost(state, {payload}) {
+            state.isConnectionLost = payload.state;
         }
     },
     extraReducers: (builder) => {
@@ -27,7 +31,7 @@ const appState = createSlice({
 })
 
 
-export const {setAppState, setIsConnectedFromAnotherPlace} = appState.actions;
+export const {setAppState, setIsConnectedFromAnotherPlace, setConnectionLost} = appState.actions;
 
 export default appState.reducer;
 

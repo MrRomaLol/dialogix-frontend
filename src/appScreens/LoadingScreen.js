@@ -92,10 +92,6 @@ const LoadingScreen = () => {
                         });
                 });
             })
-
-            socket.on('reconnect', () => {
-                socket.emit('my-id', userInfo.id);
-            })
         }
     }, [userInfo])
 

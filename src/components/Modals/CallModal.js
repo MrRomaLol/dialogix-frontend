@@ -8,8 +8,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     acceptPrivateCall,
     cancelPrivateCall,
-    endPrivateCall,
-    setCalling,
     setCallingState
 } from "../../store/diallerSlice";
 import useSound from "use-sound";
@@ -139,29 +137,29 @@ const CallingAvatar = styled(FriendAvatar)`
   margin-bottom: 20px;
 `
 
-const CallModal = () => {
+const CallModal = ({callerId}) => {
     const dispatch = useDispatch();
-    const {callingId, isCurrentlyInCall} = useSelector(state => state.dialler);
+    const {callers} = useSelector(state => state.dialler);
     const {friends} = useSelector(state => state.friends);
 
     const [play, {stop, duration}] = useSound(call, {loop: true});
 
     const callingUser = useMemo(() => {
-        return friends.find(friend => friend.id === callingId);
-    }, [callingId]);
+        return friends.find(friend => friend.id === callerId);
+    }, [callerId]);
 
     const handleAcceptCall = () => {
-        if (isCurrentlyInCall) {
-            dispatch(endPrivateCall()).then(() => {
-                dispatch(acceptPrivateCall());
-            });
-        } else {
-            dispatch(acceptPrivateCall());
-        }
+        // if (isCurrentlyInCall) {
+        //     dispatch(endPrivateCall()).then(() => {
+        //         dispatch(acceptPrivateCall());
+        //     });
+        // } else {
+            dispatch(acceptPrivateCall({callerId}));
+        // }
     }
 
     const handleCancelCall = () => {
-        dispatch(endPrivateCall());
+        dispatch(cancelPrivateCall({callerId}));
     }
 
     const initialPosition = useMemo(() => {
@@ -172,7 +170,7 @@ const CallModal = () => {
     }, [])
 
     useEffect(() => {
-        if (duration) {
+        if (duration && callers.length === 1) {
             play();
         }
         return () => {
@@ -184,8 +182,8 @@ const CallModal = () => {
 
     useEffect(() => {
         socket.on('private-call-ended', () => {
-            dispatch(setCallingState({isMeTryingToCall: false, isCallAccepted: false, isCurrentlyInCall: false}));
-            dispatch(setCalling({isCalling: false, callingId: null, callerSignal: null}));
+            // dispatch(setCallingState({isMeTryingToCall: false, isCallAccepted: false, isCurrentlyInCall: false}));
+            // dispatch(setCalling({isCalling: false, callingId: null, callerSignal: null}));
         })
 
         return () => {

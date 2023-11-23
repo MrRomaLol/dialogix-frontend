@@ -2,7 +2,7 @@ import {io} from 'socket.io-client';
 
 import store from "../store";
 import {getFriends, updateFriendProfile, updateFriendStatus} from "../store/friendsSlice";
-import {setIsConnectedFromAnotherPlace} from "../store/appStateSlice";
+import {setConnectionLost, setIsConnectedFromAnotherPlace} from "../store/appStateSlice";
 
 export const socket = io('/', {
     autoConnect: false,
@@ -11,6 +11,15 @@ export const socket = io('/', {
 socket.on('connect-from-another-place', () => {
     store.dispatch(setIsConnectedFromAnotherPlace());
     DisconnectSocket();
+})
+
+socket.on('disconnect', (err) => {
+    if (err === 'io client disconnect') return;
+    store.dispatch(setConnectionLost({state: true}));
+})
+
+socket.on('connect', () => {
+    store.dispatch(setConnectionLost({state: false}));
 })
 
 socket.on('update-friend-list-request', () => {

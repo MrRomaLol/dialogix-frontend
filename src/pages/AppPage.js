@@ -21,11 +21,12 @@ import CallModal from "../components/Modals/CallModal";
 import StreamPlayer from "../components/StreamPlayer";
 import useSound from "use-sound";
 import beeps from "../sounds/beeps.mp3"
+import ConnectionLostModal from "../components/Modals/ConnectionLostModal";
 
 const AppPage = () => {
     const size = useWindowSize();
-    const {state, isConnectedFromAnotherPlace} = useSelector(state => state.appState);
-    const {isCalling, isMeTryingToCall} = useSelector(state => state.dialler);
+    const {state, isConnectedFromAnotherPlace, isConnectionLost} = useSelector(state => state.appState);
+    const {callers, isMeTryingToCall} = useSelector(state => state.dialler);
     const [play, {stop, duration}] = useSound(beeps, {loop: true})
 
     const stateComponent = useMemo(() => {
@@ -93,7 +94,8 @@ const AppPage = () => {
             <AudioPlayer/>
             <StreamPlayer/>
             <ConnectedFromAnotherPlaceModal isOpen={isConnectedFromAnotherPlace}/>
-            {isCalling && <CallModal/>}
+            <ConnectionLostModal isOpen={isConnectionLost}/>
+            {callers.map((caller) => <CallModal key={caller.id} callerId={caller.id}/>)}
         </>
     );
 };

@@ -2,16 +2,20 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {revertAll} from "./index";
 import Peer from "simple-peer";
 import {socket} from "../socket";
-import {addStreamToPlayer} from "../components/StreamPlayer";
+import {addStreamToPlayer, updateStreamMute} from "../components/StreamPlayer";
 
 const initialState = {
+    callers: [],
     isCurrentlyInCall: false,
     isMeTryingToCall: false,
-    isCalling: false,
     isCallAccepted: false,
     callingId: null,
-    callerSignal: null,
+
+    isMicrophoneMuted: false,
+    isSoundMuted: false,
 }
+
+let peer;
 
 export const makePrivateCall = createAsyncThunk(
     'dialler/call',
@@ -19,10 +23,22 @@ export const makePrivateCall = createAsyncThunk(
         const state = getState();
         const id = state.auth.userInfo.id;
 
+        const isMicMuted = state.dialler.isMicrophoneMuted;
+
+        const isCurrentlyInCall = state.dialler.isCurrentlyInCall;
+
+        if (isCurrentlyInCall) {
+            dispatch(endPrivateCall());
+            await new Promise(resolve => setTimeout(() => resolve(), 500));
+        }
+
         navigator.mediaDevices
             .getUserMedia({video: false, audio: true})
             .then(stream => {
-                const peer = new Peer({
+
+                stream.getAudioTracks()[0].enabled = !isMicMuted;
+
+                peer = new Peer({
                     key: id,
                     initiator: true,
                     trickle: false,
@@ -36,21 +52,39 @@ export const makePrivateCall = createAsyncThunk(
                     });
                 });
 
+                const endConnection = () => {
+                    peer.removeAllListeners();
+                    peer.destroy();
+                }
+
                 socket.on('private-call-accepted', (signal) => {
                     peer.signal(signal);
                     dispatch(setCallingState({isMeTryingToCall: false, isCallAccepted: true}));
                     socket.off('private-call-accepted');
+                    socket.off('private-call-canceled');
                 })
 
-                socket.on('private-call-ended', () => {
-                    peer.removeAllListeners();
-                    peer.destroy();
+                socket.on('private-call-canceled', () => {
+                    endConnection();
                     dispatch(setCallingState({
                         isMeTryingToCall: false,
                         isCallAccepted: false,
-                        isCurrentlyInCall: false
+                        isCurrentlyInCall: false,
+                        callingId: null,
                     }));
-                    dispatch(setCalling({isCalling: false, callingId: null, callerSignal: null}));
+                    socket.off('private-call-accepted');
+                    socket.off('private-call-ended');
+                    socket.off('private-call-canceled');
+                })
+
+                socket.on('private-call-ended', () => {
+                    endConnection();
+                    dispatch(setCallingState({
+                        isMeTryingToCall: false,
+                        isCallAccepted: false,
+                        isCurrentlyInCall: false,
+                        callingId: null,
+                    }));
                     socket.off('private-call-accepted');
                     socket.off('private-call-ended');
                 })
@@ -73,28 +107,34 @@ export const makePrivateCall = createAsyncThunk(
 
 export const acceptPrivateCall = createAsyncThunk(
     'dialler/acceptCall',
-    async (_, {rejectWithValue, getState, dispatch}) => {
+    async ({callerId}, {rejectWithValue, getState, dispatch}) => {
         const diallerState = getState().dialler;
-        const caller = diallerState.callingId;
-        const callerSignal = diallerState.callerSignal;
+        const caller = diallerState.callers.find(obj => obj.id === callerId);
+        const callerSignal = caller.signal;
+
+        const isMicMuted = diallerState.isMicrophoneMuted;
+
         const isCurrentlyInCall = diallerState.isCurrentlyInCall;
 
         if (isCurrentlyInCall) {
             dispatch(endPrivateCall());
+            await new Promise(resolve => setTimeout(() => resolve(), 500));
         }
 
         navigator.mediaDevices
             .getUserMedia({video: false, audio: true})
             .then(stream => {
-                const peer = new Peer({
+                stream.getAudioTracks()[0].enabled = !isMicMuted;
+
+                peer = new Peer({
                     initiator: false,
                     trickle: false,
                     stream: stream
                 });
 
                 peer.on("signal", data => {
-                    socket.emit("accept-private-call", {signal: data, to: caller});
-                    dispatch(setCallingState({isCallAccepted: true, isCurrentlyInCall: true}));
+                    socket.emit("accept-private-call", {signal: data, to: caller.id});
+                    dispatch(setCallingState({isCallAccepted: true, isCurrentlyInCall: true, callingId: callerId}));
                 });
 
                 peer.on("stream", stream => {
@@ -103,15 +143,18 @@ export const acceptPrivateCall = createAsyncThunk(
 
                 peer.signal(callerSignal);
 
-                socket.on('private-call-ended', () => {
+                const endConnection = () => {
                     peer.removeAllListeners();
                     peer.destroy();
+                }
+
+                socket.on('private-call-ended', () => {
+                    endConnection();
                     dispatch(setCallingState({
                         isMeTryingToCall: false,
                         isCallAccepted: false,
                         isCurrentlyInCall: false
                     }));
-                    dispatch(setCalling({isCalling: false, callingId: null, callerSignal: null}));
                     socket.off('private-call-ended');
                 })
             })
@@ -122,16 +165,35 @@ export const acceptPrivateCall = createAsyncThunk(
                     rejectWithValue({error: 'filed'});
                 }
             })
+
+        return {callerId};
+    }
+)
+
+export const cancelPrivateCall = createAsyncThunk(
+    'dialler/cancelCall',
+    async ({callerId}) => {
+        socket.emit("cancel-private-call", callerId);
+        return {callerId};
     }
 )
 
 export const endPrivateCall = createAsyncThunk(
-    'dialler/cancelCall',
-    async (_, {rejectWithValue, getState}) => {
+    'dialler/endCall',
+    async (_, {rejectWithValue, getState, dispatch}) => {
         const diallerState = getState().dialler;
         const caller = diallerState.callingId;
 
-        socket.emit("end-private-call", caller);
+        peer.removeAllListeners();
+        peer.destroy();
+
+        dispatch(setCallingState({isCalling: false, callingId: null, callerSignal: null}));
+
+        socket.emit('end-private-call', caller);
+
+        socket.off('private-call-accepted');
+        socket.off('private-call-ended');
+        socket.off('private-call-canceled');
     }
 )
 
@@ -139,10 +201,8 @@ const diallerSlice = createSlice({
     name: "dialler",
     initialState,
     reducers: {
-        setCalling(state, {payload}) {
-            state.isCalling = payload.isCalling;
-            state.callingId = payload.callingId;
-            state.callerSignal = payload.callerSignal;
+        addCalling(state, {payload}) {
+            state.callers.push(payload);
         },
         setCallingState(state, {payload}) {
             if (payload.isMeTryingToCall !== undefined)
@@ -151,6 +211,16 @@ const diallerSlice = createSlice({
                 state.isCallAccepted = payload.isCallAccepted;
             if (payload.isCurrentlyInCall !== undefined)
                 state.isCurrentlyInCall = payload.isCurrentlyInCall;
+            if (payload.callingId !== undefined)
+                state.callingId = payload.callingId;
+        },
+        setMuteState(state, {payload}) {
+            state.isMicrophoneMuted = payload.microphoneState;
+            state.isSoundMuted = payload.soundState;
+            if (peer) {
+                peer.streams[0].getAudioTracks()[0].enabled = !payload.microphoneState;
+            }
+            updateStreamMute(payload.soundState);
         }
     },
     extraReducers: (builder) => {
@@ -170,10 +240,13 @@ const diallerSlice = createSlice({
             state.isCalling = false;
         })
         builder.addCase(acceptPrivateCall.fulfilled, (state, {payload}) => {
-            state.isCallAccepted = true;
+            state.callers = state.callers.filter(obj => obj.id !== payload.callerId);
         })
         builder.addCase(acceptPrivateCall.rejected, (state, {payload}) => {
 
+        })
+        builder.addCase(cancelPrivateCall.fulfilled, (state, {payload}) => {
+            state.callers = state.callers.filter(obj => obj.id !== payload.callerId);
         })
         builder.addCase(endPrivateCall.fulfilled, (state, {payload}) => {
             state.isCurrentlyInCall = false;
@@ -186,6 +259,6 @@ const diallerSlice = createSlice({
     }
 })
 
-export const {setCalling, setCallingState} = diallerSlice.actions;
+export const {addCalling, setCallingState, setMuteState} = diallerSlice.actions;
 
 export default diallerSlice.reducer;

@@ -7,6 +7,9 @@ export const HeaderBack = styled.div`
 export const LeftRightBars = styled(HeaderBack)`
   width: 100%;
   height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `
 
 export const HeaderBorders = styled.div`

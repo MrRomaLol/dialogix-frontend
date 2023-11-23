@@ -13,4 +13,11 @@ export const addStreamToPlayer = (stream) => {
     }
 };
 
+export const updateStreamMute = (isMuted) => {
+    const audioRef = document.getElementById('dx-stream-player');
+    if (audioRef) {
+        audioRef.volume = isMuted ? 0 : 1;
+    }
+};
+
 export default StreamPlayer;
