@@ -23,11 +23,12 @@ const EobaniyBlyr = styled.span`
   filter: drop-shadow(rgba(255, 0, 245, 0.8) 20px 0px 40px);
 
   z-index: 200;
-  
+
   transition-duration: 200ms;
 
   ${({isRolled}) => isRolled && css`
     height: 95px;
+    transition-delay: 300ms;
   `}
 
   ${({screen}) => screen === SERVER_SCREEN && css`
@@ -107,22 +108,19 @@ const FriendsSideBar = () => {
                                isSelected={screenName === FRIENDS_SCREEN}>
                         {!!pending.length && <NewFriendsAlert onClick={goToPending} isAnimated/>}
                     </BarButton>
-                    {!isRolled &&
-                        <>
-                            <BarButton dataTooltipId={'friend-tooltip-add'} icon={faPlus} onClick={goToAdd}/>
-                            <IconSeparator/>
-                            <ScrollerBarBox>
-                                <ScrollerBar>
-                                    {friends.map((friend) => (<FriendBarIcon key={friend.id} id={friend.id}
-                                                                             avatarUrl={friend.avatar_url}
-                                                                             nickname={friend.nickname}
-                                                                             status={friend.status}
-                                                                             isSelected={currentChatId === friend.id}
-                                                                             hasNotification={friend.hasNotification}
-                                                                             isInVoice={isCurrentlyInCall && callingId === friend.id}/>))}
-                                </ScrollerBar>
-                            </ScrollerBarBox>
-                        </>}
+                    <BarButton dataTooltipId={'friend-tooltip-add'} icon={faPlus} onClick={goToAdd}/>
+                    <IconSeparator/>
+                    <ScrollerBarBox>
+                        <ScrollerBar>
+                            {friends.map((friend) => (<FriendBarIcon key={friend.id} id={friend.id}
+                                                                     avatarUrl={friend.avatar_url}
+                                                                     nickname={friend.nickname}
+                                                                     status={friend.status}
+                                                                     isSelected={currentChatId === friend.id}
+                                                                     hasNotification={friend.hasNotification}
+                                                                     isInVoice={isCurrentlyInCall && callingId === friend.id}/>))}
+                        </ScrollerBar>
+                    </ScrollerBarBox>
                 </Bar>
                 <BarBorder isRolled={isRolled}/>
             </EobaniyBlyr>

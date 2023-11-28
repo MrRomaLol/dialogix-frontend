@@ -32,6 +32,7 @@
     "process": "^0.11.10",
     "react": "^18.2.0",
     "react-awesome-reveal": "^4.2.5",
+    "react-contexify": "^6.0.0",
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.6",
     "react-dropzone": "^14.2.3",

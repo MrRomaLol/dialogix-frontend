@@ -3,6 +3,7 @@ import {ReactNotifications} from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
 import 'animate.css/animate.min.css';
 import 'react-loading-skeleton/dist/skeleton.css'
+import 'react-contexify/ReactContexify.css';
 import './styles/notification.scss'
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import {createGlobalStyle} from 'styled-components';

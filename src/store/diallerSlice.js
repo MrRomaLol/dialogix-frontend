@@ -36,6 +36,11 @@ export const makePrivateCall = createAsyncThunk(
             .getUserMedia({video: false, audio: true})
             .then(stream => {
 
+                dispatch(setCallingState({
+                    isCurrentlyInCall: true,
+                    isMeTryingToCall: true,
+                }))
+
                 stream.getAudioTracks()[0].enabled = !isMicMuted;
 
                 peer = new Peer({
@@ -226,8 +231,7 @@ const diallerSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(revertAll, () => initialState);
         builder.addCase(makePrivateCall.pending, (state) => {
-            state.isCurrentlyInCall = true;
-            state.isMeTryingToCall = true;
+
         })
         builder.addCase(makePrivateCall.fulfilled, (state, {payload}) => {
             state.callingId = payload.calling;
