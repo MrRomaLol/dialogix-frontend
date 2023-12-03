@@ -5,11 +5,14 @@ import ContentContainer from "../components/ContentContainer";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-regular-svg-icons";
 import {APP_OPENED_STATE, setAppState} from "../store/appStateSlice";
-import {useDispatch} from "react-redux";
-import MyAccount from "../components/SettingsTabs/MyAccount";
+import {useDispatch, useSelector} from "react-redux";
+import SettingsMyAccount from "../components/SettingsTabs/SettingsMyAccount";
 import YesNoModal from "../components/Modals/YesNoModal";
 import {logoutUser} from "../store/authSlice";
 import {revertAll} from "../store";
+import {setCurrentGuild} from "../store/guildsSlice";
+import {setChat} from "../store/chatSlice";
+import SettingsAppearance from "../components/SettingsTabs/SettingsAppearance";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;
@@ -177,7 +180,12 @@ const SettingsMenu = ({children}) => {
 const SettingsScreen = () => {
     const dispatch = useDispatch();
 
+    const {currentGuildId} = useSelector(state => state.guilds);
+    const {currentChatId} = useSelector(state => state.chat);
+
     const [isLogoutModal, setIsLogoutModal] = useState(false);
+    const [guildId] = useState(currentGuildId);
+    const [chatId] = useState(currentChatId);
 
     const handleOpenLogoutModal = () => {
         setIsLogoutModal(true);
@@ -195,6 +203,12 @@ const SettingsScreen = () => {
     }
 
     const goToAppState = () => {
+        if (guildId) {
+            dispatch(setCurrentGuild({currentGuildId: guildId}));
+        }
+        if (chatId) {
+            dispatch(setChat({chatId}));
+        }
         dispatch(setAppState({stateName: APP_OPENED_STATE}));
     }
 
@@ -217,15 +231,12 @@ const SettingsScreen = () => {
                     <Cont>
                         <SettingsMenu>
                             <SettingTabsHeader>User Settings</SettingTabsHeader>
-                            <SettingTab content={<MyAccount/>}>My Account</SettingTab>
-                            <SettingTab>Tab2</SettingTab>
-                            <SettingTab>Tab3</SettingTab>
-                            <SettingTab>Tab4</SettingTab>
+                            <SettingTab content={<SettingsMyAccount/>}>My Account</SettingTab>
                             <SettingTabsSeparator/>
 
-                            <SettingTabsHeader>App Settings</SettingTabsHeader>
-                            <SettingTab>Tab1</SettingTab>
-                            <SettingTab>Tab2</SettingTab>
+                            <SettingTabsHeader>App settings</SettingTabsHeader>
+                            <SettingTab content={<SettingsAppearance/>}>Appearance</SettingTab>
+
                             <SettingTabsSeparator/>
                             <SettingTab onClick={handleOpenLogoutModal}>Logout</SettingTab>
                         </SettingsMenu>

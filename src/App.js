@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
 import {ReactNotifications} from 'react-notifications-component'
+import devTools from "devtools-detect";
 import 'react-notifications-component/dist/theme.css'
 import 'animate.css/animate.min.css';
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -35,6 +36,14 @@ function App() {
     useEffect(() => {
         dispatch(checkAuthentication());
     }, [dispatch])
+
+    useEffect(() => {
+        window.addEventListener('devtoolschange', event => {
+            if (event.detail.isOpen) {
+                setTimeout(console.log.bind(console, "%cHold on, hold on. %cQuick question: Are you absolutely sure you need to dive into the dev tools right now? Double-checking to make sure you're in the right place, alright?", "color:red;font-size:50px;font-weight:bold; text-shadow:-3px 0 white, 0 3px white, 3px 0 white, 0 -3px white;", ""));
+            }
+        });
+    }, []);
 
     return (
         <ThemeProvider theme={themes[theme]}>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import styled, {css} from "styled-components";
+import styled from "styled-components";
 import {useDispatch} from "react-redux";
 import {DIRECT_MESSAGES_SCREEN, setScreen} from "../../store/screenStateSlice";
 import {setChat} from "../../store/chatSlice";
@@ -81,6 +81,7 @@ const FriendBarIcon = ({id, isSelected, hasNotification, status, avatarUrl, nick
     if (isHovered) {
         notificationHeight = '20px';
     }
+
     if (isSelected) {
         notificationHeight = '40px';
     }

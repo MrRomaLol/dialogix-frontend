@@ -153,24 +153,30 @@ const CurrentChat = () => {
     const {screen} = useSelector(state => state.screenState);
     const {currentChatId} = useSelector(state => state.chat);
     const {friends} = useSelector(state => state.friends);
+    const {guilds, currentGuildId} = useSelector(state => state.guilds);
 
     const friend = useMemo(() => {
         const friendIndex = friends.findIndex(item => item.id === currentChatId);
         return friends[friendIndex];
     }, [friends, currentChatId])
 
+    const guild = useMemo(() => {
+        const guildIndex = guilds.findIndex(item => item.id === currentGuildId);
+        return guilds[guildIndex];
+    }, [guilds, currentGuildId])
+
     const name = useMemo(() => {
         switch (screen) {
             case DIRECT_MESSAGES_SCREEN:
                 return friend.nickname;
             case SERVER_SCREEN:
-                return "server name";
+                return guild.name;
             default:
                 return 'DialogiX Inc.';
         }
 
 
-    }, [screen, currentChatId]);
+    }, [screen, currentChatId, currentGuildId]);
 
     return (
         <Nickname>{name}</Nickname>

@@ -85,8 +85,8 @@ const chatSlice = createSlice({
     name: "chat",
     initialState,
     reducers: {
-        setChat(state, action) {
-            state.currentChatId = action.payload.chatId;
+        setChat(state, {payload}) {
+            state.currentChatId = payload.chatId;
         },
         addMessage(state, {payload}) {
             if (!state.chats[payload.chatId]) {

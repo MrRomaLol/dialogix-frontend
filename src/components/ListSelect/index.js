@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 const ListSelect = ({name, onChange, items}) => {
     const [clonedItems] = useState(items);

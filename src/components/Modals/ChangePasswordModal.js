@@ -20,8 +20,7 @@ const StyledInputBox = styled(InputBox)`
 
 const ChangePasswordModal = ({isOpen, onRequestClose}) => {
     const dispatch = useDispatch();
-    const {loading, error, success} = useSelector(store => store.auth);
-    const [tryingToChange, setTryingToChange] = useState(false);
+    const {loading} = useSelector(store => store.auth);
 
     const [formData, setFormData] = useState({
         currentPassword: '',
@@ -50,7 +49,6 @@ const ChangePasswordModal = ({isOpen, onRequestClose}) => {
 
     const handleChangePassword = () => {
         if (loading) return;
-        setTryingToChange(false);
         if (!formData.currentPassword) {
             return Store.addNotification({
                 ...notification,
@@ -72,21 +70,18 @@ const ChangePasswordModal = ({isOpen, onRequestClose}) => {
             })
         }
 
-        dispatch(changePassword({currentPassword: formData.currentPassword, newPassword: formData.newPassword}))
-        setTryingToChange(true);
-    }
+        if (formData.currentPassword === formData.newPassword) {
+            return Store.addNotification({
+                ...notification,
+                message: "And what will you achieve by this?"
+            })
+        }
 
-    useEffect(() => {
-        const showNotification = () => {
-            if (!tryingToChange) return;
-            if (error) {
-                Store.addNotification({
-                    ...notification,
-                    message: error === 'wrong_password' ? 'Current password you entered is incorrect' : `Something went wrong: ${error}`
-                })
-            }
-
-            if (success) {
+        dispatch(changePassword({
+            currentPassword: formData.currentPassword,
+            newPassword: formData.newPassword
+        })).unwrap()
+            .then(() => {
                 Store.addNotification({
                     ...notification,
                     title: "Success!",
@@ -94,10 +89,14 @@ const ChangePasswordModal = ({isOpen, onRequestClose}) => {
                     message: "Password changed successfully"
                 })
                 onRequestClose();
-            }
-        }
-        showNotification();
-    }, [success, error, tryingToChange])
+            })
+            .catch((error) => {
+                Store.addNotification({
+                    ...notification,
+                    message: error === 'wrong_password' ? 'Current password you entered is incorrect' : `Something went wrong: ${error}`
+                })
+            })
+    }
 
     return (
         <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose}>

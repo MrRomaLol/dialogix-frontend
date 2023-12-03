@@ -1,5 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {revertAll} from "./index";
+import store, {revertAll} from "./index";
+import {setCurrentGuild} from "./guildsSlice";
 
 export const MAIN_SCREEN = "mainScreen";
 export const FRIENDS_SCREEN = "friendsScreen";

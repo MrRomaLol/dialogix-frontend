@@ -6,6 +6,7 @@ import {getData, postData} from "../axios";
 
 const initialState = {
     settings: {},
+    isSettingsLoaded: false,
     loading: true,
     error: null,
 }
@@ -65,6 +66,7 @@ const fetchSlice = createSlice({
         builder.addCase(fetchAllData.fulfilled, (state, {payload}) => {
             state.loading = false;
             state.settings = payload;
+            state.isSettingsLoaded = true;
         })
         builder.addCase(fetchAllData.rejected, (state, {payload}) => {
             state.loading = false;

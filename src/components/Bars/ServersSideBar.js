@@ -26,7 +26,7 @@ const Bar = styled(LRBars)`
 `
 
 const ServersSideBar = () => {
-    const {guilds} = useSelector(state => state.guilds);
+    const {guilds, currentGuildId} = useSelector(state => state.guilds);
     const [isCrateServerModalOpened, setIsCrateServerModalOpened] = useState(false);
 
     const handleOpenCreateServerModal = () => {
@@ -43,12 +43,16 @@ const ServersSideBar = () => {
                 <BarBorder/>
                 <Bar>
                     <BarButton dataTooltipId={'server-tooltip-servers'} icon={faUsers}/>
-                    <BarButton dataTooltipId={'server-tooltip-add'} icon={faPlus} onClick={handleOpenCreateServerModal}/>
+                    <BarButton dataTooltipId={'server-tooltip-add'} icon={faPlus}
+                               onClick={handleOpenCreateServerModal}/>
                     <IconSeparator/>
                     <ScrollerBarBox>
                         <ScrollerBar>
                             {guilds.map((guild) => (
-                                <ServerBarIcon key={guild.id} id={guild.id} avatarUrl={guild.avatarUrl} name={guild.name}/>))}
+                                <ServerBarIcon key={guild.id} id={guild.id}
+                                               avatarUrl={guild.avatarUrl}
+                                               name={guild.name}
+                                               isSelected={currentGuildId === guild.id}/>))}
                         </ScrollerBar>
                     </ScrollerBarBox>
                 </Bar>
@@ -60,9 +64,9 @@ const ServersSideBar = () => {
                      place="left"
                      content={'Create server'}/>
             {guilds.map((guild) => (
-            <Tooltip key={guild.id} id={`server-tooltip-${guild.id}`}
-                     place="left"
-                     content={guild.name}/>))}
+                <Tooltip key={guild.id} id={`server-tooltip-${guild.id}`}
+                         place="left"
+                         content={guild.name}/>))}
             <CreateGuildModal isOpen={isCrateServerModalOpened} onRequestClose={handleCloseCreateServerModal}/>
         </>
     );

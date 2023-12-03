@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {SettingTabName} from "./SettingsParts";
+import React, {useMemo, useState} from 'react';
+import {SettingName, SettingTabName} from "./SettingsParts";
 import styled from "styled-components";
 import CutButton from "../UIElements/CutButton";
 import ContentContainer from "../ContentContainer";
@@ -43,15 +43,6 @@ const UserTagBox = styled.div`
   flex-direction: row;
 `
 
-const SettingName = styled.p`
-  font-size: 25px;
-  font-family: Furore, serif;
-  text-indent: 15px;
-
-  margin-bottom: 10px;
-  color: white;
-`
-
 const StyledInputBox = styled(InputBox)`
   margin-bottom: 10px;
   font-size: 25px;
@@ -93,7 +84,7 @@ const Setting = ({name, onChange, value, maxLength, disabled}) => {
 const PasswordChange = ({onClick}) => {
     return (
         <>
-            <SettingName> Password </SettingName>
+            <SettingName>Password</SettingName>
             <CutButton style={{marginTop: "25px"}} width={300} onClick={onClick}>Change Password</CutButton>
         </>
     )
@@ -128,7 +119,7 @@ function areSpecifiedFieldsEqual(obj1, obj2, fieldsToCheck) {
     return true;
 }
 
-const MyAccount = () => {
+const SettingsMyAccount = () => {
     const dispatch = useDispatch();
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
     const {userInfo, loading} = useSelector(state => state.auth);
@@ -254,4 +245,4 @@ const MyAccount = () => {
     );
 };
 
-export default MyAccount;
+export default SettingsMyAccount;

@@ -1,14 +1,17 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ModalComponent from "./ModalComponent";
 import ContentContainer from "../ContentContainer";
 import styled, {css} from "styled-components";
 import CutButton from "../UIElements/CutButton";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {ModalContent, ModalName, SectionName} from "./ModalParts";
 import InputBox from "../UIElements/InputBox";
 import ListSelect from "../ListSelect";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faComments, faVolumeHigh} from "@fortawesome/free-solid-svg-icons";
+import DXSpinner from "../DXSpinner";
+import {Store} from "react-notifications-component";
+import {createChannel} from "../../store/guildsSlice";
 
 const StyledInputBox = styled(InputBox)`
   margin-bottom: 10px;
@@ -54,11 +57,12 @@ const ChanelType = ({icon, name, isSelected = false, onClick}) => {
     )
 }
 
-const CreateCategoryModal = ({isOpen, onRequestClose}) => {
+const CreateCategoryModal = ({isOpen, onRequestClose, category}) => {
     const dispatch = useDispatch();
+    const {loading} = useSelector(state => state.guilds);
     const [formData, setFormData] = useState({
         channelName: '',
-        channelType: '',
+        channelType: 'text',
     })
 
     const chanelTypes = [
@@ -73,20 +77,70 @@ const CreateCategoryModal = ({isOpen, onRequestClose}) => {
         }))
     }
 
-    const handleChanelCreate = () => {
-
+    const notification = {
+        title: "Error!",
+        type: "danger",
+        insert: "top",
+        container: "bottom-right",
+        animationIn: ["animate__animated", "animate__fadeInDown"],
+        dismiss: {
+            duration: 5000,
+            pauseOnHover: true,
+        }
     }
+
+    const handleChanelCreate = () => {
+        if (loading) return;
+        if (formData.channelName.length < 3) {
+            return Store.addNotification({
+                ...notification,
+                message: "Channel name is too short"
+            })
+        }
+
+        if (formData.channelName.length > 16) {
+            return Store.addNotification({
+                ...notification,
+                message: "Channel name is too long"
+            })
+        }
+
+        dispatch(createChannel({
+            channelName: formData.channelName,
+            channelType: formData.channelType,
+            categoryId: category?.id,
+        })).unwrap()
+            .then(() => {
+                onRequestClose();
+            })
+            .catch((error) => {
+                Store.addNotification({
+                    ...notification,
+                    message: `Something went wrong: ${error}`
+                })
+            })
+    }
+
+    useEffect(() => {
+        if (isOpen) {
+            setFormData({
+                channelName: '',
+                channelType: 'text',
+            })
+        }
+    }, [isOpen]);
 
     return (
         <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose}>
             <ContentContainer>
                 <ModalContent>
-                    <ModalName>Create channel</ModalName>
+                    <ModalName>Create channel {category && `in ${category.name}`}</ModalName>
                     <SectionName>Channel name</SectionName>
-                    <StyledInputBox name={'channelName'} onChange={handleChange}/>
+                    <StyledInputBox autoFocus name={'channelName'} onChange={handleChange}/>
                     <SectionName>Channel type</SectionName>
                     <ListSelect name={'channelType'} onChange={handleChange} items={chanelTypes}/>
-                    <CutButton onClick={handleChanelCreate}>{'Create'}</CutButton>
+                    <CutButton style={{marginTop: "15px"}} onClick={handleChanelCreate}>{loading ?
+                        <DXSpinner/> : 'Create'}</CutButton>
                 </ModalContent>
             </ContentContainer>
         </ModalComponent>

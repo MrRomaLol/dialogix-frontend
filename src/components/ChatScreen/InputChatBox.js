@@ -116,9 +116,16 @@ const StyledCallButton = styled(StyledSendButton)`
   cursor: pointer;
   transform: scaleX(-1);
 
-  &:hover {
-    color: white;
-  }
+  ${({isActive}) => !isActive && css`
+    cursor: default;
+    color: gray;
+  `}
+
+  ${({isActive}) => isActive && css`
+    &:hover {
+      color: white;
+    }
+  `}
 `
 
 const FileContainer = styled.div`
@@ -217,7 +224,7 @@ const InputChatBox = forwardRef(({name, id, onTextChange}, ref) => {
     const dispatch = useDispatch();
     const {userInfo} = useSelector(state => state.auth);
     const {currentChatId} = useSelector(state => state.chat);
-    const {isCurrentlyInCall} = useSelector(state => state.dialler);
+    const {isCurrentlyInCall, callingId} = useSelector(state => state.dialler);
     const [files, setFiles] = useState([]);
     const inputRef = useRef(null);
     const [input, setInput] = useState('');
@@ -255,6 +262,8 @@ const InputChatBox = forwardRef(({name, id, onTextChange}, ref) => {
     }
 
     const handleMakePrivateCall = () => {
+        if (isCurrentlyInCall && callingId === currentChatId) return;
+
         if (isCurrentlyInCall) {
             dispatch(endPrivateCall()).then(() => {
                 setTimeout(() => {
@@ -342,6 +351,7 @@ const InputChatBox = forwardRef(({name, id, onTextChange}, ref) => {
                            multiple/>
                     <Separator/>
                     <MessageTextArea
+                        autoFocus
                         className={"scroll-bar"}
                         value={input}
                         placeholder={name}
@@ -352,7 +362,7 @@ const InputChatBox = forwardRef(({name, id, onTextChange}, ref) => {
                     />
                     <StyledSendButton icon={faPaperPlane} hasInput={getInput()} onClick={handleSendMessage}/>
                     <Separator/>
-                    <StyledCallButton icon={faPhone} onClick={handleMakePrivateCall}/>
+                    <StyledCallButton icon={faPhone} onClick={handleMakePrivateCall} isActive={!(isCurrentlyInCall && callingId === currentChatId)}/>
                 </InputContainer>
             </InputBack>
             <InputBorder/>

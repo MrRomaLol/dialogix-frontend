@@ -9,9 +9,12 @@ import {
 } from "./FriendCardStyledParts";
 import styled from "styled-components";
 import {useDispatch} from "react-redux";
-import {deleteFriend} from "../../store/friendsSlice";
+import {deleteFriend, setNotification} from "../../store/friendsSlice";
 import StatusIndicator from "../StatusIndicator";
 import Avatar from "../FriendAvatar";
+import {setChat} from "../../store/chatSlice";
+import {DIRECT_MESSAGES_SCREEN, setScreen} from "../../store/screenStateSlice";
+import {Item, Menu, useContextMenu} from "react-contexify";
 
 const SettingsIcon = styled(FriendCardIcon)`
   color: #C087D4;
@@ -41,23 +44,51 @@ export const FriendCardAvatar = styled(Avatar)`
 const FriendCard = ({nick, id, avatarUrl, status}) => {
     const dispatch = useDispatch();
 
+    const ID = "create";
+
+    const {show} = useContextMenu({
+        id: ID,
+    });
+
+    const showContextMenu = (event) => {
+        event.stopPropagation();
+        show({
+            event,
+            props: {
+                key: 'value'
+            }
+        })
+    }
+
     const handleDeleteFriend = () => {
         dispatch(deleteFriend({id}))
     }
 
+    const handleOpenChat = () => {
+        dispatch(setChat({chatId: id}));
+        dispatch(setScreen({screenName: DIRECT_MESSAGES_SCREEN}));
+        dispatch(setNotification({id, state: false}));
+    }
+
+
     return (
-        <CardContainer>
-            <FriendCardBack>
-                <FriendCardContainer>
-                    <FriendCardAvatar id={id} nick={nick} url={avatarUrl}>
-                        <Status status={status}/>
-                    </FriendCardAvatar>
-                    {nick}
-                </FriendCardContainer>
-                <SettingsIcon icon={faSliders} onClick={handleDeleteFriend}/>
-            </FriendCardBack>
-            <FriendCardBorder/>
-        </CardContainer>
+        <>
+            <CardContainer onClick={handleOpenChat}>
+                <FriendCardBack>
+                    <FriendCardContainer>
+                        <FriendCardAvatar id={id} nick={nick} url={avatarUrl}>
+                            <Status status={status}/>
+                        </FriendCardAvatar>
+                        {nick}
+                    </FriendCardContainer>
+                    <SettingsIcon icon={faSliders} onClick={showContextMenu}/>
+                </FriendCardBack>
+                <FriendCardBorder/>
+            </CardContainer>
+            <Menu id={ID} animation={'fade'}>
+                <Item style={{color: 'red'}} id="removeFriend" onClick={handleDeleteFriend}><div style={{color: "#B13470"}}>Remove friend</div></Item>
+            </Menu>
+        </>
     )
 };
 

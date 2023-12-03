@@ -1,18 +1,20 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import styled from "styled-components";
 import ContentContainer from "../ContentContainer";
 import useWindowSize from "../../hooks/useWindowSize";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUserPlus} from "@fortawesome/free-solid-svg-icons";
-import {Item, Menu, useContextMenu} from "react-contexify";
-import {use} from "i18next";
+import {Item, Menu, Separator, useContextMenu} from "react-contexify";
 import CreateCategoryModal from "../Modals/CreateCategoryModal";
 import CreateChannelModal from "../Modals/CreateChannelModal";
-
-const GuildLeftBar = styled(ContentContainer)`
-  height: 100%;
-  width: 250px;
-`
+import InviteToGuildModal from "../Modals/InviteToGuildModal";
+import ChannelsCategory from "./ChannelsCategory";
+import {useDispatch, useSelector} from "react-redux";
+import {loadGuild, setCurrentGuild} from "../../store/guildsSlice";
+import GuildChannels from "./GuildChannels";
+import {GuildBarName} from "./GuildParts";
+import ChannelsBar from "./ChannelsBar";
+import {APP_OPENED_STATE, APP_SETTINGS_STATE} from "../../store/appStateSlice";
 
 const GuildChat = styled(ContentContainer)`
   display: flex;
@@ -25,19 +27,6 @@ const GuildChat = styled(ContentContainer)`
 const GuildRightBar = styled(ContentContainer)`
   height: 100%;
   width: 250px;
-`
-
-const BarName = styled.div`
-  font-family: Furore, serif;
-  color: #9788B1;
-  width: 100%;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 26px;
-  padding-left: 10px;
-  border-bottom: 2px solid rgba(188, 44, 201, 0.62);
 `
 
 const Wrapper = styled.div`
@@ -68,9 +57,9 @@ const InviteUsersBack = styled.div`
   }
 `
 
-const InviteUsers = () => {
+const InviteUsers = ({onClick}) => {
     return (
-        <InviteUsersBack>
+        <InviteUsersBack onClick={onClick}>
             <FontAwesomeIcon icon={faUserPlus} color={"#723AAA"}/>
             <div style={{color: "#9788B1", fontFamily: "Furore, serif"}}>Invite users</div>
         </InviteUsersBack>
@@ -79,69 +68,54 @@ const InviteUsers = () => {
 
 const GuildScreen = () => {
     const {width} = useWindowSize();
+    const dispatch = useDispatch();
 
-    const [isCreateCategory, setIsCreateCategory] = useState(false);
-    const [isCreateChannel, setIsCreateChannel] = useState(false);
+    const {guilds, currentGuildId} = useSelector(state => state.guilds);
 
-    const ID = "create";
+    const [isInviteToGuild, setIsInviteToGuild] = useState(false);
 
-    const {show} = useContextMenu({
-        id: ID,
-    });
+    const guild = useMemo(() => {
+        const guildIndex = guilds.findIndex(item => item.id === currentGuildId);
+        return guilds[guildIndex];
+    }, [guilds, currentGuildId])
 
-    const showContextMenu = (event) => {
-        show({
-            event,
-            props: {
-                key: 'value'
-            }
-        })
+    const handleInviteToGuild = () => {
+        setIsInviteToGuild(true);
     }
 
-    const handleCreateCategory = () => {
-        setIsCreateCategory(true);
+    const closeInviteToGuild = () => {
+        setIsInviteToGuild(false);
     }
 
-    const closeCreateCategory = () => {
-        setIsCreateCategory(false);
-    }
+    useEffect(() => {
+        if (!guild.isLoaded) {
+            dispatch(loadGuild({guildId: currentGuildId}));
+        }
+    }, [guilds, currentGuildId]);
 
-    const handleCreateChannel= () => {
-        setIsCreateChannel(true);
-    }
-
-    const closeCreateChannel= () => {
-        setIsCreateChannel(false);
-    }
+    useEffect(() => {
+        return () => {
+            dispatch(setCurrentGuild({currentGuildId: null}))
+        }
+    }, []);
 
     return (
         <div style={{display: "flex", width: "100%", height: "100%"}}>
-            <GuildLeftBar>
-                <BarName>Channels</BarName>
-                <Wrapper>
-                    <Content onContextMenu={showContextMenu}>
+            <ChannelsBar guild={guild}/>
 
-                    </Content>
-                </Wrapper>
-            </GuildLeftBar>
             <GuildChat>
 
             </GuildChat>
-            {width > 1000 && <GuildRightBar>
-                <BarName>Users</BarName>
-                <InviteUsers/>
+            {width > 1200 && <GuildRightBar>
+                <GuildBarName>Users</GuildBarName>
+                <InviteUsers onClick={handleInviteToGuild}/>
                 <Wrapper>
                     <Content>
                     </Content>
                 </Wrapper>
             </GuildRightBar>}
-            <Menu id={ID} animation={'fade'}>
-                <Item id="addCategory" onClick={handleCreateCategory}>Add Category</Item>
-                <Item id="addChannel" onClick={handleCreateChannel}>Add Channel</Item>
-            </Menu>
 
-            <CreateCategoryModal isOpen={isCreateCategory} onRequestClose={closeCreateCategory}/>
-            <CreateChannelModal isOpen={isCreateChannel} onRequestClose={closeCreateChannel}/>
+            <InviteToGuildModal isOpen={isInviteToGuild} onRequestClose={closeInviteToGuild}/>
         </div>
     );
 };

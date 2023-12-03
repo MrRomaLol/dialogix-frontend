@@ -119,7 +119,7 @@ const FriendAddTab = () => {
     return (
         <Container>
             <SearchField>
-                <FriendsInputField onChange={handleAddChange}/>
+                <FriendsInputField autoFocus onChange={handleAddChange}/>
                 <Button onClick={addFriend}>Send friend request</Button>
             </SearchField>
         </Container>

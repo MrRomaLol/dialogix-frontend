@@ -25,6 +25,7 @@ export const ModalName = styled.p`
   font-size: 28px;
   color: white;
   text-align: center;
+  user-select: none;
 `
 
 export const ModalSubName = styled.p`

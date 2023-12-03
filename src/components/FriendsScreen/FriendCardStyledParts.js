@@ -4,10 +4,14 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 export const CardContainer = styled.div`
   height: 100px;
   width: 400px;
-
   margin-bottom: 30px;
-
   position: relative;
+  cursor: pointer;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 50px), calc(100% - 50px) 100%, 0 100%);
+  
+  &:hover {
+    background-color: rgba(188, 44, 201, 0.1);
+  }
 `
 
 export const FriendCardBack = styled.div`

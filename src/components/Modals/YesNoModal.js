@@ -12,19 +12,24 @@ const ButtonsContainer = styled.div`
   gap: 50px;
 `
 
-const YesNoModal = ({isOpen, onRequestClose, onFirst, onSecond, modalName, modalSubName, firstName, secondName}) => {
+const StyledContentContainer = styled(ContentContainer)`
+  max-width: 900px;
+`
+
+const YesNoModal = ({isOpen, onRequestClose, onFirst, onSecond, modalName, modalSubName, firstName, secondName, children}) => {
     return (
         <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose}>
-            <ContentContainer>
+            <StyledContentContainer>
                 <ModalContent>
                     <ModalName>{modalName}</ModalName>
-                    <ModalSubName style={{marginTop: "10px"}}>{modalSubName}</ModalSubName>
+                    {modalSubName && <ModalSubName style={{marginTop: "10px"}}>{modalSubName}</ModalSubName>}
+                    {children}
                     <ButtonsContainer>
                         <CutButton onClick={onFirst}>{firstName}</CutButton>
                         <CutButton onClick={onSecond}>{secondName}</CutButton>
                     </ButtonsContainer>
                 </ModalContent>
-            </ContentContainer>
+            </StyledContentContainer>
         </ModalComponent>
     );
 };

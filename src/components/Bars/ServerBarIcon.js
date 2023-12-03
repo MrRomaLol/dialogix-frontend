@@ -4,6 +4,7 @@ import {Tooltip} from "react-tooltip";
 import {useDispatch} from "react-redux";
 import {DIRECT_MESSAGES_SCREEN, SERVER_SCREEN, setScreen} from "../../store/screenStateSlice";
 import {BarsIconFriendGuild, IconFriendGuild} from "./SideIconParts";
+import {setCurrentGuild} from "../../store/guildsSlice";
 
 const Container = styled.div`
   display: flex;
@@ -45,7 +46,7 @@ const ServerIcon = (props) => {
     )
 }
 
-const ServerBarIcon = ({id, avatarUrl, name}) => {
+const ServerBarIcon = ({id, avatarUrl, isSelected, name}) => {
     const dispatch = useDispatch();
     const [isHovered, setIsHovered] = useState(false);
 
@@ -55,17 +56,23 @@ const ServerBarIcon = ({id, avatarUrl, name}) => {
         notificationHeight = '20px';
     }
 
+    if (isSelected) {
+        notificationHeight = '40px';
+    }
+
     const handleHover = (isHovered) => {
         setIsHovered(isHovered);
     }
 
     const handleClick = () => {
         dispatch(setScreen({screenName: SERVER_SCREEN}));
+        dispatch(setCurrentGuild({currentGuildId: id}));
     }
 
     return (
         <Container>
             <ServerIcon data-tooltip-id={`server-tooltip-${id}`}
+                        isSelected={isSelected}
                         onClick={handleClick}
                         onMouseEnter={() => handleHover(true)} onMouseLeave={() => handleHover(false)}
                         id={id} url={avatarUrl} name={name}/>

@@ -7,3 +7,12 @@ export const SettingTabName = styled.p`
   font-size: 28px;
   color: white;
 `
+
+export const SettingName = styled.p`
+  font-size: 25px;
+  font-family: Furore, serif;
+  text-indent: 15px;
+
+  margin-bottom: 10px;
+  color: white;
+`
