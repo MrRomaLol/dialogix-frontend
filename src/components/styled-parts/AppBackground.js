@@ -17,11 +17,12 @@ export const StyledAppBackground = styled.div`
 `
 
 export const AppBackground = () => {
+    const {userInfo} = useSelector(state => state.auth);
     const {settings, isSettingsLoaded} = useSelector(state => state.fetchRoot);
 
     const bgUrl = useMemo(() => {
         if (!isSettingsLoaded) return "img/AppBG.webp"
-        return settings['app_bg'].value || "img/AppBG.webp";
+        return settings['app_bg']?.value ? `/api/v1/cdn/users/bg/${userInfo.id}/${settings['app_bg'].value}` : "img/AppBG.webp";
     }, [settings, isSettingsLoaded]);
 
     return <StyledAppBackground appBg={bgUrl}/>

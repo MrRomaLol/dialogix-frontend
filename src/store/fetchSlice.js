@@ -53,6 +53,26 @@ export const updateUserSetting = createAsyncThunk(
     }
 )
 
+export const setAppBackground = createAsyncThunk(
+    'fetch/setBackground',
+    async ({backgroundImage}, {rejectedWithValue, dispatch, getState}) => {
+        const data = {
+            backgroundImage
+        }
+
+        const res = await postData('/api/v1/profile/uploadbackground', data);
+
+        if (!res.ok) {
+            rejectedWithValue(res.message);
+        }
+
+        const settings = getState().fetchRoot.settings;
+        const bgSetting = settings['app_bg'];
+
+        dispatch(updateUserSetting({id: bgSetting.id, settingName: 'app_bg', settingValue: res.bgName}));
+    }
+)
+
 const fetchSlice = createSlice({
     name: "fetch",
     initialState,
@@ -80,7 +100,7 @@ const fetchSlice = createSlice({
             state.loading = false;
             state.settings[payload.settingName] = {
                 id: payload.id,
-                settingValue: payload.settingValue,
+                value: payload.settingValue,
             }
         })
         builder.addCase(updateUserSetting.rejected, (state, {payload}) => {

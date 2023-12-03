@@ -133,6 +133,10 @@ ipcMain.on("closeApp", () => {
     mainWindow?.hide();
 });
 
+ipcMain.on("openLink", (channel, args) => {
+    shell.openExternal([args[0]]);
+});
+
 ipcMain.on("saveCookies", () => {
     session.defaultSession.cookies.get({url: DIALOGIX_APP_URL}).then((cookies) => {
         store.set('App-Cookies', cookies);

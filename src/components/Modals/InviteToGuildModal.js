@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import ModalComponent from "./ModalComponent";
 import ContentContainer from "../ContentContainer";
-import {ModalContent, ModalName} from "./ModalParts";
+import {ModalContent, ModalName, ModalSubName} from "./ModalParts";
 import styled, {css} from "styled-components";
 import {useSelector} from "react-redux";
 import CutButton from "../UIElements/CutButton";
@@ -124,6 +124,7 @@ const InviteToGuildModal = ({isOpen, onRequestClose}) => {
                 <ModalContent>
                     <ModalName style={{marginBottom: "15px"}}>Invite users to {currentGuild.name}</ModalName>
                     <UsersScrollBox className={'scroll-bar'}>
+                        {friends.length === 0 && <ModalSubName style={{width: "100%", textAlign: "center"}}>You have no friends(</ModalSubName>}
                         {friends.map(friend => (
                             <User key={friend.id} id={friend.id} url={friend.avatar_url} nickname={friend.nickname}
                                   onClick={handleInvite} isInvited={invited.includes(friend.id)}/>))}
