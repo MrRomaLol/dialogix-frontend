@@ -6,6 +6,7 @@ import {useSelector} from "react-redux";
 import FileMessage from "./FileMessage";
 import FileMessagePlaceholder from "./FileMessagePlaceholder";
 import formatDate from "../../utils/dateFormat";
+import {useTranslation} from "react-i18next";
 
 export const MyMessageContainer = styled(MessageContainer)`
   justify-content: flex-end;
@@ -32,13 +33,14 @@ export const MyMessageBack = styled(MessageBack)`
 
 const MyMessage = ({content, timestamp, status, files}) => {
     const {userInfo} = useSelector(state => state.auth)
+    const [ t, i18n ] = useTranslation();
 
     let statusOrTimestamp;
 
     if (status === "sending") {
-        statusOrTimestamp = "Sending...";
+        statusOrTimestamp = t("myMsg.send");
     } else if (status === "error") {
-        statusOrTimestamp = "Error";
+        statusOrTimestamp = t("misc.error");
     } else {
         statusOrTimestamp = formatDate(timestamp);
     }

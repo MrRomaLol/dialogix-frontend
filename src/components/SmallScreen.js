@@ -1,6 +1,7 @@
 import React from 'react';
 import {AppBackground, AppContent} from "./styled-parts/AppBackground";
 import styled from "styled-components";
+import {useTranslation} from "react-i18next";
 
 const Content = styled(AppContent)`
   justify-content: center;
@@ -47,14 +48,15 @@ const Container = styled.div`
 `
 
 const SmallScreen = () => {
+    const [ t, i18n ] = useTranslation();
     return (
         <React.Fragment>
             <AppBackground/>
             <Content>
                 <Container>
                     <Back>
-                        <H1>Screen is too small!</H1>
-                        <P>Please use a larger screen to view this content.</P>
+                        <H1>{t("smallScreen.screen2Small")}</H1>
+                        <P>{t("smallScreen.screenWarn")}</P>
                     </Back>
                     <Border/>
                 </Container>

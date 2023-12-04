@@ -6,6 +6,7 @@ import styled from "styled-components";
 import CutButton from "../UIElements/CutButton";
 import {createCroppedImage} from "../../utils/imageCrop";
 import {ModalName} from "./ModalParts";
+import {useTranslation} from "react-i18next";
 
 const Container = styled.div`
   display: flex;
@@ -48,6 +49,7 @@ const CropImageModal = ({isOpen, onRequestClose, src, onImageCrop}) => {
     const [crop, setCrop] = useState({x: 0, y: 0});
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [zoom, setZoom] = useState(1);
+    const [ t, i18n ] = useTranslation();
 
     const handleChangeZoom = e => {
         setZoom(e.target.value);
@@ -82,7 +84,7 @@ const CropImageModal = ({isOpen, onRequestClose, src, onImageCrop}) => {
         <ModalComponent isOpen={isOpen}>
             <ContentContainer>
                 <Container>
-                    <ModalName style={{marginBottom: "15px"}}>Crop image</ModalName>
+                    <ModalName style={{marginBottom: "15px"}}>{t("cropImg.cropImg")}</ModalName>
                     <CropContainer>
                         {isAnimationEnd ? <Cropper
                             image={src}
@@ -99,7 +101,7 @@ const CropImageModal = ({isOpen, onRequestClose, src, onImageCrop}) => {
                     </CropContainer>
                     <ButtonsContainer>
                         <Slider type={'range'} onChange={handleChangeZoom} min={1} max={10} step={0.1} value={zoom}/>
-                        <CutButton width={140} onClick={handleCropImage}>Crop</CutButton>
+                        <CutButton width={140} onClick={handleCropImage}>{t("cropImg.crop")}</CutButton>
                     </ButtonsContainer>
                 </Container>
             </ContentContainer>

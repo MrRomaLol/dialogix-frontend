@@ -14,6 +14,7 @@ import useSound from "use-sound";
 import FriendAvatar from "../FriendAvatar";
 import call from "../../sounds/call.mp3"
 import {socket} from "../../socket";
+import {useTranslation} from "react-i18next";
 
 const CallContainer = styled(ContentContainer)`
   width: 100%;
@@ -139,6 +140,7 @@ const CallingAvatar = styled(FriendAvatar)`
 
 const CallModal = ({callerId}) => {
     const dispatch = useDispatch();
+    const [ t, i18n ] = useTranslation();
     const {callers} = useSelector(state => state.dialler);
     const {friends} = useSelector(state => state.friends);
 
@@ -184,6 +186,7 @@ const CallModal = ({callerId}) => {
         socket.on('private-call-ended', () => {
             // dispatch(setCallingState({isMeTryingToCall: false, isCallAccepted: false, isCurrentlyInCall: false}));
             // dispatch(setCalling({isCalling: false, callingId: null, callerSignal: null}));
+            // TODO close modal on call end
         })
 
         return () => {
@@ -200,7 +203,7 @@ const CallModal = ({callerId}) => {
                             <CallingAvatar id={callingUser.id} nick={callingUser.nickname}
                                            url={callingUser.avatar_url}/>
                             <Calling style={{marginBottom: "15px", fontSize: "20px"}}>{callingUser.nickname}</Calling>
-                            <Calling>calling...</Calling>
+                            <Calling>{t("callModal")}</Calling>
                         </Info>
                         <CallButtons>
                             <AnswerBack onClick={handleAcceptCall}>

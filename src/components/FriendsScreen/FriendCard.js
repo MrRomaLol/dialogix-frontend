@@ -15,6 +15,7 @@ import Avatar from "../FriendAvatar";
 import {setChat} from "../../store/chatSlice";
 import {DIRECT_MESSAGES_SCREEN, setScreen} from "../../store/screenStateSlice";
 import {Item, Menu, useContextMenu} from "react-contexify";
+import {useTranslation} from "react-i18next";
 
 const SettingsIcon = styled(FriendCardIcon)`
   color: #C087D4;
@@ -43,6 +44,7 @@ export const FriendCardAvatar = styled(Avatar)`
 
 const FriendCard = ({nick, id, avatarUrl, status}) => {
     const dispatch = useDispatch();
+    const [ t, i18n ] = useTranslation();
 
     const ID = "create";
 
@@ -86,7 +88,7 @@ const FriendCard = ({nick, id, avatarUrl, status}) => {
                 <FriendCardBorder/>
             </CardContainer>
             <Menu id={ID} animation={'fade'}>
-                <Item style={{color: 'red'}} id="removeFriend" onClick={handleDeleteFriend}><div style={{color: "#B13470"}}>Remove friend</div></Item>
+                <Item style={{color: 'red'}} id="removeFriend" onClick={handleDeleteFriend}><div style={{color: "#B13470"}}>{t("friendCard.remFriend")}</div></Item>
             </Menu>
         </>
     )

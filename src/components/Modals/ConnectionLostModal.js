@@ -8,6 +8,7 @@ import {logoutUser} from "../../store/authSlice";
 import {revertAll} from "../../store";
 import {useDispatch} from "react-redux";
 import DXSpinner from "../DXSpinner";
+import {useTranslation} from "react-i18next";
 
 const ModalText = styled.p`
   width: 550px;
@@ -17,6 +18,8 @@ const ModalText = styled.p`
 `
 
 const ConnectionLostModal = ({isOpen}) => {
+    const [ t, i18n ] = useTranslation();
+
     const bgStyle = {
         zIndex: 9999,
         backgroundColor: 'transparent',
@@ -27,8 +30,8 @@ const ConnectionLostModal = ({isOpen}) => {
         <ModalComponent isOpen={isOpen} overlayStyle={bgStyle}>
             <ContentContainer>
                 <ModalContent>
-                    <ModalName style={{marginBottom: "20px"}}>Connection lost</ModalName>
-                    <ModalText>Lost server connection; attempting to reconnect.</ModalText>
+                    <ModalName style={{marginBottom: "20px"}}>{t("lostConnModal.connLost")}</ModalName>
+                    <ModalText>{t("lostConnModal.reconn")}</ModalText>
                     <div style={{width: "100px", height: "100px", marginTop: "20px"}}>
                         <DXSpinner/>
                     </div>

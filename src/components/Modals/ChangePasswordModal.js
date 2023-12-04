@@ -9,6 +9,8 @@ import {Store} from "react-notifications-component";
 import {useDispatch, useSelector} from "react-redux";
 import {changePassword} from "../../store/authSlice";
 import DXSpinner from "../DXSpinner";
+import {t} from "i18next";
+import {cT} from "../../localization/funcs";
 
 
 const StyledInputBox = styled(InputBox)`
@@ -36,7 +38,7 @@ const ChangePasswordModal = ({isOpen, onRequestClose}) => {
     }
 
     const notification = {
-        title: "Error!",
+        title: t("misc.error"),
         type: "danger",
         insert: "top",
         container: "bottom-right",
@@ -52,28 +54,28 @@ const ChangePasswordModal = ({isOpen, onRequestClose}) => {
         if (!formData.currentPassword) {
             return Store.addNotification({
                 ...notification,
-                message: "Enter your current password"
+                message: t("chngPswdModal.entCurrPswd")
             });
         }
 
         if (formData.newPassword !== formData.repeat) {
             return Store.addNotification({
                 ...notification,
-                message: "Passwords doesn't match"
+                message: t("logRegPage.pswdNotMatch")
             });
         }
 
         if (formData.newPassword.length < 6) {
             return Store.addNotification({
                 ...notification,
-                message: "Password is too short"
+                message: t("logRegPage.shortPswd")
             })
         }
 
         if (formData.currentPassword === formData.newPassword) {
             return Store.addNotification({
                 ...notification,
-                message: "And what will you achieve by this?"
+                message: t("chngPswdModal.samePswd")
             })
         }
 
@@ -84,16 +86,16 @@ const ChangePasswordModal = ({isOpen, onRequestClose}) => {
             .then(() => {
                 Store.addNotification({
                     ...notification,
-                    title: "Success!",
+                    title: t("misc.succ"),
                     type: "success",
-                    message: "Password changed successfully"
+                    message: t("chngPswdModal.succChangePswd")
                 })
                 onRequestClose();
             })
             .catch((error) => {
                 Store.addNotification({
                     ...notification,
-                    message: error === 'wrong_password' ? 'Current password you entered is incorrect' : `Something went wrong: ${error}`
+                    message: error === 'wrong_password' ? t("chngPswdModal.currPswdIncor") :  cT(t("misc.msgErr"), error)
                 })
             })
     }
@@ -102,17 +104,16 @@ const ChangePasswordModal = ({isOpen, onRequestClose}) => {
         <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose}>
             <ContentContainer>
                 <ModalContent>
-                    <ModalName>Change password</ModalName>
-                    <ModalSubName style={{marginTop: "10px"}}>Enter your current password and a new
-                        password</ModalSubName>
-                    <SectionName style={{marginTop: "30px"}}>Current password</SectionName>
+                    <ModalName></ModalName>
+                    <ModalSubName style={{marginTop: "10px"}}>{t("chngPswdModal.entCurrAndNewPswd")}</ModalSubName>
+                    <SectionName style={{marginTop: "30px"}}>{t("chngPswdModal.currPswd")}</SectionName>
                     <StyledInputBox type={'password'} name={'currentPassword'} onChange={handleChange}/>
-                    <SectionName>New password</SectionName>
+                    <SectionName>{t("chngPswdModal.newPswd")}</SectionName>
                     <StyledInputBox type={'password'} name={'newPassword'} onChange={handleChange}/>
-                    <SectionName>Repeat new password</SectionName>
+                    <SectionName>{t("chngPswdModal.repNewPswd")}</SectionName>
                     <StyledInputBox type={'password'} name={'repeat'} onChange={handleChange}/>
                     <CutButton style={{marginTop: "20px"}} onClick={handleChangePassword}>{loading ?
-                        <DXSpinner/> : 'Done'}</CutButton>
+                        <DXSpinner/> : t("misc.done")}</CutButton>
                 </ModalContent>
             </ContentContainer>
         </ModalComponent>

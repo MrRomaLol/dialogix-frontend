@@ -6,6 +6,7 @@ import styled, {css} from "styled-components";
 import {useSelector} from "react-redux";
 import CutButton from "../UIElements/CutButton";
 import FriendAvatar from "../FriendAvatar";
+import {useTranslation} from "react-i18next";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;
@@ -74,25 +75,26 @@ const Nickname = styled.p`
   font-family: "JetBrains Mono", serif;
 `
 
-const InviteButton = ({isInvited}) => {
+const InviteButton = ({isInvited, t}) => {
     return (
-        <InviteButtonBack isInvited={isInvited}>{isInvited ? "Invited" : "Invite"}</InviteButtonBack>
+        <InviteButtonBack isInvited={isInvited}>{isInvited ? t("guildInviteModal.invited") : t("guildInviteModal.invite")}</InviteButtonBack>
     )
 }
 
-const User = ({id, url, nickname, isInvited, onClick}) => {
+const User = ({id, url, nickname, isInvited, onClick, t}) => {
     return (
         <UserBox isInvited={isInvited} onClick={() => onClick?.(id)}>
             <div style={{display: "inherit", alignItems: "inherit"}}>
                 <Avatar id={id} url={url} nick={nickname}/>
                 <Nickname>{nickname}</Nickname>
             </div>
-            <InviteButton isInvited={isInvited}/>
+            <InviteButton isInvited={isInvited} t={t}/>
         </UserBox>
     )
 }
 
 const InviteToGuildModal = ({isOpen, onRequestClose}) => {
+    const [ t, i18n ] = useTranslation();
     const {guilds, currentGuildId} = useSelector(state => state.guilds);
     const {friends} = useSelector(state => state.friends);
     const [invited, setInvited] = useState([]);
@@ -122,12 +124,12 @@ const InviteToGuildModal = ({isOpen, onRequestClose}) => {
         <ModalComponent contentStyle={{width: "600px"}} isOpen={isOpen} onRequestClose={onRequestClose}>
             <FullScreenContainer>
                 <ModalContent>
-                    <ModalName style={{marginBottom: "15px"}}>Invite users to {currentGuild.name}</ModalName>
+                    <ModalName style={{marginBottom: "15px"}}>{t("guildInviteModal.invUsers2")} {currentGuild.name}</ModalName>
                     <UsersScrollBox className={'scroll-bar'}>
-                        {friends.length === 0 && <ModalSubName style={{width: "100%", textAlign: "center"}}>You have no friends(</ModalSubName>}
+                        {friends.length === 0 && <ModalSubName style={{width: "100%", textAlign: "center"}}>{t("guildInviteModal.noFriends")}</ModalSubName>}
                         {friends.map(friend => (
                             <User key={friend.id} id={friend.id} url={friend.avatar_url} nickname={friend.nickname}
-                                  onClick={handleInvite} isInvited={invited.includes(friend.id)}/>))}
+                                  onClick={handleInvite} isInvited={invited.includes(friend.id)} t={t}/>))}
                     </UsersScrollBox>
                     <CutButton style={{marginTop: "15px"}}>Send</CutButton>
                 </ModalContent>

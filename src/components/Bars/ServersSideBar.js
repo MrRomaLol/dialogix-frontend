@@ -8,6 +8,7 @@ import CreateGuildModal from "../Modals/CreateGuildModal";
 import {useSelector} from "react-redux";
 import ServerBarIcon from "./ServerBarIcon";
 import {Tooltip} from "react-tooltip";
+import {useTranslation} from "react-i18next";
 
 const EobaniyBlyr = styled.span`
   height: 100%;
@@ -28,6 +29,7 @@ const Bar = styled(LRBars)`
 const ServersSideBar = () => {
     const {guilds, currentGuildId} = useSelector(state => state.guilds);
     const [isCrateServerModalOpened, setIsCrateServerModalOpened] = useState(false);
+    const [ t, i18n ] = useTranslation();
 
     const handleOpenCreateServerModal = () => {
         setIsCrateServerModalOpened(true);
@@ -59,10 +61,10 @@ const ServersSideBar = () => {
             </EobaniyBlyr>
             <Tooltip id={'server-tooltip-servers'}
                      place="left"
-                     content={'Servers (not a button)'}/>
+                     content={t("servSB.servButt")}/>
             <Tooltip id={'server-tooltip-add'}
                      place="left"
-                     content={'Create server'}/>
+                     content={t("servSB.servCreate")}/>
             {guilds.map((guild) => (
                 <Tooltip key={guild.id} id={`server-tooltip-${guild.id}`}
                          place="left"

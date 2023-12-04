@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {useSelector} from "react-redux";
 import FriendCardPending from "./FriendCardPending";
 import FriendCardSent from "./FriendCardSent";
+import {useTranslation} from "react-i18next";
 
 const SeparatorContainer = styled.div`
   height: 50px;
@@ -46,6 +47,7 @@ const Name = styled.div`
 
 const FriendSentPendingTab = ({searchQuery}) => {
     const {pending, sent} = useSelector((state) => state.friends);
+    const [ t, i18n ] = useTranslation();
 
     const filteredPending = useMemo(() => {
         return pending.filter(item => {
@@ -63,7 +65,7 @@ const FriendSentPendingTab = ({searchQuery}) => {
         <Grid className={"scroll-bar"}>
             {!!filteredPending.length && <>
                 <SeparatorContainer>
-                    <Name>Pending</Name>
+                    <Name>{t("friendSendPendTab.pend")}</Name>
                     <Separator/>
                 </SeparatorContainer>
                 {filteredPending.map((friend) => (<FriendCardPending key={friend.id} nick={friend.nickname} id={friend.id} avatarUrl={friend.avatar_url}/>))}
@@ -71,7 +73,7 @@ const FriendSentPendingTab = ({searchQuery}) => {
 
             {!!filteredSent.length && <>
                 <SeparatorContainer>
-                    <Name>Sent</Name>
+                    <Name>{t("friendSendPendTab.sent")}</Name>
                     <Separator/>
                 </SeparatorContainer>
                 {filteredSent.map((friend) => (<FriendCardSent key={friend.id} nick={friend.nickname} id={friend.id} avatarUrl={friend.avatar_url}/>))}

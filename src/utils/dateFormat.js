@@ -1,16 +1,19 @@
+import i18n from "../localization";
+
 export default function formatDate(date) {
-    date = new Date(date);
+    const t = i18n.t;
+        date = new Date(date);
     const now = new Date();
     const diffInDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
 
     if (diffInDays === 0) {
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
-        return `Today at ${hours}:${minutes}`;
+        return t("dateFormat.today")`${hours}:${minutes}`;
     } else if (diffInDays === 1) {
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
-        return `Yesterday at ${hours}:${minutes}`;
+        return t("dateFormat.yesterday")`${hours}:${minutes}`;
     } else {
         const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
         return date.toLocaleDateString(undefined, options);
