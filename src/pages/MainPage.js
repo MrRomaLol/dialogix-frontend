@@ -3,6 +3,10 @@ import {useNavigate} from "react-router-dom";
 import {AppBackground, AppContent} from "../components/styled-parts/AppBackground";
 import CutButton from "../components/UIElements/CutButton";
 import styled from "styled-components";
+import {useDispatch, useSelector} from "react-redux";
+import {logoutUser} from "../store/authSlice";
+import {revertAll} from "../store";
+import FriendAvatar from "../components/FriendAvatar";
 
 const LogoBack = styled.div`
   width: 250px;
@@ -90,8 +94,7 @@ const Text = styled.p`
 
   font-family: Furore, serif;
   font-size: 40px;
-
-  margin-left: 30px;
+  text-indent: 35px;
 `
 
 const HeaderText = styled.p`
@@ -101,6 +104,12 @@ const HeaderText = styled.p`
   font-size: 30px;
   
   text-align: center;
+  margin: 250px 100px 0 70px;
+  
+  @media screen and (max-width: 1000px) {
+    font-size: 25px;
+    margin: 250px 50px 0 50px;
+  }
 `
 
 const MainText = styled.p`
@@ -108,11 +117,38 @@ const MainText = styled.p`
 
   font-family: Furore, serif;
   font-size: 30px;
+  
   text-align: justify;
+  margin: 0 100px 100px 100px;
+  
+  @media screen and (max-width: 1000px) {
+    font-size: 25px;
+    margin: 0 50px 100px 50px;
+  }
+`
+
+const StyledFriendAvatar = styled(FriendAvatar)`
+  height: 100px;
+  width: 100px;
+`
+
+const NicknameText = styled.p`
+  color: #F1B7FF;
+
+  font-family: "JetBrains Mono", serif;
+  font-size: 25px;
+  
+  display: flex;
+  align-items: center;
 `
 
 const MainPage = () => {
     const navigate = useNavigate()
+
+    const dispatch = useDispatch();
+    const {isAuthenticated} = useSelector((state) => state.auth)
+
+    const {userInfo} = useSelector(state => state.auth);
 
     const goToLogin = () => {
         navigate('/login')
@@ -126,11 +162,19 @@ const MainPage = () => {
         navigate('/app')
     }
 
+
+    const handleLogout = () => {
+        dispatch(logoutUser()).then(() => {
+            dispatch(revertAll());
+        })
+    }
+
     return (
         <div>
             <AppBackground/>
             <AppContent>
-                <div style={{
+
+                 {!isAuthenticated && <div style={{
                     display: "flex",
                     flexDirection: "row",
                     margin: "30px",
@@ -141,23 +185,41 @@ const MainPage = () => {
                 }}>
                     <CutButton onClick={goToLogin}>LOGIN</CutButton>
                     <CutButton onClick={goToRegister}>REGISTER</CutButton>
-                </div>
+                </div>}
+
+                {isAuthenticated && <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    margin: "30px",
+                    gap: "30px",
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    alignItems:"center"
+                }}>
+
+                    <>
+                        <StyledFriendAvatar id={userInfo.id} nick={userInfo.nickname} url={userInfo.avatar_url} />
+                        <NicknameText>{userInfo.nickname}</NicknameText>
+                    </>
+                    <CutButton onClick={handleLogout}>LOG OUT</CutButton>
+                </div>}
 
                 <div style={{width: "100%", height: "100%", display:"flex", flexDirection:"row"}}>
-                    <div style={{display: "flex", flexDirection: "column", width: "30%", gap: "80px", padding: "50px 0 0 50px"}}>
+                    <div style={{display: "flex", flexDirection: "column",  gap: "70px", padding: "50px 0 0 50px",  width:"30%", }}>
                         <div style={{display: "flex", flexDirection: "column", gap:"20px"}}>
                             <Logotype/>
                             <Text>DIALOGIX</Text>
                         </div>
 
-                        <div style={{gap: "40px", margin: "0 auto", display: "flex", flexDirection: "column"}}>
+                        <div style={{display: "flex", flexDirection: "column", gap: "40px", margin: "0 auto"}}>
                             <CutButton>DOWNLOAD</CutButton>
-                            <CutButton onClick={goToApp}>OPEN DIALOGIX</CutButton>
+                            {isAuthenticated && <CutButton onClick={goToApp}>OPEN DIALOGIX</CutButton>}
                         </div>
 
                     </div>
 
-                    <div style={{display: "flex", flexDirection: "column", gap: "30px", margin:"250px 100px 100px 150px"}}>
+                    <div style={{display: "flex", flexDirection: "column", gap:"30px"}}>
                         <HeaderText>IMAGINE A PLACE...</HeaderText>
                         <MainText>...where you can do anything you want, also that type of things that u can't do in Discord. The place where everything allowed, but you need to pay money for this. The place where you can do nothing but it will crash your app. The place where you can buy subscriptions that gives you absolutely nothing just for fun. Like you always do...</MainText>
                     </div>
