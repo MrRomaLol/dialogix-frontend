@@ -15,6 +15,7 @@ import {
 import AlertIcon from "../AlertIcon";
 import FriendBarIcon from "./FriendBarIcon";
 import {Tooltip} from "react-tooltip";
+import {useTranslation} from "react-i18next";
 
 const EobaniyBlyr = styled.span`
   height: 100%;
@@ -68,6 +69,7 @@ const NewFriendsAlert = styled(AlertIcon)`
 
 const FriendsSideBar = () => {
     const dispatch = useDispatch();
+    const [ t, i18n ] = useTranslation();
     const [isRolled, setIsRolled] = useState(false);
     const screenName = useSelector(state => state.screenState.screen);
     const {friends, pending} = useSelector(state => state.friends);
@@ -126,10 +128,10 @@ const FriendsSideBar = () => {
             </EobaniyBlyr>
             <Tooltip id={'friend-tooltip-friends'}
                      place="right"
-                     content={'Friends'}/>
+                     content={t("friendsSB.friends")}/>
             <Tooltip id={'friend-tooltip-add'}
                      place="right"
-                     content={'Add friends'}/>
+                     content={t("friendsSB.friendsAdd")}/>
             {friends.map((friend) => (
                 <Tooltip key={friend.id}
                          id={`friend-tooltip-${friend.id}`}

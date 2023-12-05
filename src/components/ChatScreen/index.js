@@ -174,7 +174,7 @@ const ChatScreen = () => {
 
             <TypingContainer>
                 {currentChat?.isUserTyping && <>
-                    {friend.nickname} typing
+                    {friend.nickname}
                     <Lottie
                         loop
                         animationData={typingAnimation}

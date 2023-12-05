@@ -13,6 +13,7 @@ import {revertAll} from "../store";
 import {setCurrentGuild} from "../store/guildsSlice";
 import {setChat} from "../store/chatSlice";
 import SettingsAppearance from "../components/SettingsTabs/SettingsAppearance";
+import {useTranslation} from "react-i18next";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;
@@ -179,6 +180,7 @@ const SettingsMenu = ({children}) => {
 
 const SettingsScreen = () => {
     const dispatch = useDispatch();
+    const [ t, i18n ] = useTranslation();
 
     const {currentGuildId} = useSelector(state => state.guilds);
     const {currentChatId} = useSelector(state => state.chat);
@@ -230,21 +232,21 @@ const SettingsScreen = () => {
                     <CloseIcon icon={faCircleXmark} onClick={goToAppState}/>
                     <Cont>
                         <SettingsMenu>
-                            <SettingTabsHeader>User Settings</SettingTabsHeader>
-                            <SettingTab content={<SettingsMyAccount/>}>My Account</SettingTab>
+                            <SettingTabsHeader>{t("settScreen.userSett")}</SettingTabsHeader>
+                            <SettingTab content={<SettingsMyAccount/>}>{t("settScreen.myAcc")}</SettingTab>
                             <SettingTabsSeparator/>
 
-                            <SettingTabsHeader>App settings</SettingTabsHeader>
-                            <SettingTab content={<SettingsAppearance/>}>Appearance</SettingTab>
+                            <SettingTabsHeader>{t("settScreen.appSett")}</SettingTabsHeader>
+                            <SettingTab content={<SettingsAppearance/>}>{t("settAppearance.appearance")}</SettingTab>
 
                             <SettingTabsSeparator/>
-                            <SettingTab onClick={handleOpenLogoutModal}>Logout</SettingTab>
+                            <SettingTab onClick={handleOpenLogoutModal}>{t("settScreen.logout")}</SettingTab>
                         </SettingsMenu>
                     </Cont>
                 </FullScreenContainer>
             </Container>
-            <YesNoModal isOpen={isLogoutModal} modalName={"Logout"} modalSubName={"Are you sure want to logout?"}
-                        firstName={"No"} secondName={"Yes"} onRequestClose={handleCloseLogoutModal}
+            <YesNoModal isOpen={isLogoutModal} modalName={t("settScreen.logout")} modalSubName={t("settScreen.logoutConf")}
+                        firstName={t("misc.no")} secondName={t("misc.yes")} onRequestClose={handleCloseLogoutModal}
                         onFirst={handleCloseLogoutModal} onSecond={handleLogout}/>
         </ScreenContainer>
     );

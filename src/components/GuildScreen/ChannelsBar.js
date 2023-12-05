@@ -14,6 +14,8 @@ import DxSpinner from "../DXSpinner";
 import {deleteCategory, deleteChannel} from "../../store/guildsSlice";
 import {Store} from "react-notifications-component";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
+import {useTranslation} from "react-i18next";
+import {cT} from "../../localization/funcs";
 
 const GuildLeftBar = styled(ContentContainer)`
   height: 100%;
@@ -49,6 +51,7 @@ const ChannelsPlaceholder = () => {
 const ChannelsBar = ({guild}) => {
     const dispatch = useDispatch();
     const {userInfo} = useSelector(state => state.auth);
+    const [ t, i18n ] = useTranslation();
     const {loading} = useSelector(state => state.guilds);
     const [isCreateCategory, setIsCreateCategory] = useState(false);
     const [isCreateChannel, setIsCreateChannel] = useState(false);
@@ -98,7 +101,7 @@ const ChannelsBar = ({guild}) => {
     }
 
     const notification = {
-        title: "Error!",
+        title: t("misc.error"),
         type: "danger",
         insert: "top",
         container: "bottom-right",
@@ -120,7 +123,7 @@ const ChannelsBar = ({guild}) => {
                 .catch((error) => {
                     Store.addNotification({
                         ...notification,
-                        message: `Something went wrong: ${error}`
+                        message: cT(t("misc.msgErr"), error)
                     })
                 })
         } else if (channel) {
@@ -131,7 +134,7 @@ const ChannelsBar = ({guild}) => {
                 .catch((error) => {
                     Store.addNotification({
                         ...notification,
-                        message: `Something went wrong: ${error}`
+                        message: cT(t("misc.msgErr"), error)
                     })
                 })
         }
@@ -169,7 +172,7 @@ const ChannelsBar = ({guild}) => {
     return (
         <>
             <GuildLeftBar>
-                <GuildBarName>Channels</GuildBarName>
+                <GuildBarName>{t("channBar.chann")}</GuildBarName>
                 <Wrapper>
                     <Content onContextMenu={onContextMenu}>
                         {guild.isLoaded ? guild.channels.map((obj) => {
@@ -194,34 +197,31 @@ const ChannelsBar = ({guild}) => {
             </GuildLeftBar>
 
             <Menu id={ID} animation={'fade'}>
-                <Item id="addChannelToCategory" onClick={handleCreateChannel} hidden={isItemHidden} data={'category'}>Create
-                    Channel in {category?.name}</Item>
+                <Item id="addChannelToCategory" onClick={handleCreateChannel} hidden={isItemHidden} data={'category'}>{cT(t("channBar.createChann"), category?.name)} </Item>
                 <Item id="addChannelToCategory" onClick={handleDelete} hidden={isItemHidden}
                       data={'category'}>
-                    <div style={{color: "#B13470"}}>Remove {category?.name}</div>
+                    <div style={{color: "#B13470"}}>{cT(t("channBar.rem"), category?.name)}</div>
                 </Item>
                 <Separator hidden={isItemHidden} data={'category'}/>
                 <Item id="addChannelToCategory" onClick={handleDelete} hidden={isItemHidden}
                       data={'channel'}>
-                    <div style={{color: "#B13470"}}>Remove {channel?.name}</div>
+                    <div style={{color: "#B13470"}}>{cT(t("channBar.rem"), channel?.name)}</div>
                 </Item>
                 <Separator hidden={isItemHidden} data={'channel'}/>
-                <Item id="addCategory" onClick={handleCreateCategory}>Create Category</Item>
-                <Item id="addChannel" onClick={handleCreateChannel}>Create Channel</Item>
+                <Item id="addCategory" onClick={handleCreateCategory}>{t("categModal.createCateg")}</Item>
+                <Item id="addChannel" onClick={handleCreateChannel}>{t("channModal.createChann")}</Item>
             </Menu>
 
             <CreateCategoryModal isOpen={isCreateCategory} onRequestClose={closeCreateCategory}/>
             <CreateChannelModal isOpen={isCreateChannel} onRequestClose={closeCreateChannel} category={category}/>
 
             <YesNoModal isOpen={yesNoModalOpened} onRequestClose={closeDelete}
-                        modalName={`Delete ${category ? category?.name : channel?.name}?`}
-                        firstName={loading ? <DxSpinner/> : 'yes'} secondName={'no'} onFirst={deleteObject}
+                        modalName={cT(t("channBar.del"), category ? category?.name : channel?.name)}
+                        firstName={loading ? <DxSpinner/> : t("misc.yes")} secondName={t("misc.no")} onFirst={deleteObject}
                         onSecond={closeDelete}>
-                <ModalSubName>Attention: You are on the verge of permanently deleting the
+                <ModalSubName>{t("channBar.att")}
                     <span
-                        style={{color: "#B13470"}}> {category ? `category ${category?.name}` : `channel ${channel?.name}`}</span>.
-                    This action cannot be undone. Are you absolutely sure you want to proceed with this
-                    deletion?</ModalSubName>
+                        style={{color: "#B13470"}}> {category ? cT(t("channBar.categ"), category?.name) : cT(t("channBar.channel"), channel?.name)}</span>{t("channBar.att2")}</ModalSubName>
             </YesNoModal>
         </>
     );

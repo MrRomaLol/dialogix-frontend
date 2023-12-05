@@ -6,9 +6,11 @@ import styled, {css} from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import CutButton from "../UIElements/CutButton";
 import FriendAvatar from "../FriendAvatar";
+import {useTranslation} from "react-i18next";
 import {Store} from "react-notifications-component";
 import {inviteUsers} from "../../store/guildsSlice";
 import DXSpinner from "../DXSpinner";
+import {cT} from "../../localization/funcs";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;
@@ -77,20 +79,20 @@ const Nickname = styled.p`
   font-family: "JetBrains Mono", serif;
 `
 
-const InviteButton = ({isInvited}) => {
+const InviteButton = ({isInvited, t}) => {
     return (
-        <InviteButtonBack isInvited={isInvited}>{isInvited ? "Invited" : "Invite"}</InviteButtonBack>
+        <InviteButtonBack isInvited={isInvited}>{isInvited ? t("guildInviteModal.invited") : t("guildInviteModal.invite")}</InviteButtonBack>
     )
 }
 
-const User = ({id, url, nickname, isInvited, onClick}) => {
+const User = ({id, url, nickname, isInvited, onClick, t}) => {
     return (
         <UserBox isInvited={isInvited} onClick={() => onClick?.(id)}>
             <div style={{display: "inherit", alignItems: "inherit"}}>
                 <Avatar id={id} url={url} nick={nickname}/>
                 <Nickname>{nickname}</Nickname>
             </div>
-            <InviteButton isInvited={isInvited}/>
+            <InviteButton isInvited={isInvited} t={t}/>
         </UserBox>
     )
 }
@@ -98,7 +100,8 @@ const User = ({id, url, nickname, isInvited, onClick}) => {
 const InviteToGuildModal = ({isOpen, onRequestClose}) => {
     const dispatch = useDispatch();
 
-    const {guilds, currentGuildId, loading} = useSelector(state => state.guilds);
+    const [ t, i18n ] = useTranslation();
+    const {guilds, currentGuildId} = useSelector(state => state.guilds);
     const {friends} = useSelector(state => state.friends);
     const [invited, setInvited] = useState([]);
 
@@ -146,7 +149,7 @@ const InviteToGuildModal = ({isOpen, onRequestClose}) => {
             .catch((error) => {
                 Store.addNotification({
                     ...notification,
-                    message: `Something went wrong: ${error}`
+                    message: cT(t("misc.msgErr"), error)
                 })
             })
     }
@@ -159,13 +162,12 @@ const InviteToGuildModal = ({isOpen, onRequestClose}) => {
         <ModalComponent contentStyle={{width: "600px"}} isOpen={isOpen} onRequestClose={onRequestClose}>
             <FullScreenContainer>
                 <ModalContent>
-                    <ModalName style={{marginBottom: "15px"}}>Invite users to {currentGuild.name}</ModalName>
+                    <ModalName style={{marginBottom: "15px"}}>{t("guildInviteModal.invUsers2")} {currentGuild.name}</ModalName>
                     <UsersScrollBox className={'scroll-bar'}>
-                        {friends.length === 0 && <ModalSubName style={{width: "100%", textAlign: "center"}}>You have no
-                            friends(</ModalSubName>}
+                        {friends.length === 0 && <ModalSubName style={{width: "100%", textAlign: "center"}}>{t("guildInviteModal.noFriends")}</ModalSubName>}
                         {friends.map(friend => (
                             <User key={friend.id} id={friend.id} url={friend.avatar_url} nickname={friend.nickname}
-                                  onClick={handleInvite} isInvited={invited.includes(friend.id)}/>))}
+                                  onClick={handleInvite} isInvited={invited.includes(friend.id)} t={t}/>))}
                     </UsersScrollBox>
                     <CutButton style={{marginTop: "15px"}} onClick={sendInvites}>{loading ? <DXSpinner/> : 'Send'}</CutButton>
                 </ModalContent>

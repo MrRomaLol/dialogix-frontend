@@ -12,6 +12,8 @@ import {faComments, faVolumeHigh} from "@fortawesome/free-solid-svg-icons";
 import DXSpinner from "../DXSpinner";
 import {Store} from "react-notifications-component";
 import {createChannel} from "../../store/guildsSlice";
+import {useTranslation} from "react-i18next";
+import {cT} from "../../localization/funcs";
 
 const StyledInputBox = styled(InputBox)`
   margin-bottom: 10px;
@@ -59,6 +61,7 @@ const ChanelType = ({icon, name, isSelected = false, onClick}) => {
 
 const CreateCategoryModal = ({isOpen, onRequestClose, category}) => {
     const dispatch = useDispatch();
+    const [ t, i18n ] = useTranslation();
     const {loading} = useSelector(state => state.guilds);
     const [formData, setFormData] = useState({
         channelName: '',
@@ -66,8 +69,8 @@ const CreateCategoryModal = ({isOpen, onRequestClose, category}) => {
     })
 
     const chanelTypes = [
-        {item: <ChanelType icon={faComments} name={'Text'}/>, selected: true, name: 'text'},
-        {item: <ChanelType icon={faVolumeHigh} name={'Voice'}/>, selected: false, name: 'voice'}
+        {item: <ChanelType icon={faComments} name={t("channModal.text")}/>, selected: true, name: 'text'},
+        {item: <ChanelType icon={faVolumeHigh} name={t("channModal.voice")}/>, selected: false, name: 'voice'}
     ]
 
     const handleChange = e => {
@@ -78,7 +81,7 @@ const CreateCategoryModal = ({isOpen, onRequestClose, category}) => {
     }
 
     const notification = {
-        title: "Error!",
+        title: t("misc.error"),
         type: "danger",
         insert: "top",
         container: "bottom-right",
@@ -94,14 +97,14 @@ const CreateCategoryModal = ({isOpen, onRequestClose, category}) => {
         if (formData.channelName.length < 3) {
             return Store.addNotification({
                 ...notification,
-                message: "Channel name is too short"
+                message: t("channModal.shortChannName")
             })
         }
 
         if (formData.channelName.length > 16) {
             return Store.addNotification({
                 ...notification,
-                message: "Channel name is too long"
+                message: t("channModal.longChannName")
             })
         }
 
@@ -116,7 +119,7 @@ const CreateCategoryModal = ({isOpen, onRequestClose, category}) => {
             .catch((error) => {
                 Store.addNotification({
                     ...notification,
-                    message: `Something went wrong: ${error}`
+                    message: cT(t("misc.msgErr"), error)
                 })
             })
     }
@@ -134,13 +137,13 @@ const CreateCategoryModal = ({isOpen, onRequestClose, category}) => {
         <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose}>
             <ContentContainer>
                 <ModalContent>
-                    <ModalName>Create channel {category && `in ${category.name}`}</ModalName>
-                    <SectionName>Channel name</SectionName>
+                    <ModalName>{t("channModal.createChann")} {category && cT(t("channModal.in"), category.name)}</ModalName>
+                    <SectionName>{t("channModal.channName")}</SectionName>
                     <StyledInputBox autoFocus name={'channelName'} onChange={handleChange}/>
-                    <SectionName>Channel type</SectionName>
+                    <SectionName>{t("channModal.channType")}</SectionName>
                     <ListSelect name={'channelType'} onChange={handleChange} items={chanelTypes}/>
                     <CutButton style={{marginTop: "15px"}} onClick={handleChanelCreate}>{loading ?
-                        <DXSpinner/> : 'Create'}</CutButton>
+                        <DXSpinner/> : t("misc.create")}</CutButton>
                 </ModalContent>
             </ContentContainer>
         </ModalComponent>

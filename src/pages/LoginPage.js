@@ -10,6 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {loginUser} from "../store/authSlice";
 import DXSpinner from "../components/DXSpinner";
 import CutButton from "../components/UIElements/CutButton";
+import {useTranslation} from "react-i18next";
 
 const StyledAppContent = styled(AppContent)`
   position: relative;
@@ -57,10 +58,10 @@ const RMFPText = styled.p`
   color: #F0CDFC;
 `
 
-const ForgotPassword = () => {
+const ForgotPassword = ({t}) => {
     return (
         <div style={{display: "flex", marginBottom: "50px", justifyContent: "flex-end"}}>
-            <RMFPText>Forgot password?</RMFPText>
+            <RMFPText>{t("logRegPage.forgotPswd")}</RMFPText>
         </div>
     );
 }
@@ -86,10 +87,10 @@ const Line = styled.div`
   align-self: center;
 `
 
-export const OrLine = () => (
+export const OrLine = ({t}) => (
     <div style={{display: "flex", flexDirection: "row", marginTop: "20px"}}>
         <Line/>
-        <OrText>OR</OrText>
+        <OrText>{t("logRegPage.orLine")}</OrText>
         <Line/>
     </div>
 )
@@ -100,6 +101,7 @@ const Button = styled(CutButton)`
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const [ t, i18n ] = useTranslation();
 
     const {loading} = useSelector((state) => state.auth);
     const dispatch = useDispatch();
@@ -116,7 +118,7 @@ const LoginPage = () => {
     }
 
     const notification = {
-        title: "Error!",
+        title: t("misc.error"),
         type: "danger",
         insert: "top",
         container: "bottom-right",
@@ -132,7 +134,7 @@ const LoginPage = () => {
         if (formData.username.length < 4 || formData.password.length < 6) {
             return Store.addNotification({
                 ...notification,
-                message: "Invalid username or password"
+                message: t("logRegPage.invalidLog")
             })
         }
 
@@ -144,7 +146,7 @@ const LoginPage = () => {
                 if (error === 'notauser') {
                     Store.addNotification({
                         ...notification,
-                        message: `Invalid username or password`
+                        message: t("logRegPage.invalidLog")
                     })
                 }
             });
@@ -169,20 +171,20 @@ const LoginPage = () => {
                     <ContentContainer>
                         <div style={{padding: "30px 60px 30px 60px", display: "flex", flexDirection: "column"}} onKeyDown={handleSubmit}>
                             <LRNameDX>DIALOGIX</LRNameDX>
-                            <LTGS>Login to get started!</LTGS>
+                            <LTGS>{t("logRegPage.logGetStart")}</LTGS>
 
-                            <LRInput placeholder={"Email / Username"} name={'username'} onChange={handleChange}/>
-                            <LRInput placeholder={"Password"} name={'password'} onChange={handleChange} type={'password'}/>
+                            <LRInput placeholder={t("logRegPage.loginInput")} name={'username'} onChange={handleChange}/>
+                            <LRInput placeholder={t("logRegPage.pswdInput")} name={'password'} onChange={handleChange} type={'password'}/>
 
-                            <ForgotPassword/>
+                            <ForgotPassword t={t}/>
 
-                            <Button onClick={handleLogin}>{loading ? <DXSpinner/> : 'Login'}</Button>
+                            <Button onClick={handleLogin}>{loading ? <DXSpinner/> : t("logRegPage.loginBtn")}</Button>
 
-                            <OrLine/>
+                            <OrLine t={t}/>
 
-                            <LTGS>Don't have account yet?</LTGS>
+                            <LTGS>{t("logRegPage.noAcc")}</LTGS>
 
-                            <Button onClick={goToRegister}>Register</Button>
+                            <Button onClick={goToRegister}>{t("logRegPage.regBtn")}</Button>
 
                         </div>
                     </ContentContainer>

@@ -9,6 +9,8 @@ import InputBox from "../UIElements/InputBox";
 import {Store} from "react-notifications-component";
 import {createCategory} from "../../store/guildsSlice";
 import DXSpinner from "../DXSpinner";
+import {useTranslation} from "react-i18next";
+import {cT} from "../../localization/funcs";
 
 const StyledInputBox = styled(InputBox)`
   margin-bottom: 10px;
@@ -19,6 +21,7 @@ const StyledInputBox = styled(InputBox)`
 
 const CreateCategoryModal = ({isOpen, onRequestClose}) => {
     const dispatch = useDispatch();
+    const [ t, i18n ] = useTranslation();
     const {loading} = useSelector(state => state.guilds);
     const [formData, setFormData] = useState({
         categoryName: '',
@@ -32,7 +35,7 @@ const CreateCategoryModal = ({isOpen, onRequestClose}) => {
     }
 
     const notification = {
-        title: "Error!",
+        title: t("misc.error"),
         type: "danger",
         insert: "top",
         container: "bottom-right",
@@ -48,7 +51,7 @@ const CreateCategoryModal = ({isOpen, onRequestClose}) => {
         if (formData.categoryName.length < 3) {
             return Store.addNotification({
                 ...notification,
-                message: "Category name is too short"
+                message: t("categModal.shortCategName")
             })
         }
 
@@ -66,7 +69,7 @@ const CreateCategoryModal = ({isOpen, onRequestClose}) => {
             .catch((error) => {
                 Store.addNotification({
                     ...notification,
-                    message: `Something went wrong: ${error}`
+                    message: cT(t("misc.msgErr"), error)
                 })
             })
     }
@@ -75,10 +78,10 @@ const CreateCategoryModal = ({isOpen, onRequestClose}) => {
         <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose}>
             <ContentContainer>
                 <ModalContent>
-                    <ModalName>Create category</ModalName>
-                    <SectionName>Category name</SectionName>
+                    <ModalName>{t("categModal.createCateg")}</ModalName>
+                    <SectionName>{t("categModal.categName")}</SectionName>
                     <StyledInputBox autoFocus name={'categoryName'} onChange={handleChange}/>
-                    <CutButton style={{marginTop: "15px"}} onClick={handleCategoryCreate}>{loading ? <DXSpinner/> : 'Create'}</CutButton>
+                    <CutButton style={{marginTop: "15px"}} onClick={handleCategoryCreate}>{loading ? <DXSpinner/> : t("misc.create")}</CutButton>
                 </ModalContent>
             </ContentContainer>
         </ModalComponent>

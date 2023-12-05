@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {AppBackground, AppContent} from "../components/styled-parts/AppBackground";
 import ElectronHeader from "../components/ElectronHeader";
 import {LRInput, LRNameDX, LTGS, OrLine} from "./LoginPage";
@@ -11,6 +11,8 @@ import {registerUser} from "../store/authSlice";
 import DXSpinner from "../components/DXSpinner";
 import CutButton from "../components/UIElements/CutButton";
 import ToS from "../components/Modals/ToS";
+import {useTranslation} from "react-i18next";
+import {cT} from "../localization/funcs";
 
 const validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 const validUsername = /^[A-Za-z0-9_]{4,20}$/;
@@ -26,6 +28,7 @@ const Button = styled(CutButton)`
 `
 
 const RegisterPage = () => {
+    const [ t, i18n ] = useTranslation();
     const navigate = useNavigate();
     const {loading} = useSelector((state) => state.auth);
     const dispatch = useDispatch();
@@ -55,7 +58,7 @@ const RegisterPage = () => {
     }
 
     const notification = {
-        title: "Error!",
+        title: t("misc.error"),
         type: "danger",
         insert: "top",
         container: "bottom-right",
@@ -72,35 +75,35 @@ const RegisterPage = () => {
         if (!formData.acceptToS) {
             return Store.addNotification({
                 ...notification,
-                message: "Accept Terms of Services"
+                message: t("logRegPage.termsErr")
             })
         }
 
         if (!formData.username.match(validUsername)) {
             return Store.addNotification({
                 ...notification,
-                message: "Username is invalid"
+                message: t("logRegPage.usernameErr")
             })
         }
 
         if (!formData.email.match(validEmail)) {
             return Store.addNotification({
                 ...notification,
-                message: "Email is invalid"
+                message: t("logRegPage.emailErr")
             })
         }
 
         if (formData.password.length < 6) {
             return Store.addNotification({
                 ...notification,
-                message: "Password is too short"
+                message: t("logRegPage.shortPswd")
             })
         }
 
         if (formData.password !== formData.rpassword) {
             return Store.addNotification({
                 ...notification,
-                message: "Passwords doesn't match"
+                message: t("logRegPage.pswdNotMatch")
             })
         }
 
@@ -111,7 +114,7 @@ const RegisterPage = () => {
             .catch((error) => {
                 Store.addNotification({
                     ...notification,
-                    message: `Something went wrong: ${error}`
+                    message: cT(t("misc.msgErr"), error)
                 })
             })
     }
@@ -135,13 +138,13 @@ const RegisterPage = () => {
                     <ContentContainer>
                         <div style={{padding: "30px 60px 30px 60px", display: "flex", flexDirection: "column"}} onKeyDown={handleSubmit}>
                             <LRNameDX>DIALOGIX</LRNameDX>
-                            <LTGS>Create new account!</LTGS>
+                            <LTGS>{t("logRegPage.regGetStart")}</LTGS>
 
-                            <LRInput placeholder={"Username"} name={'username'} onChange={handleChange} type={'text'}/>
-                            <LRInput placeholder={"Email"} name={'email'} onChange={handleChange} type={'email'}/>
-                            <LRInput placeholder={"Password"} name={'password'} onChange={handleChange}
+                            <LRInput placeholder={t("logRegPage.userInput")} name={'username'} onChange={handleChange} type={'text'}/>
+                            <LRInput placeholder={t("logRegPage.emailInput")} name={'email'} onChange={handleChange} type={'email'}/>
+                            <LRInput placeholder={t("logRegPage.pswdInput")} name={'password'} onChange={handleChange}
                                      type={'password'}/>
-                            <LRInput placeholder={"Repeat password"} name={'rpassword'} onChange={handleChange}
+                            <LRInput placeholder={t("logRegPage.pswdRepInput")} name={'rpassword'} onChange={handleChange}
                                      type={'password'}/>
                             <div style={{
                                 display: "flex",
@@ -152,7 +155,7 @@ const RegisterPage = () => {
                             }}>
                                 <input id={'agree'} name={'acceptToS'} onChange={handleChange} type={'checkbox'}/>
                                 <label htmlFor={'agree'} style={{marginLeft: "15px", color: "white"}}>
-                                    I agree to the
+                                    {t("logRegPage.agreement")}
                                 </label>
                                 <strong style={{
                                     color: "#BC2CC9",
@@ -162,13 +165,13 @@ const RegisterPage = () => {
                                 }} onClick={openTOS}>ToS</strong>
                             </div>
 
-                            <Button onClick={handleRegister}>{loading ? <DXSpinner/> : 'Register'}</Button>
+                            <Button onClick={handleRegister}>{loading ? <DXSpinner/> : t("logRegPage.regBtn")}</Button>
 
-                            <OrLine/>
+                            <OrLine t={t}/>
 
-                            <LTGS>Already have an account?</LTGS>
+                            <LTGS>{t("logRegPage.haveAcc")}</LTGS>
 
-                            <Button onClick={goToLogin}>Login</Button>
+                            <Button onClick={goToLogin}>{t("logRegPage.loginBtn")}</Button>
 
                         </div>
                     </ContentContainer>

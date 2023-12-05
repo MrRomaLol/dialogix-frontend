@@ -5,6 +5,7 @@ import CutButton from "../UIElements/CutButton";
 import {useDispatch, useSelector} from "react-redux";
 import {setAppBackground, updateUserSetting} from "../../store/fetchSlice";
 import {Store} from "react-notifications-component";
+import {useTranslation} from "react-i18next";
 
 const SettingsBox = styled.div`
   padding: 50px;
@@ -13,6 +14,7 @@ const SettingsBox = styled.div`
 
 const SettingsAppearance = () => {
     const dispatch = useDispatch();
+    const [ t, i18n ] = useTranslation();
     const {settings} = useSelector(state => state.fetchRoot);
     const fileRef = useRef(null);
 
@@ -21,7 +23,7 @@ const SettingsAppearance = () => {
         if (selectedFile) {
             if (selectedFile.size > 5242880) {
                 return Store.addNotification({
-                    title: "Error!",
+                    title: t("misc.error"),
                     type: "danger",
                     insert: "top",
                     container: "bottom-right",
@@ -30,7 +32,7 @@ const SettingsAppearance = () => {
                         duration: 5000,
                         pauseOnHover: true,
                     },
-                    message: "File is too large. Please use file with size maximum of 5MB"
+                    message: t("settAppearance.file2Large")
                 });
             }
             const reader = new FileReader();
@@ -48,13 +50,13 @@ const SettingsAppearance = () => {
 
     return (
         <React.Fragment>
-            <SettingTabName>Appearance</SettingTabName>
+            <SettingTabName>{t("settAppearance.appearance")}</SettingTabName>
 
             <SettingsBox>
-                <SettingName>Background</SettingName>
+                <SettingName>{t("settAppearance.bg")}</SettingName>
                 <div style={{display: "flex", gap: "20px"}}>
-                    <CutButton onClick={() => fileRef.current.click()}>Select</CutButton>
-                    {settings['app_bg']?.value && <CutButton onClick={handleResetBG}>Reset</CutButton>}
+                    <CutButton onClick={() => fileRef.current.click()}>{t("misc.sel")}</CutButton>
+                    {settings['app_bg']?.value && <CutButton onClick={handleResetBG}>{t("misc.reset")}</CutButton>}
                 </div>
                 <input ref={fileRef} type={"file"} accept={"image/*"} style={{display: 'none'}}
                        onChange={handleSelectBackground}/>

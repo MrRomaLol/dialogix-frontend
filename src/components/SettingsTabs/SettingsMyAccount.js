@@ -10,6 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {Store} from "react-notifications-component";
 import {updateProfile} from "../../store/authSlice";
 import DxSpinner from "../DXSpinner";
+import {useTranslation} from "react-i18next";
 
 const SettingsBox = styled.div`
   width: 100%;
@@ -82,10 +83,11 @@ const Setting = ({name, onChange, value, maxLength, disabled}) => {
 
 
 const PasswordChange = ({onClick}) => {
+    const [ t, i18n ] = useTranslation();
     return (
         <>
-            <SettingName>Password</SettingName>
-            <CutButton style={{marginTop: "25px"}} width={300} onClick={onClick}>Change Password</CutButton>
+            <SettingName>{t("settMyAcc.pswd")}</SettingName>
+            <CutButton style={{marginTop: "25px"}} width={300} onClick={onClick}>{t("settMyAcc.chngPswd")}</CutButton>
         </>
     )
 }
@@ -121,6 +123,7 @@ function areSpecifiedFieldsEqual(obj1, obj2, fieldsToCheck) {
 
 const SettingsMyAccount = () => {
     const dispatch = useDispatch();
+    const [ t, i18n ] = useTranslation();
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
     const {userInfo, loading} = useSelector(state => state.auth);
     const [formData, setFormData] = useState({
@@ -166,7 +169,7 @@ const SettingsMyAccount = () => {
     }
 
     const notification = {
-        title: "Error!",
+        title: t("misc.error"),
         type: "danger",
         insert: "top",
         container: "bottom-right",
@@ -182,7 +185,7 @@ const SettingsMyAccount = () => {
         if (!formData.nickname) {
             return Store.addNotification({
                 ...notification,
-                message: "Invalid nickname"
+                message: t("settMyAcc.invalNickname")
             })
         }
 
@@ -196,29 +199,29 @@ const SettingsMyAccount = () => {
                 updateInfo(result);
                 Store.addNotification({
                     ...notification,
-                    title: "Success!",
+                    title: t("misc.succ"),
                     type: "success",
-                    message: "Profile updated successfully!"
+                    message: t("setMyAcc.updtProfile")
                 })
             })
             .catch((error) => {
                 Store.addNotification({
                     ...notification,
-                    message: `Something went wrong: ${error}`
+                    message: t("misc.msgErr"), error
                 })
             });
     }
 
     return (
         <React.Fragment>
-            <SettingTabName>My Account</SettingTabName>
+            <SettingTabName>{t("settMyAcc.myProfile")}</SettingTabName>
 
             <SettingsBox>
 
                 <ChangeSettingsBox>
-                    <Setting name={'Nickname'} onChange={handleChange} value={formData.nickname} maxLength={20}/>
-                    <Setting name={'Username'} value={userInfo.username} disabled/>
-                    <Setting name={'Email'} value={userInfo.email} disabled/>
+                    <Setting name={t("settMyAcc.name")} onChange={handleChange} value={formData.nickname} maxLength={20}/>
+                    <Setting name={t("settMyAcc.userName")} value={userInfo.username} disabled/>
+                    <Setting name={t("settMyAcc.mail")} value={userInfo.email} disabled/>
                     <PasswordChange onClick={openChangePasswordModal}/>
                 </ChangeSettingsBox>
 
@@ -230,9 +233,9 @@ const SettingsMyAccount = () => {
                         </UserTagBox>
                     </UserPreviewBox>
                     <ProfileButtonsContainer isShown={isValuesChanged}>
-                        <CutButton style={{marginTop: "20px"}} onClick={handleReset}>Reset</CutButton>
+                        <CutButton style={{marginTop: "20px"}} onClick={handleReset}>{t("settMyAcc.reset")}</CutButton>
                         <CutButton style={{marginTop: "20px"}} onClick={handleUpdateProfile}>{loading ?
-                            <DxSpinner/> : "Apply"}</CutButton>
+                            <DxSpinner/> : t("settMyAcc.apply")}</CutButton>
                     </ProfileButtonsContainer>
                 </UserPreviewContainer>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, {css} from "styled-components";
 import {AwayStatus, DNDStatus, OfflineStatus, OnlineStatus} from "./StatusIndicator";
+import {useTranslation} from "react-i18next";
 
 const SelectOption = styled.div`
   display: flex;
@@ -33,6 +34,7 @@ const Icon = styled.div`
   height: 20px;
 `
 const StatusSelect = ({onChange, currentStatus, isStatusLoading}) => {
+    const [ t, i18n ] = useTranslation();
     const handleChangeStatus = (status) => {
         if (isStatusLoading) return;
         onChange(status)
@@ -41,19 +43,19 @@ const StatusSelect = ({onChange, currentStatus, isStatusLoading}) => {
     return (
         <>
             <SelectOption isSelected={currentStatus === 'online'} isStatusLoading={isStatusLoading} onClick={() => handleChangeStatus('online')}>
-                Online
+                {t("statusSel.online")}
                 {<Icon><OnlineStatus/></Icon>}
             </SelectOption>
             <SelectOption isSelected={currentStatus === 'away'} isStatusLoading={isStatusLoading} onClick={() => handleChangeStatus('away')}>
-                Away
+                {t("statusSel.away")}
                 {<Icon><AwayStatus/></Icon>}
             </SelectOption>
             <SelectOption isSelected={currentStatus === 'dnd'} isStatusLoading={isStatusLoading} onClick={() => handleChangeStatus('dnd')}>
-                DnD
+                {t("statusSel.dnd")}
                 {<Icon><DNDStatus/></Icon>}
             </SelectOption>
             <SelectOption isSelected={currentStatus === 'offline'} isStatusLoading={isStatusLoading} onClick={() => handleChangeStatus('offline')}>
-                Offline
+                {t("statusSel.off")}
                 {<Icon><OfflineStatus/></Icon>}
             </SelectOption>
         </>

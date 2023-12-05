@@ -10,6 +10,8 @@ import DXSpinner from "../DXSpinner";
 import ImageSelector from "../UIElements/ImageSelector";
 import {ModalContent, ModalName, ModalSubName, SectionName} from "./ModalParts";
 import InputBox from "../UIElements/InputBox";
+import {useTranslation} from "react-i18next";
+import {cT} from "../../localization/funcs";
 
 const StyledInputBox = styled(InputBox)`
   margin-bottom: 10px;
@@ -24,8 +26,8 @@ const GuildImageSelector = styled(ImageSelector)`
 
 const CreateGuildModal = ({isOpen, onRequestClose}) => {
     const dispatch = useDispatch();
-    const {loading: createLoading, error: createError} = useSelector(state => state.guilds);
-    const [isTryingToCreate, setIsTryingToCreate] = useState(false);
+    const [ t, i18n ] = useTranslation();
+    const {loading} = useSelector(state => state.guilds);
     const [formData, setFormData] = useState({
         guildName: '',
         avatar: null,
@@ -46,7 +48,7 @@ const CreateGuildModal = ({isOpen, onRequestClose}) => {
     }
 
     const notification = {
-        title: "Error!",
+        title: t("misc.error"),
         type: "danger",
         insert: "top",
         container: "bottom-right",
@@ -58,57 +60,44 @@ const CreateGuildModal = ({isOpen, onRequestClose}) => {
     }
 
     const handleServerCreate = () => {
-        if (createLoading) return;
-        setIsTryingToCreate(false);
+
         if (formData.guildName.length < 2) {
             return Store.addNotification({
                 ...notification,
-
+                message: t("guildModal.shortGuildName")
             })
         }
 
         if (formData.guildName.length > 25) {
             return Store.addNotification({
                 ...notification,
-                message: "Guild name is too long"
+                message: t("guildModal.longGuildName")
             })
         }
 
-        dispatch(createGuild(formData));
-        setIsTryingToCreate(true);
-    }
-
-    useEffect(() => {
-        const handleCreate = () => {
-            if (!isTryingToCreate) return;
-
-            if (!createLoading) {
-                return onRequestClose();
-            }
-
-            if (createError) {
-                return Store.addNotification({
+        dispatch(createGuild(formData)).unwrap()
+            .then(() => {
+                onRequestClose();
+            })
+            .catch((error) => {
+                Store.addNotification({
                     ...notification,
-                    message: `Guild creation failed: ${createError}`
+                    message:  cT(t("misc.msgErr"), error)
                 });
-            }
-
-        }
-
-        handleCreate();
-    }, [isTryingToCreate, createLoading, createError])
+            })
+    }
 
     return (
         <ModalComponent isOpen={isOpen} onRequestClose={onRequestClose}>
             <ContentContainer>
                 <ModalContent>
-                    <ModalName>Create guild</ModalName>
-                    <ModalSubName style={{marginTop: "10px"}}>Create guild</ModalSubName>
-                    <SectionName>Guild name</SectionName>
+                    <ModalName>{t("guildModal.createGuild")}</ModalName>
+                    <ModalSubName style={{marginTop: "10px"}}>{t("guildModal.createGuild")}</ModalSubName>
+                    <SectionName>{t("guildModal.guildName")}</SectionName>
                     <StyledInputBox name={'guildName'} onChange={handleChange}/>
-                    <SectionName>Upload image</SectionName>
+                    <SectionName>{t("guildModal.uplImg")}</SectionName>
                     <GuildImageSelector onChange={handleAvatarChange}/>
-                    <CutButton onClick={handleServerCreate}>{createLoading ? <DXSpinner/> : 'Create'}</CutButton>
+                    <CutButton onClick={handleServerCreate}>{loading ? <DXSpinner/> : t("misc.create")}</CutButton>
                 </ModalContent>
             </ContentContainer>
         </ModalComponent>

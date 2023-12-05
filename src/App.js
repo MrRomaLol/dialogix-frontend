@@ -9,7 +9,7 @@ import './styles/notification.scss'
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import {createGlobalStyle} from 'styled-components';
 import {useDispatch, useSelector} from "react-redux";
-
+import i18n from "./localization";
 import MainPage from "./pages/MainPage";
 
 import {ThemeProvider, themes} from "./theme";

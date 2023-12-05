@@ -1,0 +1,178 @@
+{
+  "en": {
+    "translation": {
+      "logRegPage": {
+        "logGetStart": "Login to get started!",
+        "regGetStart": "Create new account!",
+        "loginInput": "Username / Email",
+        "userInput": "Username",
+        "emailInput": "Email",
+        "pswdInput": "Password",
+        "pswdRepInput": "Repeat your password",
+        "forgotPswd": "Forgot password?",
+        "loginBtn": "LOGIN",
+        "regBtn": "REGISTER",
+        "orLine": "OR",
+        "noAcc": "Dont have account yet?",
+        "invalidLog": "Username/Password are incorrect",
+        "termsErr": "Accept terms of use",
+        "usernameErr": "Username is invalid",
+        "emailErr": "Email is invalid",
+        "shortPswd": "Password is too short",
+        "pswdNotMatch": "Passwords doesn't match",
+        "agreement": "I agree to the",
+        "haveAcc": "Already have an account?"
+      },
+      "settScreen": {
+        "userSett": "User Settings",
+        "myAcc": "My Profile",
+        "appSett": "App settings",
+        "logout": "Logout",
+        "logoutConf": "Are you sure want to logout?"
+      },
+      "misc": {
+        "error": "Error!",
+        "succ": "Success!",
+        "msgErr": "Something went wrong: ${0}",
+        "done": "Done",
+        "create": "Create",
+        "sel": "Select",
+        "reset": "Reset",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "mainScreen": {
+        "chooseChat": "Choose chat to make something wonderful!"
+      },
+      "callModal": {
+        "calling": "Calling..."
+      },
+      "chngPswdModal": {
+        "samePswd": "And what will you achieve by this?",
+        "succChangePswd": "Password changed successfully",
+        "entCurrPswd": "Enter your current password",
+        "currPswdIncor": "Current password you entered is incorrect",
+        "chngPswd": "Change password",
+        "entCurrAndNewPswd": "Enter your current password and a new password",
+        "currPswd": "Current password",
+        "newPswd": "New password",
+        "repNewPswd": "Repeat new password"
+      },
+      "anotherPlaceModal": {
+        "connAnothPlace": "Connected from another place",
+        "anothPlaceMsg": "Hello. Someone seems to be accessing this account from a different location. If you want to continue using this app here, please reload the page.",
+        "logout": "Logout"
+      },
+      "lostConnModal": {
+        "connLost": "Connection lost",
+        "reconn": "Lost server connection, attempting to reconnect."
+      },
+      "categModal": {
+        "shortCategName": "Category name is too short",
+        "longCategName": "Category name is too long",
+        "createCateg": "Create category",
+        "categName": "Category name"
+      },
+      "channModal": {
+        "shortChannName": "Channel name is too short",
+        "longChannName": "Channel name is too long",
+        "createChann": "Create channel",
+        "channName": "Channel name",
+        "channType": "Channel type",
+        "in": "in ${0}",
+        "text": "Text",
+        "voice": "Voice"
+      },
+      "guildModal": {
+        "shortGuildName": "Guild name is too short",
+        "longGuildName": "Guild name is too long",
+        "guildCreateErr": "Guild create failed",
+        "createGuild": "Create guild",
+        "guildName": "Guild name",
+        "uplImg": "Upload image"
+      },
+      "cropImg": {
+        "cropImg": "Crop image",
+        "crop": "Crop"
+      },
+      "DnDModal": {
+        "dropFiles": "Drop files here",
+        "dropFiles2Upload": "Drop the files here to upload."
+      },
+      "guildInviteModal": {
+        "invUsers2": "Invite users to: ",
+        "noFriends": "You have no friends(",
+        "invite": "Invite",
+        "invited": "Invited"
+      },
+      "settAppearance": {
+        "file2Large": "File is too large. Please use file with maximum size of 5MB.",
+        "appearance": "Appearance",
+        "bg": "Background"
+      },
+      "settMyAcc": {
+        "pswd": "Password",
+        "chngPswd": "Change Password",
+        "invalNickname": "Invalid nickname",
+        "updtProfile": "Profile updated successfully!",
+        "myProfile": "My Profile",
+        "name": "Nickname",
+        "userName": "Username",
+        "mail": "Email",
+        "reset": "Reset",
+        "apply": "Apply"
+      },
+      "smallScreen": {
+        "screen2Small": "Screen is too small!",
+        "screenWarn": "Please use a larger screen to view this content."
+      },
+      "statusSel": {
+        "online": "Online",
+        "away": "Away",
+        "dnd": "DnD",
+        "off": "Offline"
+      },
+      "dateFormat": {
+        "today": "Today at",
+        "yesterday": "Yesterday at"
+      },
+      "friendsSB": {
+        "friends": "Friends",
+        "friendsAdd": "Add friends"
+      },
+      "servSB": {
+        "servButt": "Servers (not a button)",
+        "servCreate": "Create server"
+      },
+      "fileMsgPH": {
+        "uploadFiles": "Uploading files: "
+      },
+      "typing": "Typing",
+      "myMsg": {
+        "send": "Sending..."
+      },
+      "friendAddTab": {
+        "greatNews": "Great news! Your friend request to ${0} was successfully sent.",
+        "badNews": "Hmm... That didn't work. Try checking the username again or maybe you've already sent a friend request to this user. Double-check your friend requests to see if they've accepted your invitation.",
+        "sendRequest": "Send friend request"
+      },
+      "friendCard": {
+        "remFriend": "Remove friend"
+      },
+      "friendSendPendTab": {
+        "pend": "Pending",
+        "sent": "Sent"
+      },
+      "channBar": {
+        "chann": "Channels",
+        "createChann": "Create Channel in ${0}",
+        "rem": "Remove ${0}",
+        "del": "Delete ${0}?",
+        "att": "Attention: You are on the verge of permanently deleting the",
+        "att2": ". This action cannot be undone. Are you absolutely sure you want to proceed with this deletion?",
+        "categ": "category ${0}",
+        "channel":"channel ${0}"
+      }
+    }
+  }
+}

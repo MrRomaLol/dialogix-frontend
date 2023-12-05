@@ -15,6 +15,7 @@ import FriendListTab from "./FriendListTab";
 import FriendSentPendingTab from "./FriendSentPendingTab";
 import FriendAddTab from "./FriendAddTab";
 import {FriendsInputField} from "./StyledParts";
+import {useTranslation} from "react-i18next";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;
@@ -137,6 +138,7 @@ const SearchField = ({searchInput, onInputChange}) => {
 
 const FriendsScreen = () => {
     const dispatch = useDispatch();
+    const [ t, i18n ] = useTranslation();
     const subScreenName = useSelector(state => state.screenState.subScreen);
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -165,11 +167,11 @@ const FriendsScreen = () => {
     return (
         <FullScreenContainer>
             <Tabs>
-                <Tab name={"Friends"} isSelected={subScreenName === FRIENDS_SUBSCREEN_FRIENDS_TAB} icon={faUser}
+                <Tab name={t("friendsSB.friends")} isSelected={subScreenName === FRIENDS_SUBSCREEN_FRIENDS_TAB} icon={faUser}
                      onClick={() => setTab(FRIENDS_SUBSCREEN_FRIENDS_TAB)}/>
-                <Tab name={"Pending"} isSelected={subScreenName === FRIENDS_SUBSCREEN_PENDING_TAB} icon={faUserClock}
+                <Tab name={t("friendSendPendTab.pend")} isSelected={subScreenName === FRIENDS_SUBSCREEN_PENDING_TAB} icon={faUserClock}
                      onClick={() => setTab(FRIENDS_SUBSCREEN_PENDING_TAB)}/>
-                <Tab name={"Add friend"} isSelected={subScreenName === FRIENDS_SUBSCREEN_ADD_FRIENDS_TAB} icon={faUserPlus}
+                <Tab name={t("friendsSB.friendsAdd")} isSelected={subScreenName === FRIENDS_SUBSCREEN_ADD_FRIENDS_TAB} icon={faUserPlus}
                      onClick={() => setTab(FRIENDS_SUBSCREEN_ADD_FRIENDS_TAB)}/>
                 {subScreenName !== FRIENDS_SUBSCREEN_ADD_FRIENDS_TAB &&
                     <SearchField searchInput={searchQuery} onInputChange={handleInputChange}/>}

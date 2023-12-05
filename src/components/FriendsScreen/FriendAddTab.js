@@ -4,6 +4,8 @@ import {FriendsInputField} from "./StyledParts";
 import {useDispatch, useSelector} from "react-redux";
 import {sendFriendRequest} from "../../store/friendsSlice";
 import {Store} from "react-notifications-component";
+import {useTranslation} from "react-i18next";
+import {cT} from "../../localization/funcs";
 
 const Container = styled.div`
   display: flex;
@@ -58,6 +60,7 @@ const FriendAddTab = () => {
     const [isTryAdded, setIsTryAdded] = useState(false);
     const [notificationId, setNotificationId] = useState('');
     const dispatch = useDispatch();
+    const [ t, i18n ] = useTranslation();
     const {error, status} = useSelector((state) => state.friends);
 
     const handleAddChange = e => {
@@ -75,7 +78,7 @@ const FriendAddTab = () => {
     }
 
     const notification = {
-        title: "Error!",
+        title: t("misc.error"),
         type: "danger",
         insert: "top",
         container: "bottom-full",
@@ -94,21 +97,21 @@ const FriendAddTab = () => {
             if (error) {
                 return Store.addNotification({
                     ...notification,
-                    message: `Something went wrong: ${error}`,
+                    message: cT(t("misc.msgErr"), error)
                 })
             }
             if (status === 'requested') {
                 return Store.addNotification({
                     ...notification,
-                    title: "Success!",
+                    title: t("misc.succ"),
                     type: "success",
-                    message: `Great news! Your friend request to ${friendName} was successfully sent.`,
+                    message: cT(t("friendAddTab.greatNews"), friendName),
                 })
             }
             if (status === 'nochange') {
                 return setNotificationId(Store.addNotification({
                     ...notification,
-                    message: `Hmm... That didn't work. Try checking the username again or maybe you've already sent a friend request to this user. Double-check your friend requests to see if they've accepted your invitation.`,
+                    message: t("friendAddTab.badNews"),
                 }))
             }
         }
@@ -120,7 +123,7 @@ const FriendAddTab = () => {
         <Container>
             <SearchField>
                 <FriendsInputField autoFocus onChange={handleAddChange}/>
-                <Button onClick={addFriend}>Send friend request</Button>
+                <Button onClick={addFriend}>{t("friendAddTab.sendRequest")}</Button>
             </SearchField>
         </Container>
     );

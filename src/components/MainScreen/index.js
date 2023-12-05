@@ -1,6 +1,7 @@
 import React from 'react';
 import ContentContainer from "../ContentContainer";
 import styled from "styled-components";
+import {useTranslation} from "react-i18next";
 
 
 const FullscreenContainer = styled(ContentContainer)`
@@ -22,9 +23,10 @@ const Message = styled.div`
 `
 
 const MainScreen = () => {
+    const [ t, i18n ] = useTranslation();
     return (
         <FullscreenContainer>
-            <Message>Choose chat to make something wonderful!</Message>
+            <Message>{t("mainScreen.chooseChat")}</Message>
         </FullscreenContainer>
     );
 };
