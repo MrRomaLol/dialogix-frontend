@@ -19,6 +19,8 @@ import "./styles/styles.css"
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import {checkAuthentication} from "./store/authSlice";
+import GuildInvitePage from "./pages/GuildInvitePage";
+import {AppBackground} from "./components/styled-parts/AppBackground";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -30,12 +32,13 @@ const GlobalStyle = createGlobalStyle`
 function App() {
     const theme = useSelector(state => state.theme.theme);
 
-    const {isAuthenticated} = useSelector((state) => state.auth)
+    const {isAuthenticated, isCheckingAuth, isAuthChecked} = useSelector((state) => state.auth)
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(checkAuthentication());
-    }, [dispatch])
+        if (!isAuthChecked)
+            dispatch(checkAuthentication());
+    }, [isAuthChecked])
 
     useEffect(() => {
         window.addEventListener('devtoolschange', event => {
@@ -45,6 +48,10 @@ function App() {
         });
     }, []);
 
+    if (isCheckingAuth) {
+        return <AppBackground/>
+    }
+
     return (
         <ThemeProvider theme={themes[theme]}>
             <GlobalStyle/>
@@ -53,6 +60,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<MainPage/>}/>
                     <Route path="/app" element={isAuthenticated ? <AppPage/> : <Navigate to={'/login'}/>}/>
+                    <Route path="/invite" element={isAuthenticated ? <GuildInvitePage/> : <Navigate to={'/login'}/>}/>
                     <Route path="/login" element={isAuthenticated ? <Navigate to={'/app'}/> : <LoginPage/>}/>
                     <Route path="/register" element={isAuthenticated ? <Navigate to={'/app'}/> : <RegisterPage/>}/>
                 </Routes>

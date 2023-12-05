@@ -30,8 +30,8 @@ export const fetchMessages = createAsyncThunk(
 
 export const sendMessage = createAsyncThunk(
     'chat/send',
-    async ({tempId, messageText, messageFiles}, {rejectWithValue, getState, dispatch}) => {
-        const receiverId = getState().chat.currentChatId;
+    async ({tempId, messageText, messageFiles, receiverId}, {rejectWithValue, getState, dispatch}) => {
+        receiverId = receiverId || getState().chat.currentChatId;
         try {
             if (messageFiles) {
                 const uploadProgress = ({uploadPercentage}) => {

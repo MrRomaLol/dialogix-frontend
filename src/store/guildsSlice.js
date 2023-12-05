@@ -1,6 +1,11 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {getData, patchData, postData} from "../axios";
 import {revertAll} from "./index";
+import {addMessage, sendMessage} from "./chatSlice";
+import {getRandomName} from "../utils/random";
+import {socket} from "../socket";
+import {MAIN_SCREEN, setScreen} from "./screenStateSlice";
+import {Store} from "react-notifications-component";
 
 const initialState = {
     guilds: [],
@@ -60,10 +65,68 @@ export const loadGuild = createAsyncThunk(
                 return rejectWithValue(res.message);
             }
 
-            return {guildId, categories: res.categories, channels: res.channels};
+            return {guildId, categories: res.categories, channels: res.channels, users: res.users};
 
         } catch (err) {
             return rejectWithValue(err.message);
+        }
+    }
+)
+
+export const inviteUsers = createAsyncThunk(
+    'guild/invite',
+    async ({invitedUsers}, {rejectWithValue, getState, dispatch}) => {
+        const state = getState();
+        const guildId = state.guilds.currentGuildId;
+        const myId = state.auth.userInfo.id;
+
+        try {
+            const data = {
+                guildId,
+                invitedUsers
+            }
+
+            const res = await postData('/api/v1/guilds/invite', data);
+
+            if (!res.ok) {
+                return rejectWithValue(res.message);
+            }
+
+            res.invitedUsers.forEach((user) => {
+                const tempId = getRandomName(6);
+                const messageText = `${window.location.origin}/invite?id=${res.link}`
+                const message = {
+                    id: tempId,
+                    sender_id: myId,
+                    receiver_id: user,
+                    content: messageText,
+                    status: 'sending',
+                }
+                dispatch(addMessage({message, chatId: user}));
+                dispatch(sendMessage({tempId, messageText, receiverId: user}));
+            })
+
+
+        } catch (err) {
+            rejectWithValue(err.message);
+        }
+    }
+)
+
+export const acceptGuildInvite = createAsyncThunk(
+    'guild/acceptInvite',
+    async ({linkId}, {rejectWithValue}) => {
+        try {
+            const res = await postData(`/api/v1/guilds/acceptinvite?id=${linkId}`);
+
+            if (!res.ok) {
+                return rejectWithValue(res.message);
+            }
+
+            return res.guild;
+
+        } catch (err) {
+            rejectWithValue(err.message);
         }
     }
 )
@@ -174,6 +237,51 @@ export const deleteChannel = createAsyncThunk(
     }
 )
 
+export const kickGuildUser = createAsyncThunk(
+    'guild/kick',
+    async ({memberInGuildId, userId}, {rejectWithValue, getState}) => {
+        const guildState = getState().guilds;
+        const guildId = guildState.currentGuildId;
+
+        try {
+            const data = {
+                memberInGuildId,
+                guildId,
+                userId
+            }
+
+            const res = await patchData('/api/v1/guilds/kick', data);
+
+            if (!res.ok) {
+                return rejectWithValue(res.message)
+            }
+
+            return {memberInGuildId: res.memberInGuildId, guildId: res.guildId};
+
+        } catch (err) {
+            rejectWithValue(err.message);
+        }
+    }
+)
+
+export const removeGuild = createAsyncThunk(
+    'guild/remove',
+    async ({guildId}, {dispatch, getState}) => {
+        const state = getState();
+        const currentGuildId = state.guilds.currentGuildId;
+
+        let isActiveGuildKicked = false;
+
+        if (currentGuildId === guildId) {
+            await dispatch(setScreen({screenName: MAIN_SCREEN}));
+            await dispatch(setCurrentGuild({currentGuildId: null}));
+            isActiveGuildKicked = true;
+        }
+
+        return {guildId, isActiveGuildKicked}
+    }
+)
+
 const guildsSlice = createSlice({
     name: "guilds",
     initialState,
@@ -216,6 +324,8 @@ const guildsSlice = createSlice({
         builder.addCase(loadGuild.fulfilled, (state, {payload}) => {
             const guild = state.guilds.find(guild => guild.id === payload.guildId);
 
+            guild.users = payload.users;
+
             const guildChannels = [];
 
             payload.categories.forEach((category) => {
@@ -246,6 +356,30 @@ const guildsSlice = createSlice({
             state.loading = false;
         })
         builder.addCase(loadGuild.rejected, (state, {payload}) => {
+            state.loading = false;
+            state.error = payload;
+        })
+        builder.addCase(inviteUsers.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        builder.addCase(inviteUsers.fulfilled, (state, {payload}) => {
+            state.loading = false;
+        })
+        builder.addCase(inviteUsers.rejected, (state, {payload}) => {
+            state.loading = false;
+            state.error = payload;
+        })
+        builder.addCase(acceptGuildInvite.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        builder.addCase(acceptGuildInvite.fulfilled, (state, {payload}) => {
+            state.loading = false;
+            state.guilds.push(payload);
+            socket.emit('join', `g-${payload.id}`);
+        })
+        builder.addCase(acceptGuildInvite.rejected, (state, {payload}) => {
             state.loading = false;
             state.error = payload;
         })
@@ -320,6 +454,22 @@ const guildsSlice = createSlice({
         builder.addCase(deleteChannel.rejected, (state, {payload}) => {
             state.loading = false;
             state.error = payload;
+        })
+        builder.addCase(kickGuildUser.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        builder.addCase(kickGuildUser.fulfilled, (state, {payload}) => {
+            state.loading = false;
+            const guild = state.guilds.find(guild => guild.id === payload.guildId);
+            guild.users = guild.users.filter((user) => user.guild_user_id !== payload.memberInGuildId);
+        })
+        builder.addCase(kickGuildUser.rejected, (state, {payload}) => {
+            state.loading = false;
+            state.error = payload;
+        })
+        builder.addCase(removeGuild.fulfilled, (state, {payload}) => {
+            state.guilds = state.guilds.filter((guild) => guild.id !== payload.guildId);
         })
     }
 })

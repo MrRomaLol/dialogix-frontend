@@ -53,18 +53,19 @@ const AppPage = () => {
         if (duration && isMeTryingToCall) {
             play();
         }
-        return() => {
+        return () => {
             if (duration) {
                 stop();
             }
         }
     }, [duration, isMeTryingToCall]);
 
-    useEffect(() => {
-        return () => {
-            DisconnectSocket();
-        }
-    }, [])
+
+    // useEffect(() => {
+    //     return () => {
+    //         DisconnectSocket();
+    //     }
+    // }, [])
 
     return (
         <>

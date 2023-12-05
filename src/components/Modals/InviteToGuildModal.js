@@ -3,9 +3,12 @@ import ModalComponent from "./ModalComponent";
 import ContentContainer from "../ContentContainer";
 import {ModalContent, ModalName, ModalSubName} from "./ModalParts";
 import styled, {css} from "styled-components";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import CutButton from "../UIElements/CutButton";
 import FriendAvatar from "../FriendAvatar";
+import {Store} from "react-notifications-component";
+import {inviteUsers} from "../../store/guildsSlice";
+import DXSpinner from "../DXSpinner";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;
@@ -93,7 +96,9 @@ const User = ({id, url, nickname, isInvited, onClick}) => {
 }
 
 const InviteToGuildModal = ({isOpen, onRequestClose}) => {
-    const {guilds, currentGuildId} = useSelector(state => state.guilds);
+    const dispatch = useDispatch();
+
+    const {guilds, currentGuildId, loading} = useSelector(state => state.guilds);
     const {friends} = useSelector(state => state.friends);
     const [invited, setInvited] = useState([]);
 
@@ -114,6 +119,38 @@ const InviteToGuildModal = ({isOpen, onRequestClose}) => {
         }
     }
 
+    const notification = {
+        title: "Error!",
+        type: "danger",
+        insert: "top",
+        container: "bottom-right",
+        animationIn: ["animate__animated", "animate__fadeInDown"],
+        dismiss: {
+            duration: 5000,
+            pauseOnHover: true,
+        }
+    }
+
+    const sendInvites = () => {
+        if (!invited.length) {
+            return Store.addNotification({
+                ...notification,
+                message: "Pls select at least one user to invite"
+            })
+        }
+
+        dispatch(inviteUsers({invitedUsers: invited})).unwrap()
+            .then(() => {
+                onRequestClose();
+            })
+            .catch((error) => {
+                Store.addNotification({
+                    ...notification,
+                    message: `Something went wrong: ${error}`
+                })
+            })
+    }
+
     useEffect(() => {
         if (!isOpen) setInvited([]);
     }, [isOpen]);
@@ -124,12 +161,13 @@ const InviteToGuildModal = ({isOpen, onRequestClose}) => {
                 <ModalContent>
                     <ModalName style={{marginBottom: "15px"}}>Invite users to {currentGuild.name}</ModalName>
                     <UsersScrollBox className={'scroll-bar'}>
-                        {friends.length === 0 && <ModalSubName style={{width: "100%", textAlign: "center"}}>You have no friends(</ModalSubName>}
+                        {friends.length === 0 && <ModalSubName style={{width: "100%", textAlign: "center"}}>You have no
+                            friends(</ModalSubName>}
                         {friends.map(friend => (
                             <User key={friend.id} id={friend.id} url={friend.avatar_url} nickname={friend.nickname}
                                   onClick={handleInvite} isInvited={invited.includes(friend.id)}/>))}
                     </UsersScrollBox>
-                    <CutButton style={{marginTop: "15px"}}>Send</CutButton>
+                    <CutButton style={{marginTop: "15px"}} onClick={sendInvites}>{loading ? <DXSpinner/> : 'Send'}</CutButton>
                 </ModalContent>
             </FullScreenContainer>
         </ModalComponent>

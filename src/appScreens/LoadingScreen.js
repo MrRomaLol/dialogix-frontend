@@ -7,6 +7,7 @@ import {getFriends} from "../store/friendsSlice";
 import {fetchAllData} from "../store/fetchSlice";
 import {setUserStatus} from "../store/authSlice";
 import {socket} from "../socket";
+import {subToGuilds} from "../socket/guilds";
 
 const Container = styled.div`
   height: 100%;
@@ -89,6 +90,8 @@ const LoadingScreen = () => {
                             const status = payload.user_status.value;
 
                             dispatch(setUserStatus({status}))
+
+                            subToGuilds();
                         });
                 });
             })

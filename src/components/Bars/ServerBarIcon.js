@@ -38,7 +38,7 @@ const Icon = styled(BarsIconFriendGuild)`
   margin-left: 15px;
 `
 
-const ServerIcon = (props) => {
+export const ServerIcon = (props) => {
     return (
         props.url ?
             <Icon {...props} style={{backgroundImage: `url(api/v1/cdn/guilds/${props.id}/${props.url})`}}/> :

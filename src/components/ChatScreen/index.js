@@ -15,6 +15,7 @@ import Lottie from "react-lottie-player";
 import {useDropzone} from "react-dropzone";
 import DnDModal from "../Modals/DnDModal";
 import CallingHeader from "./CallingHeader";
+import {MAIN_SCREEN, setScreen} from "../../store/screenStateSlice";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;
@@ -126,7 +127,7 @@ const ChatScreen = () => {
 
     useEffect(() => {
         return () => {
-            dispatch(setChat({chatId: null})) //TODO Fix when app state changes not null chatId
+            dispatch(setChat({chatId: null}))
         }
     }, [])
 

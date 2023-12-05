@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScreenContainer} from "./ScreenContainer";
 import styled, {css} from "styled-components";
 import ContentContainer from "../components/ContentContainer";

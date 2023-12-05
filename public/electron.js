@@ -3,7 +3,7 @@ const path = require('path');
 const electronLocalShortcut = require('electron-localshortcut');
 const Store = require('electron-store');
 
-const {app, BrowserWindow, session, ipcMain, Tray, Menu} = require('electron');
+const {app, BrowserWindow, session, ipcMain, Tray, Menu, shell} = require('electron');
 const isDev = require('electron-is-dev');
 
 const iconPath = path.join(__dirname, 'icons', 'DialogiX256.ico');
@@ -134,7 +134,7 @@ ipcMain.on("closeApp", () => {
 });
 
 ipcMain.on("openLink", (channel, args) => {
-    shell.openExternal([args[0]]);
+    shell.openExternal(args[0]);
 });
 
 ipcMain.on("saveCookies", () => {

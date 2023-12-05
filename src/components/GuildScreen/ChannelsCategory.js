@@ -36,7 +36,7 @@ const Plus = styled.span`
   }
 `
 
-const ChannelsCategory = ({id, name, channels, onContextMenu, onPlusClick, onContextMenuChannel}) => {
+const ChannelsCategory = ({id, name, channels, onContextMenu, onPlusClick, onContextMenuChannel, showPlus}) => {
     const context = (e) => {
         e.preventDefault();
         onContextMenu({event: e, id, name, channels});
@@ -53,7 +53,7 @@ const ChannelsCategory = ({id, name, channels, onContextMenu, onPlusClick, onCon
                     <span style={{paddingRight: "5px"}}>&#8226;</span>
                     {name}
                 </div>
-                <Plus onClick={plusClicked}>+</Plus>
+                {showPlus && <Plus onClick={plusClicked}>+</Plus>}
             </ChannelsCategoryBack>
             <Channels>
                 {channels.map((channel) => <GuildChannels key={channel.id} id={channel.id} type={channel.channel_type}

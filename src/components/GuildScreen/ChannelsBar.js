@@ -13,10 +13,7 @@ import {useDispatch, useSelector} from "react-redux";
 import DxSpinner from "../DXSpinner";
 import {deleteCategory, deleteChannel} from "../../store/guildsSlice";
 import {Store} from "react-notifications-component";
-import {getRandomInt} from "../../utils/random";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
-import MyMessagePlaceholder from "../ChatScreen/MyMessagePlaceholder";
-import MemberMessagePlaceholder from "../ChatScreen/MemberMessagePlaceholder";
 
 const GuildLeftBar = styled(ContentContainer)`
   height: 100%;
@@ -37,7 +34,7 @@ const Content = styled.div`
   overflow-y: auto;
 `
 
-const ChannelsRandomPlaceholder = () => {
+const ChannelsPlaceholder = () => {
     return (
         <SkeletonTheme baseColor="#573166" highlightColor="#9c61b2">
             <Skeleton width={"100%"} height={25} style={{marginBottom: "20px"}}/>
@@ -51,6 +48,7 @@ const ChannelsRandomPlaceholder = () => {
 
 const ChannelsBar = ({guild}) => {
     const dispatch = useDispatch();
+    const {userInfo} = useSelector(state => state.auth);
     const {loading} = useSelector(state => state.guilds);
     const [isCreateCategory, setIsCreateCategory] = useState(false);
     const [isCreateChannel, setIsCreateChannel] = useState(false);
@@ -65,6 +63,8 @@ const ChannelsBar = ({guild}) => {
     });
 
     const showContextMenu = (event, showItemsOf) => {
+        if (userInfo.id !== guild.creatorId) return;
+
         event.stopPropagation();
         show({
             event,
@@ -176,6 +176,7 @@ const ChannelsBar = ({guild}) => {
                                     if (obj.objectType === 'category') {
                                         return <ChannelsCategory key={`category-${obj.id}`} id={obj.id}
                                                                  name={obj.name} channels={obj.channels}
+                                                                 showPlus={userInfo.id === guild.creatorId}
                                                                  onContextMenu={onContextMenuCategory}
                                                                  onPlusClick={addChannelToCategory}
                                                                  onContextMenuChannel={onContextMenuChannel}/>
@@ -186,7 +187,7 @@ const ChannelsBar = ({guild}) => {
                                     }
                                 }
                             )
-                            : <ChannelsRandomPlaceholder/>
+                            : <ChannelsPlaceholder/>
                         }
                     </Content>
                 </Wrapper>

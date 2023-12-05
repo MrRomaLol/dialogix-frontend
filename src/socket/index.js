@@ -14,7 +14,7 @@ socket.on('connect-from-another-place', () => {
 })
 
 socket.on('disconnect', (err) => {
-    if (err === 'io client disconnect') return;
+    if (err !== 'transport error') return;
     store.dispatch(setConnectionLost({state: true}));
 })
 
@@ -36,11 +36,12 @@ socket.on('user-status-update', (data) => {
 
 require('./chat');
 require('./voice');
+require('./guilds');
 
 
 export const DisconnectSocket = () => {
+    socket.removeAllListeners('connect');
+    socket.removeAllListeners('reconnect');
     socket.disconnect();
-    socket.off('connect');
-    socket.off('reconnect');
     socket.close();
 }

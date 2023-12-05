@@ -1,10 +1,12 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {getData, postData} from "../axios";
 import {revertAll} from "./index";
-import {socket} from "../socket";
+import {DisconnectSocket, socket} from "../socket";
 
 const initialState = {
     loading: false,
+    isCheckingAuth: true,
+    isAuthChecked: false,
     isAuthenticated: false,
     userInfo: {},
     error: null,
@@ -64,6 +66,8 @@ export const logoutUser = createAsyncThunk(
             if (!res.ok) {
                 return rejectWithValue(res.message);
             }
+
+            DisconnectSocket();
         } catch (err) {
             return rejectWithValue(err.message);
         }
@@ -207,15 +211,20 @@ const authSlice = createSlice({
         builder.addCase(checkAuthentication.pending, (state) => {
             state.loading = true
             state.error = null
+            state.isCheckingAuth = true
         })
         builder.addCase(checkAuthentication.fulfilled, (state, {payload}) => {
             state.loading = false
             state.isAuthenticated = true
+            state.isCheckingAuth = false
+            state.isAuthChecked = true
             state.userInfo = payload
         })
         builder.addCase(checkAuthentication.rejected, (state, {payload}) => {
             state.loading = false
             state.isAuthenticated = false
+            state.isCheckingAuth = false
+            state.isAuthChecked = true
         })
         builder.addCase(changePassword.pending, (state) => {
             state.loading = true

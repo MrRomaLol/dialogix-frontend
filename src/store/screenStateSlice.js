@@ -19,11 +19,11 @@ const screenState = createSlice({
     name: "screenState",
     initialState,
     reducers: {
-        setScreen(state, action) {
-            state.screen = action.payload.screenName
+        setScreen(state, {payload}) {
+            state.screen = payload.screenName
         },
-        setSubScreen(state, action) {
-            state.subScreen = action.payload.subScreenName
+        setSubScreen(state, {payload}) {
+            state.subScreen = payload.subScreenName
         },
     },
     extraReducers: (builder) => {
