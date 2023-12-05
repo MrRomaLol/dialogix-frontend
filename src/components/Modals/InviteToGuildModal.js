@@ -27,7 +27,6 @@ const UsersScrollBox = styled.div`
 
 const InviteButtonBack = styled.p`
   text-align: center;
-  width: 76px;
   transition-duration: 200ms;
   color: white;
   font-family: "JetBrains Mono", serif;
@@ -97,11 +96,13 @@ const User = ({id, url, nickname, isInvited, onClick, t}) => {
     )
 }
 
+//TODO check for localize
+
 const InviteToGuildModal = ({isOpen, onRequestClose}) => {
     const dispatch = useDispatch();
 
     const [ t, i18n ] = useTranslation();
-    const {guilds, currentGuildId} = useSelector(state => state.guilds);
+    const {guilds, currentGuildId, loading} = useSelector(state => state.guilds);
     const {friends} = useSelector(state => state.friends);
     const [invited, setInvited] = useState([]);
 
@@ -138,7 +139,7 @@ const InviteToGuildModal = ({isOpen, onRequestClose}) => {
         if (!invited.length) {
             return Store.addNotification({
                 ...notification,
-                message: "Pls select at least one user to invite"
+                message: "Pls select at least one user to invite"//TODO localize
             })
         }
 
@@ -169,7 +170,7 @@ const InviteToGuildModal = ({isOpen, onRequestClose}) => {
                             <User key={friend.id} id={friend.id} url={friend.avatar_url} nickname={friend.nickname}
                                   onClick={handleInvite} isInvited={invited.includes(friend.id)} t={t}/>))}
                     </UsersScrollBox>
-                    <CutButton style={{marginTop: "15px"}} onClick={sendInvites}>{loading ? <DXSpinner/> : 'Send'}</CutButton>
+                    <CutButton style={{marginTop: "15px"}} onClick={sendInvites}>{loading ? <DXSpinner/> : 'Send' /*TODO localize*/}</CutButton>
                 </ModalContent>
             </FullScreenContainer>
         </ModalComponent>

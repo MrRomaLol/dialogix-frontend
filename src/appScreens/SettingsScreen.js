@@ -14,6 +14,7 @@ import {setCurrentGuild} from "../store/guildsSlice";
 import {setChat} from "../store/chatSlice";
 import SettingsAppearance from "../components/SettingsTabs/SettingsAppearance";
 import {useTranslation} from "react-i18next";
+import SettingsLanguage from "../components/SettingsTabs/SettingsLanguage";
 
 const FullScreenContainer = styled(ContentContainer)`
   width: 100%;
@@ -238,6 +239,7 @@ const SettingsScreen = () => {
 
                             <SettingTabsHeader>{t("settScreen.appSett")}</SettingTabsHeader>
                             <SettingTab content={<SettingsAppearance/>}>{t("settAppearance.appearance")}</SettingTab>
+                            <SettingTab content={<SettingsLanguage/>}>Language</SettingTab>{/*TODO: localize*/}
 
                             <SettingTabsSeparator/>
                             <SettingTab onClick={handleOpenLogoutModal}>{t("settScreen.logout")}</SettingTab>

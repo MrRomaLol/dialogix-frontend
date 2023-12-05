@@ -18,6 +18,8 @@ const Message = styled.div`
   align-items: center;
   justify-content: center;
 
+  font-family: "JetBrains Mono", serif;
+  
   color: white;
   font-size: 30px;
 `

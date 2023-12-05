@@ -3,11 +3,11 @@ import styled, {keyframes} from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import {APP_OPENED_STATE, setAppState} from "../store/appStateSlice";
 import {ScreenContainer} from "./ScreenContainer";
-import {getFriends} from "../store/friendsSlice";
 import {fetchAllData} from "../store/fetchSlice";
 import {setUserStatus} from "../store/authSlice";
 import {socket} from "../socket";
 import {subToGuilds} from "../socket/guilds";
+import {useTranslation} from "react-i18next";
 
 const Container = styled.div`
   height: 100%;
@@ -74,6 +74,7 @@ const PSecondary = styled(P)`
 
 const LoadingScreen = () => {
     const dispatch = useDispatch();
+    const [t, i18n] = useTranslation();
     const {userInfo} = useSelector(state => state.auth);
 
     useEffect(() => {
@@ -89,7 +90,9 @@ const LoadingScreen = () => {
                             }, 100);
                             const status = payload.user_status.value;
 
-                            dispatch(setUserStatus({status}))
+                            dispatch(setUserStatus({status}));
+
+                            i18n.changeLanguage(payload['app_lang'].value);
 
                             subToGuilds();
                         });

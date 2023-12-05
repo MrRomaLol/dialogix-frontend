@@ -2,20 +2,20 @@ import i18n from "../localization";
 
 export default function formatDate(date) {
     const t = i18n.t;
-        date = new Date(date);
+    date = new Date(date);
     const now = new Date();
     const diffInDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
 
     if (diffInDays === 0) {
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
-        return t("dateFormat.today")`${hours}:${minutes}`;
+        return t("dateFormat.today")`${hours}:${minutes}`; //TODO localize with cT
     } else if (diffInDays === 1) {
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
-        return t("dateFormat.yesterday")`${hours}:${minutes}`;
+        return t("dateFormat.yesterday")`${hours}:${minutes}`; //TODO localize with cT
     } else {
-        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        const options = {year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'};
         return date.toLocaleDateString(undefined, options);
     }
 
