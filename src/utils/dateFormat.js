@@ -1,4 +1,5 @@
 import i18n from "../localization";
+import {cT} from "../localization/funcs";
 
 export default function formatDate(date) {
     const t = i18n.t;
@@ -9,11 +10,11 @@ export default function formatDate(date) {
     if (diffInDays === 0) {
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
-        return t("dateFormat.today")`${hours}:${minutes}`; //TODO localize with cT
+        return cT(t("dateFormat.today"), hours, minutes);
     } else if (diffInDays === 1) {
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
-        return t("dateFormat.yesterday")`${hours}:${minutes}`; //TODO localize with cT
+        return cT(t("dateFormat.yesterday"),hours,minutes);
     } else {
         const options = {year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'};
         return date.toLocaleDateString(undefined, options);

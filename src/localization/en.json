@@ -27,19 +27,22 @@
         "userSett": "User Settings",
         "myAcc": "My Profile",
         "appSett": "App settings",
+        "language": "Language",
         "logout": "Logout",
         "logoutConf": "Are you sure want to logout?"
       },
       "misc": {
         "error": "Error!",
         "succ": "Success!",
+        "hey": "Hey!",
         "msgErr": "Something went wrong: ${0}",
         "done": "Done",
         "create": "Create",
         "sel": "Select",
         "reset": "Reset",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "send": "Send"
       },
       "mainScreen": {
         "chooseChat": "Choose chat to make something wonderful!"
@@ -91,6 +94,14 @@
         "guildName": "Guild name",
         "uplImg": "Upload image"
       },
+      "userBar": {
+        "invUsers": "Invite users",
+        "creator": "Creator",
+        "users": "Users",
+        "kick": "Kick ${0}",
+        "kick2": "Kick ${0}?",
+        "kickConf": "Are you sure you want to kick"
+      },
       "cropImg": {
         "cropImg": "Crop image",
         "crop": "Crop"
@@ -103,7 +114,8 @@
         "invUsers2": "Invite users to: ",
         "noFriends": "You have no friends(",
         "invite": "Invite",
-        "invited": "Invited"
+        "invited": "Invited",
+        "sendInv": "Please select at least one user to invite"
       },
       "settAppearance": {
         "file2Large": "File is too large. Please use file with maximum size of 5MB.",
@@ -133,8 +145,8 @@
         "off": "Offline"
       },
       "dateFormat": {
-        "today": "Today at",
-        "yesterday": "Yesterday at"
+        "today": "Today at ${0}:${1}",
+        "yesterday": "Yesterday at ${0}:${1}"
       },
       "friendsSB": {
         "friends": "Friends",
@@ -172,6 +184,9 @@
         "att2": ". This action cannot be undone. Are you absolutely sure you want to proceed with this deletion?",
         "categ": "category ${0}",
         "channel":"channel ${0}"
+      },
+      "notif": {
+        "kickGuild": "It seems you are no longer welcome here. Being a good program, I'll just redirect you to the main page.☺"
       }
     }
   }

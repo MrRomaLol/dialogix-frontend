@@ -139,7 +139,7 @@ const InviteToGuildModal = ({isOpen, onRequestClose}) => {
         if (!invited.length) {
             return Store.addNotification({
                 ...notification,
-                message: "Pls select at least one user to invite"//TODO localize
+                message: t("guildInviteModal.sendInv")
             })
         }
 
@@ -170,7 +170,7 @@ const InviteToGuildModal = ({isOpen, onRequestClose}) => {
                             <User key={friend.id} id={friend.id} url={friend.avatar_url} nickname={friend.nickname}
                                   onClick={handleInvite} isInvited={invited.includes(friend.id)} t={t}/>))}
                     </UsersScrollBox>
-                    <CutButton style={{marginTop: "15px"}} onClick={sendInvites}>{loading ? <DXSpinner/> : 'Send' /*TODO localize*/}</CutButton>
+                    <CutButton style={{marginTop: "15px"}} onClick={sendInvites}>{loading ? <DXSpinner/> : t("misc.send")}</CutButton>
                 </ModalContent>
             </FullScreenContainer>
         </ModalComponent>

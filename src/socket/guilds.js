@@ -2,10 +2,12 @@ import store from "../store";
 import {socket} from "./index";
 import {loadGuild, removeGuild} from "../store/guildsSlice";
 import {Store} from "react-notifications-component";
+import i18n from "../localization";
 
 const showNotification = () => {
+    const t = i18n.t;
     Store.addNotification({
-        title: "Hey!",
+        title: t("misc.hey"),
         type: "info",
         insert: "top",
         container: "bottom-right",
@@ -14,7 +16,7 @@ const showNotification = () => {
             duration: 5000,
             pauseOnHover: true,
         },
-        message: "It seems you are no longer welcome here. Being a good program, I'll just redirect you to the main page."
+        message: t("notif.kickGuild")
     })
 }
 

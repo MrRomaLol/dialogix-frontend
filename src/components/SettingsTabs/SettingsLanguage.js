@@ -99,7 +99,7 @@ const SettingsLanguage = () => {
 
     return (
         <React.Fragment>
-            <SettingTabName>Language</SettingTabName>
+            <SettingTabName>{t("settScreen.language")}</SettingTabName>
 
             <SettingsBox>
                 <ListSelect name={'lang'} onChange={handleChange} items={langs} doNotChangeOnLoading isLoading={loading}/>

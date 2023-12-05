@@ -72,11 +72,11 @@ const ProfileButtonsContainer = styled.div`
   opacity: ${({isShown}) => isShown ? 1 : 0};
 `
 
-const Setting = ({name, onChange, value, maxLength, disabled}) => {
+const Setting = ({name, onChange, value, maxLength, disabled, inputName}) => {
     return <div style={{marginBottom: '40px'}}>
         <SettingName>{name}</SettingName>
         <StyledInputBox value={value} placeholder={name} disabled={disabled} maxLength={maxLength}
-                        name={name.toLowerCase()}
+                        name={inputName}
                         onChange={onChange}/>
     </div>
 }
@@ -201,7 +201,7 @@ const SettingsMyAccount = () => {
                     ...notification,
                     title: t("misc.succ"),
                     type: "success",
-                    message: t("setMyAcc.updtProfile")
+                    message: t("settMyAcc.updtProfile")
                 })
             })
             .catch((error) => {
@@ -219,9 +219,9 @@ const SettingsMyAccount = () => {
             <SettingsBox>
 
                 <ChangeSettingsBox>
-                    <Setting name={t("settMyAcc.name")} onChange={handleChange} value={formData.nickname} maxLength={20}/>
-                    <Setting name={t("settMyAcc.userName")} value={userInfo.username} disabled/>
-                    <Setting name={t("settMyAcc.mail")} value={userInfo.email} disabled/>
+                    <Setting name={t("settMyAcc.name")} inputName={'nickname'} onChange={handleChange} value={formData.nickname} maxLength={20}/>
+                    <Setting name={t("settMyAcc.userName")} inputName={'username'} value={userInfo.username} disabled/>
+                    <Setting name={t("settMyAcc.mail")} inputName={'email'} value={userInfo.email} disabled/>
                     <PasswordChange onClick={openChangePasswordModal}/>
                 </ChangeSettingsBox>
 

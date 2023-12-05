@@ -239,7 +239,7 @@ const SettingsScreen = () => {
 
                             <SettingTabsHeader>{t("settScreen.appSett")}</SettingTabsHeader>
                             <SettingTab content={<SettingsAppearance/>}>{t("settAppearance.appearance")}</SettingTab>
-                            <SettingTab content={<SettingsLanguage/>}>Language</SettingTab>{/*TODO: localize*/}
+                            <SettingTab content={<SettingsLanguage/>}>{t("settScreen.language")}</SettingTab>
 
                             <SettingTabsSeparator/>
                             <SettingTab onClick={handleOpenLogoutModal}>{t("settScreen.logout")}</SettingTab>

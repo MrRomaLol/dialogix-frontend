@@ -21,7 +21,7 @@ export const notificationPM = (message) => {
         new Notification(sender.nickname, {
             body: message.content,
             silent: true,
-            icon: `api/v1/cdn/users/${sender.id}/${sender.avatar_url}` //TODO check api
+            icon: `api/v1/cdn/users/${sender.id}/${sender.avatar_url}`
         })
     }
 
