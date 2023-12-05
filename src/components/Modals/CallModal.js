@@ -203,7 +203,7 @@ const CallModal = ({callerId}) => {
                             <CallingAvatar id={callingUser.id} nick={callingUser.nickname}
                                            url={callingUser.avatar_url}/>
                             <Calling style={{marginBottom: "15px", fontSize: "20px"}}>{callingUser.nickname}</Calling>
-                            <Calling>{t("callModal")}</Calling>
+                            <Calling>{t("callModal.calling")}</Calling>
                         </Info>
                         <CallButtons>
                             <AnswerBack onClick={handleAcceptCall}>
