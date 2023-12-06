@@ -51,11 +51,9 @@ function createWindow() {
         }
 
     mainWindow.maximize();
-    mainWindow.loadURL(
-        isDev
-            ? DIALOGIX_APP_URL + '/app'
-            : `file://${path.join(__dirname, '../build/index.html')}`
-    );
+
+    const initialURL = process.argv[2] || process.env.DEFAULT_URL || DIALOGIX_APP_URL;
+    mainWindow.loadURL((isDev ? DIALOGIX_APP_URL : initialURL) + '/app');
 
     mainWindow.on('ready-to-show', () => {
         mainWindow.show();
@@ -67,7 +65,7 @@ function createWindow() {
 
     //tray
     trayIcon = new Tray(iconPath);
-    trayIcon.setToolTip('DialogiX app (beta)');
+    trayIcon.setToolTip('DialogiX app');
 
     trayIcon.on('click', () => {
         mainWindow?.show();
