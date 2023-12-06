@@ -106,7 +106,7 @@
         "cropImg": "Crop image",
         "crop": "Crop"
       },
-      "DnDModal": {
+      "dnDModal": {
         "dropFiles": "Drop files here",
         "dropFiles2Upload": "Drop the files here to upload."
       },

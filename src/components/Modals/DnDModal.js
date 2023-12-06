@@ -20,8 +20,8 @@ const DnDModal = () => {
         <DnDModalBack>
             <ContentContainer>
                 <ModalContent>
-                    <ModalName>{t("DndModal.dropFiles")}</ModalName>
-                    <ModalSubName style={{marginTop: "10px"}}>{t("DnDModal.dropFiles2Upload")}</ModalSubName>
+                    <ModalName>{t("dnDModal.dropFiles")}</ModalName>
+                    <ModalSubName style={{marginTop: "10px"}}>{t("dnDModal.dropFiles2Upload")}</ModalSubName>
                 </ModalContent>
             </ContentContainer>
         </DnDModalBack>
